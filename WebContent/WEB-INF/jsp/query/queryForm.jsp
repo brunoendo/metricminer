@@ -41,6 +41,9 @@
 							<textarea type="text" class="text small" name="query.sqlQuery">${query.sqlQuery}</textarea>
 						</p>
 						<p class="note">
+							You can see the database schema <a href="<c:url value='/images/erd.png' />">here</a>.
+						</p>
+						<p class="note">
 							Please, do not get the source code. We are trying to convince industry to put 
 							their projects here. So, never try to get their code. Be honest!
 						</p>
