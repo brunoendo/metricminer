@@ -17,12 +17,10 @@ import br.com.caelum.vraptor.resource.ResourceMethod;
 public class LoggedUserInterceptor implements Interceptor {
 	
 	private final UserSession session;
-	private final Validator validator;
 	private final Result result;
 
 	public LoggedUserInterceptor(UserSession session, Validator validator, Result result) {
 		this.session = session;
-		this.validator = validator;
 		this.result = result;
 	}
 
@@ -36,8 +34,9 @@ public class LoggedUserInterceptor implements Interceptor {
 			Object resource) throws InterceptionException {
 		if (session.isLoggedIn()) {
 			result.redirectTo(UserController.class).loginForm();
+		} else {
+			stack.next(method, resource);
 		}
-		stack.next(method, resource);
 	}
 
 }
