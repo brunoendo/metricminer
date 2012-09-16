@@ -30,8 +30,14 @@ public class ExecuteQueryTask implements RunnableTask {
         Query query = queryDao.findBy(queryId);
         String csvFileName = config.getQueriesResultsDir() + "/result-" + query.getId() + "-" + query.getResultCount() + ".csv";
         FileOutputStream outputStream = createFile(csvFileName);
-        queryExecutor.execute(query, outputStream);
-        query.addResult(new QueryResult(csvFileName));
+        try {
+            queryExecutor.execute(query, outputStream);
+            query.addResult(new QueryResult(csvFileName));
+        } catch (Exception e){
+            QueryResult result = new QueryResult();
+            result.fail(e.getMessage());
+            query.addResult(result);
+        }
         queryDao.update(query);
     }
 

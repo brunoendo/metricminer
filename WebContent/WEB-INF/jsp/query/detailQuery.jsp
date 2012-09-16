@@ -53,7 +53,13 @@
 					<table class="clear">
 						<c:forEach items="${query.results}" var="result" >
 							<tr>
-								<td><a href="<c:url value="/query/download/${result.id}" />">${result.csvFilename}</a></td>
+								<td>${result.status}</td>
+								<c:if test="${result.hasFailed() == false}">
+									<td><a href="<c:url value="/query/download/${result.id}" />">Download results</a></td>
+								</c:if>
+								<c:if test="${result.hasFailed()}">
+									<td><a>See error message</a></td>
+								</c:if>
 								<td><fmt:formatDate value="${result.executedDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
 							</tr>
 						</c:forEach>

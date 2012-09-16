@@ -16,13 +16,15 @@ public class QueryResult {
 	private String csvFilename;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar executedDate;
+	private QueryResultStatus status;
 	
 	public QueryResult() {
+	    executedDate = Calendar.getInstance();
 	}
 
 	public QueryResult(String csvFilename) {
+	    this();
 		this.csvFilename = csvFilename;
-		this.executedDate = Calendar.getInstance();
 	}
 	
 	public String getCsvFilename() {
@@ -35,6 +37,22 @@ public class QueryResult {
 	
 	public Calendar getExecutedDate() {
 		return executedDate;
+	}
+	
+	public void fail(String message) {
+	    status = QueryResultStatus.FAILED.withMessage(message);
+	}
+	
+	public void success() {
+	    status = QueryResultStatus.SUCESS;
+	}
+	
+	public QueryResultStatus getStatus() {
+        return status;
+    }
+	
+	public boolean hasFailed() {
+	    return QueryResultStatus.FAILED == this.status;
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.metricminer.model;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +33,7 @@ public class Query implements Comparable<Query> {
 
     public Query() {
         submitDate = Calendar.getInstance();
+        results = new ArrayList<QueryResult>();
     }
 
     public Query(String query) {

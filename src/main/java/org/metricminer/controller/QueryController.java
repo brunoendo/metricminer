@@ -51,7 +51,7 @@ public class QueryController {
         query.setAuthor(userSession.user());
         queryDao.save(query);
         taskDao.saveTaskToExecuteQuery(query);
-        result.redirectTo(TaskController.class).listTasks();
+        result.redirectTo(QueryController.class).detailQuery(query.getId());
     }
 
     @Post("/query/{queryId}")
