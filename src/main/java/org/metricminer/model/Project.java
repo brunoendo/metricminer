@@ -110,8 +110,16 @@ public class Project {
 	public void setupInitialConfigurationsEntries() {
 		String metricMinerHome = this.metricMinerConfigs.getRepositoriesDir();
 
-		configurationEntries.add(new ProjectConfigurationEntry("scm",
-				"org.metricminer.scm.git.GitFactory", this));
+		if ( this.getScmUrl().endsWith(".git") ) {
+			configurationEntries.add(new ProjectConfigurationEntry("scm",
+					"org.metricminer.scm.git.GitFactory", this));
+					
+		}
+		else {
+			configurationEntries.add(new ProjectConfigurationEntry("scm",
+					"org.metricminer.scm.svn.SvnFactory", this));
+		}
+		
 		configurationEntries.add(new ProjectConfigurationEntry("scm.repository", metricMinerHome
 				+ "/projects/" + this.id, this));
 		configurationEntries.add(new ProjectConfigurationEntry("changesets",

@@ -17,12 +17,12 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class Git implements SCM {
 
-	private final String repository;
-	private final GitLogParser logParser;
-	private final CommandExecutor exec;
-	private final GitDiffParser diffParser;
-	private final GitBlameParser blameParser;
-	private String currentPosition;
+	protected final String repository;
+	protected final GitLogParser logParser;
+	protected final CommandExecutor exec;
+	protected final GitDiffParser diffParser;
+	protected final GitBlameParser blameParser;
+	protected String currentPosition;
 
 	public Git(String repository, GitLogParser logParser,
 			GitDiffParser diffParser, GitBlameParser blameParser,
