@@ -37,12 +37,12 @@
         <param name="DatePattern" value=".yyyy-ww" />
 	</appender>
 	
-	<logger name="org.metricminer.tasks.runner">
+	<logger name="org.metricminer">
 		<level value="ERROR" />
 		<appender-ref ref="errorlog" />
 	</logger>
 	
-	<logger name="br.com.caelum.vraptor.tasks">
+	<logger name="br.com.caelum.vraptor">
 		<level value="ERROR" />
 		<appender-ref ref="errorlog" />
 	</logger>
@@ -61,7 +61,6 @@
 		<priority value="DEBUG" />
 		<appender-ref ref="memoryfile" />
 	</logger>
-	
 			
 	<category name="br.com.caelum.vraptor">
 		<priority value="INFO" />
