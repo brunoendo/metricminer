@@ -19,6 +19,9 @@
 		.clear {
 			clear: both;
 		}
+		.stacktrace {
+			display: none;
+		}
 	</style>
 </head>
 
@@ -50,7 +53,7 @@
 					</c:if>
 					
 					<h3 class="clear">Results:</h3>
-					<table class="clear">
+					<table class="clear results">
 						<c:forEach items="${query.results}" var="result" >
 							<tr>
 								<td>${result.status}</td>
@@ -58,7 +61,8 @@
 									<td><a href="<c:url value="/query/download/${result.id}" />">Download results</a></td>
 								</c:if>
 								<c:if test="${result.hasFailed()}">
-									<td><a>See error message</a></td>
+									<td><a href="#" data-result-id="${result.id}" id="${result.id}-error" class="error">See the error stacktrace</a></td>
+									<td id="${result.id}-stacktrace" class="stacktrace"><pre>${result.status.message}</pre></td>
 								</c:if>
 								<td><fmt:formatDate value="${result.executedDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
 							</tr>
@@ -72,6 +76,16 @@
 	</div>		<!-- #hld ends -->
 	<c:import url="../import/footer.jsp" />
 	<c:import url="../import/javascripts.jsp" />
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".error").click(function() {
+				var id = $(this).attr("data-result-id");
+				$("#" + id + "-stacktrace").show();
+				$(this).parent().remove();
+				return false;
+			});
+		});
+	</script>
 </body>
 </html>
 

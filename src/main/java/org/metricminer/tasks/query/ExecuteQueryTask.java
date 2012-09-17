@@ -3,6 +3,7 @@ package org.metricminer.tasks.query;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.QueryDao;
 import org.metricminer.model.Query;
@@ -35,7 +36,7 @@ public class ExecuteQueryTask implements RunnableTask {
             query.addResult(new QueryResult(csvFileName));
         } catch (Exception e){
             QueryResult result = new QueryResult();
-            result.fail(e.getMessage());
+            result.fail(ExceptionUtils.getStackTrace(e));
             query.addResult(result);
         }
         queryDao.update(query);

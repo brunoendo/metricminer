@@ -2,6 +2,7 @@ package org.metricminer.model;
 
 import java.util.Calendar;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ public class QueryResult {
 	private String csvFilename;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar executedDate;
+	@Embedded
 	private QueryResultStatus status;
 	
 	public QueryResult() {
@@ -40,11 +42,11 @@ public class QueryResult {
 	}
 	
 	public void fail(String message) {
-	    status = QueryResultStatus.FAILED.withMessage(message);
+	    status = QueryResultStatus.FAILED(message);
 	}
 	
 	public void success() {
-	    status = QueryResultStatus.SUCESS;
+	    status = QueryResultStatus.SUCCESS();
 	}
 	
 	public QueryResultStatus getStatus() {
@@ -52,7 +54,7 @@ public class QueryResult {
     }
 	
 	public boolean hasFailed() {
-	    return QueryResultStatus.FAILED == this.status;
+	    return this.status.isFail();
 	}
 
 }
