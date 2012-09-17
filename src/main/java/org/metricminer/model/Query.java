@@ -90,7 +90,7 @@ public class Query implements Comparable<Query> {
                 return o1.getExecutedDate().compareTo(o2.getExecutedDate());
             }
         });
-        return (List<QueryResult>) Collections.unmodifiableCollection(results);
+        return Collections.unmodifiableList(results);
     }
 
     public void setAuthor(User author) {
