@@ -72,8 +72,10 @@
 												See the error stacktrace
 											</a>
 										</td>
-										<td style="width:700px" id="${result.id}-stacktrace" class="stacktrace">
-											<pre>${result.status.message}</pre>
+										<td style="width:800px" id="${result.id}-stacktrace" class="stacktrace">
+											<pre style="width:800px;word-break: break-word;">
+												${result.status.message}
+											</pre>
 										</td>
 									</c:if>
 								<td><fmt:formatDate value="${result.executedDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
