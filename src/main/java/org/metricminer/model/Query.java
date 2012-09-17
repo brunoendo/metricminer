@@ -87,7 +87,7 @@ public class Query implements Comparable<Query> {
         Collections.sort(results, new Comparator<QueryResult>() {
             @Override
             public int compare(QueryResult o1, QueryResult o2) {
-                return o1.getExecutedDate().compareTo(o2.getExecutedDate());
+                return -1 * o1.getExecutedDate().compareTo(o2.getExecutedDate());
             }
         });
         return Collections.unmodifiableList(results);
