@@ -3,6 +3,7 @@ package org.metricminer.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -83,7 +84,13 @@ public class Query implements Comparable<Query> {
     }
 
     public List<QueryResult> getResults() {
-        return Collections.unmodifiableList(results);
+        Collections.sort(results, new Comparator<QueryResult>() {
+            @Override
+            public int compare(QueryResult o1, QueryResult o2) {
+                return o1.getExecutedDate().compareTo(o2.getExecutedDate());
+            }
+        });
+        return (List<QueryResult>) Collections.unmodifiableCollection(results);
     }
 
     public void setAuthor(User author) {

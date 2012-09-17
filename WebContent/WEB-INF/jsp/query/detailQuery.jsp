@@ -15,6 +15,8 @@
 		}
 		pre {
 			margin: 20px 0;
+			width: 500px;
+			white-space: normal;
 		}
 		.clear {
 			clear: both;
@@ -58,11 +60,21 @@
 							<tr>
 								<td>${result.status}</td>
 									<c:if test="${result.hasFailed() eq false}">
-										<td><a href="<c:url value="/query/download/${result.id}" />">Download results</a></td>
+										<td>
+											<a href="<c:url value="/query/download/${result.id}" />">
+												Download results
+											</a>
+										</td>
 									</c:if>
 									<c:if test="${result.hasFailed()}">
-										<td><a href="#" data-result-id="${result.id}" id="${result.id}-error" class="error">See the error stacktrace</a></td>
-										<td id="${result.id}-stacktrace" class="stacktrace"><pre>${result.status.message}</pre></td>
+										<td>
+											<a href="#" data-result-id="${result.id}" id="${result.id}-error" class="error">
+												See the error stacktrace
+											</a>
+										</td>
+										<td style="width:700px" id="${result.id}-stacktrace" class="stacktrace">
+											<pre>${result.status.message}</pre>
+										</td>
 									</c:if>
 								<td><fmt:formatDate value="${result.executedDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
 							</tr>

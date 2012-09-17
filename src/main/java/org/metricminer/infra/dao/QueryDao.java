@@ -3,6 +3,7 @@ package org.metricminer.infra.dao;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.metricminer.model.Query;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -30,6 +31,6 @@ public class QueryDao {
     
     @SuppressWarnings("unchecked")
     public List<Query> list() {
-        return session.createCriteria(Query.class).list();
+        return session.createCriteria(Query.class).addOrder(Order.desc("submitDate")).list();
     }
 }
