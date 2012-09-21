@@ -1,13 +1,17 @@
 package org.metricminer.tasks;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.metricminer.config.MetricMinerConfigs;
+import org.metricminer.model.Task;
 import org.metricminer.model.TaskBuilder;
 
 public class TaskQueueStatusTest {
@@ -49,9 +53,9 @@ public class TaskQueueStatusTest {
     public void shouldAllowToStartTaskIfThreadtIsNotRunning() {
         when(mockedConfigs.getMaxConcurrentTasks()).thenReturn(2);
         Thread threadNotRunning = mock(Thread.class);
-        when(mockedThreadInspector.isRunning(threadNotRunning)).thenReturn(true);
-        Thread runningThread2 = mock(Thread.class);
         when(mockedThreadInspector.isRunning(threadNotRunning)).thenReturn(false);
+        Thread runningThread2 = mock(Thread.class);
+        when(mockedThreadInspector.isRunning(threadNotRunning)).thenReturn(true);
         
         taskQueueStatus.addRunningTask(new TaskBuilder().withId(1l).build(), threadNotRunning);
         taskQueueStatus.addRunningTask(new TaskBuilder().withId(2l).build(), runningThread2);
@@ -59,6 +63,20 @@ public class TaskQueueStatusTest {
         taskQueueStatus.cleanTasksNotRunning();
         
         assertTrue(taskQueueStatus.mayStartTask());
+    }
+    
+    @Test
+    public void shouldCleanZombieTask() {
+        when(mockedConfigs.getMaxConcurrentTasks()).thenReturn(1);
+        Thread threadNotRunning = mock(Thread.class);
+        when(mockedThreadInspector.isRunning(threadNotRunning)).thenReturn(false);
+        
+        taskQueueStatus.addRunningTask(new TaskBuilder().withId(1l).build(), threadNotRunning);
+        
+        List<Task> cleanTasksNotRunning = taskQueueStatus.cleanTasksNotRunning();
+        
+        assertEquals(1, cleanTasksNotRunning.size());
+        assertTrue(taskQueueStatus.getTaskQueue().isEmpty());
     }
 
     
