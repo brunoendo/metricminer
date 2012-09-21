@@ -45,7 +45,7 @@ public class TaskDao {
 
     @SuppressWarnings("unchecked")
     public List<Task> listTasks() {
-        return session.createCriteria(Task.class).addOrder(Order.desc("endDate")).list();
+        return session.createCriteria(Task.class).addOrder(Order.desc("submitDate")).list();
     }
 
     @SuppressWarnings("unchecked")
