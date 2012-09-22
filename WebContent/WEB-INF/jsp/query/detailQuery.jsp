@@ -43,15 +43,21 @@
 					
 					<pre>${query.sqlQuery}</pre>
 					
-					<form method="post" action="<c:url value="/query/run" />">
-						<input type="submit" class="submit small" value="Run again" />
-						<input type="hidden" name="queryId" value="${query.id}" />
-					</form>
+					<c:if test="${scheduledToRun eq false}">
 					
-					<c:if test="${allowedToEdit}">
-						<form method="get" action="<c:url value="/query/edit/${query.id}" />">
-							<input type="submit" class="submit small" value="Edit" />
+						<form method="post" action="<c:url value="/query/run" />">
+							<input type="submit" class="submit small" value="Run again" />
+							<input type="hidden" name="queryId" value="${query.id}" />
 						</form>
+						
+						<c:if test="${allowedToEdit}">
+							<form method="get" action="<c:url value="/query/edit/${query.id}" />">
+								<input type="submit" class="submit small" value="Edit" />
+							</form>
+						</c:if>
+					</c:if>
+					<c:if test="${scheduledToRun}">
+						<h4>Query scheduled to run, wait for the task to finish to download new results.</h4>
 					</c:if>
 					
 					<h3 class="clear">Results:</h3>

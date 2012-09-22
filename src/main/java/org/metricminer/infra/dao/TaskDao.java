@@ -72,4 +72,20 @@ public class TaskDao {
                 query.getId().toString());
         save(task);
     }
+
+    public List<Task> findTasksScheduledToRunQuery(Query queryScheduled) {
+        org.hibernate.Query hql = session.createQuery("select task from Task as task " +
+        		"join fetch task.configurationEntries c " +
+        		"where c.key=:key " +
+        		"and c.value=:queryId " +
+        		"and (task.status=:status1 or task.status=:status2)");
+        hql.setString("key", TaskConfigurationEntryKey.QUERY_ID.toString())
+            .setString("queryId", queryScheduled.getId().toString())
+            .setString("status1", TaskStatus.STARTED.toString())
+            .setString("status2", TaskStatus.QUEUED.toString());
+        
+        return hql.list();
+        
+    }
+
 }

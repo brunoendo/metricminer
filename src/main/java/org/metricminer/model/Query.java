@@ -41,6 +41,11 @@ public class Query implements Comparable<Query> {
         this();
         this.sqlQuery = query;
     }
+    
+    public Query(Long id) {
+        this();
+        this.id = id;
+    }
 
     public String getSqlQuery() {
         return sqlQuery;

@@ -11,6 +11,7 @@ import org.metricminer.infra.session.UserSession;
 import org.metricminer.infra.validator.QueryValidator;
 import org.metricminer.model.Query;
 import org.metricminer.model.QueryResult;
+import org.metricminer.model.Task;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
@@ -87,9 +88,11 @@ public class QueryController {
     public void detailQuery(Long queryId) {
         Query query = queryDao.findBy(queryId);
         boolean allowedToEdit = query.isAllowedToEdit(userSession.user());
+        List<Task> tasksToRunThisQuery = taskDao.findTasksScheduledToRunQuery(query);
         
         result.include("query", query);
         result.include("allowedToEdit", allowedToEdit);
+        result.include("scheduledToRun", !tasksToRunThisQuery.isEmpty());
     }
 
     @Get("/query/download/{resultId}")
