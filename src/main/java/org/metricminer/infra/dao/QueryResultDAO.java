@@ -13,7 +13,7 @@ public class QueryResultDAO {
         this.session = session;
     }
     
-    public QueryResult findBy(Long queryResultId) {
+    public QueryResult findById(Long queryResultId) {
     	return (QueryResult) session.load(QueryResult.class, queryResultId);
     }
 }
