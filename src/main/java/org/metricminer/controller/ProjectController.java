@@ -24,7 +24,6 @@ public class ProjectController {
     private final MetricMinerConfigs configs;
     private final TagTokenizer tokenize;
     private final TagDao tagDao;
-
     public ProjectController(Result result, ProjectDao dao, TagDao tagDao,
             MetricMinerConfigs metricMinerConfigs, TagTokenizer tokenize) {
         this.result = result;

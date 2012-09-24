@@ -1,5 +1,7 @@
 package org.metricminer.infra.dao;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.metricminer.model.QueryResult;
 
@@ -15,5 +17,10 @@ public class QueryResultDAO {
     
     public QueryResult findById(Long queryResultId) {
     	return (QueryResult) session.load(QueryResult.class, queryResultId);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<QueryResult> list() {
+        return session.createCriteria(QueryResult.class).list();
     }
 }

@@ -6,6 +6,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -17,6 +18,8 @@ public class QueryResult {
 	private String csvFilename;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar executedDate;
+	@ManyToOne
+	private Query query;
 	@Embedded
 	private QueryResultStatus status;
 	
@@ -24,9 +27,10 @@ public class QueryResult {
 	    executedDate = Calendar.getInstance();
 	}
 
-	public QueryResult(String csvFilename) {
+	public QueryResult(String csvFilename, Query query) {
 	    this();
 		this.csvFilename = csvFilename;
+        this.query = query;
 	}
 	
 	public String getCsvFilename() {
@@ -56,5 +60,9 @@ public class QueryResult {
 	public boolean hasFailed() {
 	    return this.status.isFail();
 	}
+	
+	public Query getQuery() {
+        return query;
+    }
 
 }

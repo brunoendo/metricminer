@@ -27,7 +27,7 @@ public class Query implements Comparable<Query> {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="query")
     private List<QueryResult> results;
     @ManyToOne
     private User author;

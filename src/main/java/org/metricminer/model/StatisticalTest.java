@@ -15,7 +15,7 @@ import org.metricminer.stats.r.RNumberListGenerator;
 public class StatisticalTest {
 
 	@Id @GeneratedValue
-	private int id;
+	private Long id;
 	private String name;
 	private String algorithm;
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -23,20 +23,21 @@ public class StatisticalTest {
 	@Transient
 	private RNumberListGenerator listGenerator;
 
+	protected StatisticalTest() {
+	    this.listGenerator = new RNumberListGenerator();
+	}
 	
 	public StatisticalTest(String name, String algorithm, User user) {
-		this.listGenerator = new RNumberListGenerator();
+	    this();
 		this.name = name;
 		this.algorithm = algorithm;
 		this.user = user;
 	}
 
-	public StatisticalTest(int id) {
+	public StatisticalTest(Long id) {
 		this.id = id;
 	}
 	
-	protected StatisticalTest() {
-	}
 	
 	public String getName() {
 		return name;
@@ -55,7 +56,7 @@ public class StatisticalTest {
 		this.user = user;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 

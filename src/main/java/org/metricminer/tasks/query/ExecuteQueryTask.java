@@ -33,7 +33,7 @@ public class ExecuteQueryTask implements RunnableTask {
         FileOutputStream outputStream = createFile(csvFileName);
         try {
             queryExecutor.execute(query, outputStream);
-            QueryResult result = new QueryResult(csvFileName);
+            QueryResult result = new QueryResult(csvFileName, query);
             query.addResult(result);
             result.success();
         } catch (Exception e){

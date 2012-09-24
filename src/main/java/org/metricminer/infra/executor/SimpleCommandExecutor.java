@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class SimpleCommandExecutor implements CommandExecutor {
 
 	private List<EnvironmentVar> vars = null;
@@ -23,6 +25,8 @@ public class SimpleCommandExecutor implements CommandExecutor {
 		String finalCommand = command;
 		Process proc;
 		try {
+		    Logger logger = Logger.getLogger(SimpleCommandExecutor.class);
+	        logger.debug("executing: " + finalCommand);
 			proc = Runtime.getRuntime().exec(finalCommand, getEnvTokens(),
 					new File(basePath));
 		} catch (IOException e) {
