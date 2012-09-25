@@ -28,7 +28,7 @@ public class QueryValidator {
     private boolean containsSourceCode(Query query) {
         boolean invalid = false;
         String sql = query.getSqlQuery();
-        if (sql.contains("source") && sql.contains("SourceCode")) {
+        if (sql.contains(" source ") && sql.contains("SourceCode")) {
             invalid = true;
         }
         return invalid;
