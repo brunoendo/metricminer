@@ -19,6 +19,7 @@ import org.metricminer.tasks.MetricComponent;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.simplemail.Mailer;
 
 @Component
 @ApplicationScoped
@@ -33,10 +34,12 @@ public class MetricMinerConfigs {
 	private final String configPath = "/WEB-INF/metricminer.properties";
 	private String queriesResultDir;
 	private String statsResultDir;
+    private final Mailer mailer;
 
-    public MetricMinerConfigs(ClassScan scan, ServletContext context) {
+    public MetricMinerConfigs(ClassScan scan, ServletContext context, Mailer mailer) {
         this.scan = scan;
 		this.context = context;
+        this.mailer = mailer;
         
 		this.maxConcurrentTasks = 1;
         this.registeredMetrics = new ArrayList<RegisteredMetric>();
@@ -114,5 +117,9 @@ public class MetricMinerConfigs {
 	public String getStatsResultDir() {
 		return statsResultDir;
 	}
+	
+	public Mailer getMailer() {
+        return mailer;
+    }
 
 }

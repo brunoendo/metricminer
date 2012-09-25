@@ -43,7 +43,7 @@ public class TasksRunnerTest {
 		when(mockedTaskSession.close()).thenReturn(null);
 		
 		taskRunner = new TaskRunner(new TaskQueueStatus(new MetricMinerConfigs(
-				new ClassScan(), context), new ThreadInspector()),sf);
+				new ClassScan(), context, null), new ThreadInspector()),sf);
 		taskRunner.daoSession = mockedSession;
 		taskRunner.taskSession = mockedTaskSession;
 		taskRunner.taskDao = mockedDao;

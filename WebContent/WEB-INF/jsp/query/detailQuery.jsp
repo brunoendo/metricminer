@@ -57,7 +57,7 @@
 						</c:if>
 					</c:if>
 					<c:if test="${scheduledToRun}">
-						<h4>Query scheduled to run, come back when the execution has finished.</h4>
+						<h4>Query scheduled to run, you will receive a email when the results are ready.</h4>
 					</c:if>
 					
 					<h3 class="clear">Results:</h3>

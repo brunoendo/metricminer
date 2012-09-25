@@ -14,7 +14,10 @@ import org.metricminer.infra.dao.QueryDao;
 import org.metricminer.model.Query;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskConfigurationEntryKey;
+import org.metricminer.model.User;
 import org.mockito.Mockito;
+
+import br.com.caelum.vraptor.simplemail.Mailer;
 
 public class ExecuteQueryTaskTest {
 
@@ -28,10 +31,15 @@ public class ExecuteQueryTaskTest {
         
         QueryDao queryDao = mock(QueryDao.class);
         Query queryToRun = new Query();
+        User author = new User();
+        author.setEmail("some@some.com");
+        queryToRun.setAuthor(author);
         when(queryDao.findBy(1L)).thenReturn(queryToRun);
         
         MetricMinerConfigs config = mock(MetricMinerConfigs.class);
         when(config.getQueriesResultsDir()).thenReturn("tmp/");
+        Mailer mailer = mock(Mailer.class);
+        when(config.getMailer()).thenReturn(mailer);
         
         QueryExecutor queryExecutor = mock(QueryExecutor.class);
         Mockito.doThrow(new RuntimeException("error message")).when(queryExecutor).execute(Mockito.any(Query.class), Mockito.any(OutputStream.class));
