@@ -25,15 +25,6 @@ public class QueryValidator {
         this.validator = validator;
     }
 
-    private boolean containsSourceCode(Query query) {
-        boolean invalid = false;
-        String sql = query.getSqlQuery();
-        if (sql.contains(" source ") && sql.contains("SourceCode")) {
-            invalid = true;
-        }
-        return invalid;
-    }
-
     private boolean containsWildCard(Query query) {
         boolean invalid = false;
         String sql = query.getSqlQuery();
@@ -64,10 +55,6 @@ public class QueryValidator {
     public void validate(Query query) {
         if (containsWildCard(query)) {
             validator.add(new ValidationMessage(WILDCARD_MESSAGE,
-                    "InvalidQuery"));
-        }
-        if (containsSourceCode(query)) {
-            validator.add(new ValidationMessage(SOURCECODE_MESSAGE,
                     "InvalidQuery"));
         }
         if (containsAuthorName(query)) {
