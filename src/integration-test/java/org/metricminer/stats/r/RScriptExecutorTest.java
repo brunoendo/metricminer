@@ -35,8 +35,8 @@ public class RScriptExecutorTest {
 	@Test
 	public void shouldInvokeR() throws Exception {
 		StatisticalTest test = new StatisticalTest("wilcoxon", wilcoxon(), new User());
-		QueryResult q1 = new QueryResult(path + "/q1.csv");
-		QueryResult q2 = new QueryResult(path + "/q2.csv");
+		QueryResult q1 = new QueryResult(path + "/q1.csv", null);
+		QueryResult q2 = new QueryResult(path + "/q2.csv", null);
 		
 		StatisticalTestResult result = r.execute(test, q1, q2);
 		
