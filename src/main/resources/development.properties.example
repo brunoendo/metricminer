@@ -1,0 +1,6 @@
+vraptor.simplemail.main.server = smtp.gmail.com
+vraptor.simplemail.main.port = 587
+vraptor.simplemail.main.tls = true
+vraptor.simplemail.main.from = metricminer@gmail.com
+vraptor.simplemail.main.username = metricminer
+vraptor.simplemail.main.password =

@@ -85,7 +85,7 @@ public class QueryController {
     }
 
     @Get("/query/{queryId}")
-    public void detailQuery(Long queryId) {
+    public void detailQuery(Long queryId)  {
         Query query = queryDao.findBy(queryId);
         boolean allowedToEdit = query.isAllowedToEdit(userSession.user());
         List<Task> tasksToRunThisQuery = taskDao.findTasksScheduledToRunQuery(query);

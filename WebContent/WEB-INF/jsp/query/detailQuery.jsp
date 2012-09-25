@@ -57,13 +57,29 @@
 						</c:if>
 					</c:if>
 					<c:if test="${scheduledToRun}">
-						<h4>Query scheduled to run, wait for the task to finish to download new results.</h4>
+						<h4>Query scheduled to run, come back when the execution has finished.</h4>
 					</c:if>
 					
 					<h3 class="clear">Results:</h3>
 					<table class="clear results">
-						<c:forEach items="${query.results}" var="result" >
+						<tr>
+							<th></th>
+							<th>Status</th>
+						</tr>
+						<c:if test="${scheduledToRun}">
 							<tr>
+								<td>#${query.results.size() + 1}</td>
+								<td>SCHEDULED</td>
+							</tr>
+						</c:if>
+						<c:forEach items="${query.results}" var="result" varStatus="status" >
+							<tr>
+								<c:if test="${scheduledToRun}">
+									<td>#${query.results.size() - status.count + 1}</td>
+								</c:if>
+								<c:if test="${scheduledToRun eq false}">
+									<td>#${query.results.size() - status.count + 1}</td>
+								</c:if>
 								<td>${result.status}</td>
 									<c:if test="${result.hasFailed() eq false}">
 										<td>

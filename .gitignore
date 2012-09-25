@@ -8,3 +8,6 @@ target/
 scripts/send.csv
 *.r
 tmp/
+src/main/resources/development.properties
+src/main/resources/production.properties
+
