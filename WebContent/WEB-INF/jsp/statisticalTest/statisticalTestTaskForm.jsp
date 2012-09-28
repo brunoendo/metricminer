@@ -32,7 +32,7 @@
 							<label for="firstQueryResultId">First dataset</label> <br />
 							<select name="firstQueryResultId">
 								<c:forEach var="result" items="${results}">
-									<option value=${result.id}>${result.query.name}</option>
+									<option value=${result.id}>${result.query.name} (${result.id})</option>
 								</c:forEach>
 							</select>
 							<span class="note">*This should be a single column dataset</span>
@@ -41,7 +41,7 @@
 							<label for="secondQueryResultId">Second dataset</label> <br />
 							<select name="secondQueryResultId">
 								<c:forEach var="result" items="${results}">
-									<option value=${result.id}>${result.query.name}</option>
+									<option value=${result.id}>${result.query.name} (${result.id})</option>
 								</c:forEach>
 							</select>
 						</p>
