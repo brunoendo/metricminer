@@ -42,6 +42,10 @@ public class TaskDao {
     public void update(Task task) {
         session.saveOrUpdate(task);
     }
+    
+    public Task findById(Long id) {
+        return (Task) session.load(Task.class, id);
+    }
 
     @SuppressWarnings("unchecked")
     public List<Task> listTasks() {

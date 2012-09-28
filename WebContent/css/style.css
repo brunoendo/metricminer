@@ -1033,3 +1033,15 @@ button:hover {
 	background: url(../images/btns_.gif) top center no-repeat;
 	text-shadow: 1px 1px 0 #b55f10;
 }
+
+select {
+	width: 200px;
+	background-color: rgba(255, 255, 255, 0.3);
+	font-size: 1.1em;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	padding: 6px;
+	background-color: white;
+	border: 1px solid #bbb;
+}

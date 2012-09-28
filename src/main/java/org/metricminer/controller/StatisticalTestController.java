@@ -16,7 +16,6 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.view.Results;
 
 @Resource
 public class StatisticalTestController {
@@ -26,14 +25,15 @@ public class StatisticalTestController {
     private final Result result;
     private final QueryResultDAO queryResultDao;
 
-    public StatisticalTestController(StatisticalTestDao statisticalTestDao, TaskDao taskDao, Result result, QueryResultDAO queryResultDao) {
+    public StatisticalTestController(StatisticalTestDao statisticalTestDao, TaskDao taskDao,
+            Result result, QueryResultDAO queryResultDao) {
         this.taskDao = taskDao;
         this.statisticalTestDao = statisticalTestDao;
         this.result = result;
         this.queryResultDao = queryResultDao;
     }
     
-    @Get("/stats/addTask")
+    @Get("/stats/add")
     public void statisticalTestTaskForm() {
         List<QueryResult> results = queryResultDao.list();
         List<StatisticalTest> tests = statisticalTestDao.list();
@@ -41,18 +41,36 @@ public class StatisticalTestController {
         result.include("tests", tests);
     }
 
-    @Post("/stats/addTask")
-    public void addStatisticalTestTask(Long statisticalTestId, Long firstQueryResultId, Long secondQueryResultId) {
-        StatisticalTest statisticalTest = statisticalTestDao.findById(statisticalTestId);
+    @Post("/stats/")
+    public void addStatisticalTestExecution(Long statisticalTestId, Long firstQueryResultId,
+            Long secondQueryResultId, String name) {
         Task task = new TaskBuilder()
             .forProject(null)
-            .withName("Execute statistical test: " + statisticalTest.getName())
+            .withName(name)
             .withRunnableTaskFactory(new ExecuteRScriptTaskFactory())
             .build();
-        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.FIRST_QUERY_RESULT, firstQueryResultId.toString());
-        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.SECOND_QUERY_RESULT, secondQueryResultId.toString());
-        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.STATISTICAL_TEST, statisticalTestId.toString());
+        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.FIRST_QUERY_RESULT, 
+                firstQueryResultId.toString());
+        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.SECOND_QUERY_RESULT, 
+                secondQueryResultId.toString());
+        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.STATISTICAL_TEST, 
+                statisticalTestId.toString());
         taskDao.save(task);
-        result.use(Results.json()).from("ok").serialize();
+        result.redirectTo(StatisticalTestController.class).detailStatiscalTestExecution(task.getId());
+    }
+    
+    @Get("/stat/{taskId}")
+    public void detailStatiscalTestExecution(Long taskId) {
+        Task task = taskDao.findById(taskId);
+        result.include("task", task);
+        long firstQueryId = Long.parseLong(task.getTaskConfigurationValueFor(TaskConfigurationEntryKey.FIRST_QUERY_RESULT));
+        long secondQueryId = Long.parseLong(task.getTaskConfigurationValueFor(TaskConfigurationEntryKey.SECOND_QUERY_RESULT));
+        long statisticalTestId = Long.parseLong(task.getTaskConfigurationValueFor(TaskConfigurationEntryKey.STATISTICAL_TEST));
+        result.include("firstDataset", 
+                queryResultDao.findById(firstQueryId));
+        result.include("secondDataset", 
+                queryResultDao.findById(secondQueryId));
+        result.include("statisticalTest", 
+                statisticalTestDao.findById(statisticalTestId));
     }
 }

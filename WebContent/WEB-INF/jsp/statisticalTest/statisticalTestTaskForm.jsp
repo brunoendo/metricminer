@@ -22,16 +22,23 @@
 				
 				
 				<div class="block_content">
-					<form method="post" action="${linkTo[StatisticalTestController].addStatisticalTestTask}">
+					<form method="post" action="${linkTo[StatisticalTestController].addStatisticalTestExecution}">
 					
 						<p>
+							<label for="name">Name</label> <br />
+							<input type="text" name="name" class="text small" />
+						</p>
+						<p>
+							<label for="firstQueryResultId">First dataset</label> <br />
 							<select name="firstQueryResultId">
 								<c:forEach var="result" items="${results}">
 									<option value=${result.id}>${result.query.name}</option>
 								</c:forEach>
 							</select>
+							<span class="note">*This should be a single column dataset</span>
 						</p>
 						<p>
+							<label for="secondQueryResultId">Second dataset</label> <br />
 							<select name="secondQueryResultId">
 								<c:forEach var="result" items="${results}">
 									<option value=${result.id}>${result.query.name}</option>
@@ -39,11 +46,13 @@
 							</select>
 						</p>
 						<p>
+							<label for="statisticalTestId">Statistical test</label> <br />
 							<select name="statisticalTestId">
 								<c:forEach var="test" items="${tests}">
 									<option value=${test.id}>${test.name}</option>
 								</c:forEach>
 							</select>
+							</select><span class="note">*This should to be a single column dataset</span>
 						</p>
 					
 						<p>
