@@ -2,7 +2,9 @@ package org.metricminer;
 
 public class MetricMinerExeption extends RuntimeException {
 
-	public MetricMinerExeption() {
+    private static final long serialVersionUID = -6840938331242924281L;
+
+    public MetricMinerExeption() {
 		super();
 	}
 

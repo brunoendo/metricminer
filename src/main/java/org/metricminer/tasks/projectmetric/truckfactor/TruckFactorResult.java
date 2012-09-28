@@ -49,5 +49,8 @@ public class TruckFactorResult implements MetricResult {
                 + artifactId + "]";
     }
     
+    public Long getId() {
+        return id;
+    }
     
 }

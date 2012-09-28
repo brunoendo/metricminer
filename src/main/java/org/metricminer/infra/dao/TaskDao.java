@@ -73,6 +73,7 @@ public class TaskDao {
         save(task);
     }
 
+    @SuppressWarnings("unchecked")
     public List<Task> findTasksScheduledToRunQuery(Query queryScheduled) {
         org.hibernate.Query hql = session.createQuery("select task from Task as task " +
         		"join fetch task.configurationEntries c " +
@@ -85,7 +86,6 @@ public class TaskDao {
             .setString("status2", TaskStatus.QUEUED.toString());
         
         return hql.list();
-        
     }
 
 }

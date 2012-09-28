@@ -2,11 +2,9 @@ package org.metricminer.scm.git;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.metricminer.changesets.ChangeSet;
 import org.metricminer.infra.executor.CommandExecutor;
-import org.metricminer.model.ArtifactKind;
 import org.metricminer.scm.CommitData;
 import org.metricminer.scm.DiffData;
 import org.metricminer.scm.SCM;
@@ -89,17 +87,6 @@ public class Git implements SCM {
 		}
 	}
 
-	private void parseBlameInformation(String id, DiffData diffData) {
-		if (diffData.getArtifactKind() != ArtifactKind.BINARY) {
-			Map<Integer, String> blamedLines = blame(id, diffData.getName());
-			for (Entry<Integer, String> blamedLineEntry : blamedLines
-					.entrySet()) {
-				diffData.blame(blamedLineEntry.getKey(),
-						blamedLineEntry.getValue());
-			}
-		}
-	}
-
 	private String findPriorCommitOf(String id) {
 		String priorCommit = exec.execute("git log " + id
 				+ "^1 --pretty=format:%H -n 1", getRepoPath());
@@ -121,19 +108,6 @@ public class Git implements SCM {
 		parsedCommit
 				.setDiff(response.substring(response.indexOf("</Commit>") + 9));
 		return parsedCommit;
-	}
-
-	private int linesIn(String modifiedSource) {
-		int lines = 0;
-		for (int i = 0; i < modifiedSource.length() - 1; i++) {
-			if (modifiedSource.charAt(i) == '\n')
-				lines++;
-		}
-		int lastCharIndex = modifiedSource.length() - 1;
-		if (lastCharIndex > 0) {
-			lines += modifiedSource.charAt(lastCharIndex) == '\n' ? 0 : 1;
-		}
-		return lines;
 	}
 
 	private String cleanCDATA(String response) {
