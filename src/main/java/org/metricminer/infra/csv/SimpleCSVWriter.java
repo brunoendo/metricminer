@@ -19,7 +19,7 @@ public class SimpleCSVWriter implements CSVWriter {
         printHeader(csvPrint, first);
         for (Map<String,Object> row : results) {
             for (Entry<String, Object> entry : row.entrySet()) {
-                csvPrint.print("\"" + entry.getValue() + "\";");
+                csvPrint.print("\"" + entry.getValue().toString().replace("\"", "'") + "\";");
             }
             csvPrint.print("\n");
         }
@@ -27,7 +27,7 @@ public class SimpleCSVWriter implements CSVWriter {
 
     private void printHeader(PrintStream csvPrint, Map<String, Object> first) {
         for (Entry<String, Object> entry : first.entrySet()) {
-            csvPrint.print("\""  + entry.getKey() + "\";");
+            csvPrint.print("\""  + entry.getKey().replace("\"", "'") + "\";");
         }
         csvPrint.print("\n");
     }
