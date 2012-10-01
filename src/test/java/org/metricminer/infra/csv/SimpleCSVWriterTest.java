@@ -31,13 +31,13 @@ public class SimpleCSVWriterTest {
         ByteArrayOutputStream csvOutputStream = new ByteArrayOutputStream();
         writer.write(csvOutputStream, results);
         
-        String expected = "column1;column2;\n" +
-                "value11;value21;\n" +
-                "value21;value22;\n";
+        String expected = "\"column1\";\"column2\";\n" +
+                "\"value11\";\"value21\";\n" +
+                "\"value21\";\"value22\";\n";
         String csv = new String(csvOutputStream.toByteArray());
         
 
         assertEquals(expected, csv);
     }
-
+    
 }
