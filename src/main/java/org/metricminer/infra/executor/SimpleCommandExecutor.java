@@ -26,7 +26,6 @@ public class SimpleCommandExecutor implements CommandExecutor {
 		Process proc;
 		try {
 		    Logger logger = Logger.getLogger(SimpleCommandExecutor.class);
-	        logger.debug("executing: " + finalCommand);
 			proc = Runtime.getRuntime().exec(finalCommand, getEnvTokens(),
 					new File(basePath));
 		} catch (IOException e) {
