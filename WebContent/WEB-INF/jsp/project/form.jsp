@@ -24,11 +24,11 @@
 					<form method="post" action='<c:url value="/projects"></c:url>' '>
 						<p>
 							<label for="project.name">Name: </label> <br />
-							<input type="text" class="text small" name="project.name" />
+							<input type="text" class="text small" name="name" />
 						</p>
 						<p>
 							<label for="project.scmUrl">Git url: </label><br />
-							<input type="text" class="text small" name="project.scmUrl" />
+							<input type="text" class="text small" name="scmUrl" />
 						</p>
 						
 						<p>

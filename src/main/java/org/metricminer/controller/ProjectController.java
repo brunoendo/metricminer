@@ -102,8 +102,11 @@ public class ProjectController {
     }
 
     @Post("/projects")
-    public void createProject(Project project, List<RegisteredMetric> metrics) {
-        saveProject(project, metrics);
+    public void createProject(String name, String scmUrl) {
+        Project project = new Project();
+        project.setName(name);
+        project.setScmUrl(scmUrl);
+        saveProject(project, configs.getRegisteredMetrics());
     }
     
     @PublicAccess
