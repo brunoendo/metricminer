@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 
 
 @PrototypeScoped
-@Scheduled(cron = "0/10 * * * * ?")
+@Scheduled(cron = "0/60 * * * * ?")
 public class TaskQueueCleanerJob implements br.com.caelum.vraptor.tasks.Task {
 
     private final Session daoSession;
@@ -31,15 +31,30 @@ public class TaskQueueCleanerJob implements br.com.caelum.vraptor.tasks.Task {
     @Override
     public void execute() {
         log.debug("Running TaskQueueCleanerJob...");
-        List<Task> tasksNotRunning = queueStatus.cleanTasksNotRunning();
         daoSession.beginTransaction();
-        for (Task task : tasksNotRunning) {
-            if (task.hasStarted()) {
-                task.setFailed();
-                taskDao.update(task);
+        clearZombieTasks();
+        List<Task> startedTasks = taskDao.findStartedTasks();
+        for (Task possibleZombieTask : startedTasks) {
+            if (!queueStatus.containsTask(possibleZombieTask)) {
+                failTask(possibleZombieTask);
             }
         }
         daoSession.getTransaction().commit();
+    }
+
+    private void clearZombieTasks() {
+        List<Task> tasksNotRunning = queueStatus.cleanTasksNotRunning();
+        for (Task task : tasksNotRunning) {
+            if (task.hasStarted()) {
+                failTask(task);
+            }
+        }
+    }
+
+    private void failTask(Task task) {
+        task.setFailed();
+        taskDao.update(task);
+        log.debug("Found zombie task: " + task);
     }
 
 }

@@ -92,4 +92,9 @@ public class TaskDao {
         return hql.list();
     }
 
+    @SuppressWarnings("unchecked")
+    public List<Task> findStartedTasks() {
+        return session.createCriteria(Task.class).add(Restrictions.eq("status", TaskStatus.STARTED)).list();
+    }
+
 }
