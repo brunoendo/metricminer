@@ -24,13 +24,13 @@ for project in projects:
     #print params
     query = urllib.urlencode(params)
     
-    url = "localhost:8080";
-    #url = "metricminer.org.br";
+    #url = "localhost:8080";
+    url = "metricminer.org.br";
     
     headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}
     
     conn = httplib.HTTPConnection(url)
-    conn.request("POST", "/MetricMiner/projects/06560fb292075c5eeca4ceb586185332", query, headers)
+    conn.request("POST", "/projects/06560fb292075c5eeca4ceb586185332", query, headers)
     response = conn.getresponse()
     print response.status, response.reason
     

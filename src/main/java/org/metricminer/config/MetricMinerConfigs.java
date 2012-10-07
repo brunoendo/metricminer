@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -49,36 +50,39 @@ public class MetricMinerConfigs {
 
 	private void readConfigurationFile() {
 		Properties properties = new Properties();
-        try {
-        	logger.info("Loading configurations from metricminer.properties");
-			loadConfsFrom(properties);
-			logger.info("queries.results.dir = " + this.queriesResultDir);
-			logger.info("repositories.dir = " + this.repositoriesDir);
-		} catch (FileNotFoundException e) {
-			throw new MetricMinerExeption("Configuration file not found.", e);
-		} catch (IOException e) {
-			throw new MetricMinerExeption("Could not read configuration file.", e);
-		}
+    	logger.info("Loading configurations from metricminer.properties");
+		loadConfsFrom(properties);
+		logger.info("queries.results.dir = " + this.queriesResultDir);
+		logger.info("repositories.dir = " + this.repositoriesDir);
+		
 	}
 
-	private void loadConfsFrom(Properties properties) throws IOException,
-			FileNotFoundException {
+	private void loadConfsFrom(Properties properties) {
 		String configFilePath = context.getRealPath(configPath);
-		properties.load(new FileInputStream(configFilePath));
+		try {
+            properties.load(new FileInputStream(configFilePath));
+		} catch (FileNotFoundException e) {
+            throw new MetricMinerExeption("Configuration file not found.", e);
+        } catch (IOException e) {
+            throw new MetricMinerExeption("Could not read configuration file.", e);
+        }
 		this.repositoriesDir = properties.getProperty("repositories.dir", "/var/tmp/repositories");
 		this.queriesResultDir = properties.getProperty("queries.results.dir", "/var/tmp/queries");
 		this.statsResultDir = properties.getProperty("stats.results.dir", "/var/tmp/stats");
-
-		File file = new File(repositoriesDir);
-		if (!file.canWrite())
-			throw new MetricMinerExeption(repositoriesDir + " is not writable.");
-		file = new File(queriesResultDir);
-		if (!file.canWrite())
-			throw new MetricMinerExeption(queriesResultDir + " is not writable.");
-		file = new File(statsResultDir);
-		if (!file.canWrite())
-			throw new MetricMinerExeption(statsResultDir + " is not writable.");
+		
+		createDirs();
 	}
+
+    private void createDirs() {
+        List<String> dirs = Arrays.asList(this.repositoriesDir, this.statsResultDir, this.queriesResultDir);
+        for (String dir : dirs) {
+            File file = new File(dir);
+            file.mkdirs();
+            if (!file.canWrite())
+                throw new MetricMinerExeption(dir + " is not writable.");
+        }
+        
+    }
 
     private void registerMetrics() {
     	
