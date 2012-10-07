@@ -65,13 +65,6 @@ public class ProjectController {
         result.include("fileCountPerCommit", dao.fileCountPerCommitForLastSixMonths(project));
     }
 
-    @Post("/projects/{projectId}/metrics")
-    public void addMetricToCalculate(Long projectId, String metricFactoryClassName) {
-        Project project = dao.findProjectBy(projectId);
-        project.addMetricToCalculate(metricFactoryClassName);
-        result.nothing();
-    }
-    
     @Get("/project/{projectId}/delete")
     public void deleteProject(Long projectId) {
         dao.delete(projectId);
@@ -117,11 +110,6 @@ public class ProjectController {
 
 	private void saveProject(Project project, List<RegisteredMetric> metrics) {
 		Project completeProject = new Project(project, configs);
-        if (metrics != null) {
-            for (RegisteredMetric metric : metrics) {
-                completeProject.addMetricToCalculate(metric.getMetricFactoryClassName());
-            }
-        }
         dao.save(completeProject);
         result.redirectTo(ProjectController.class).list(1);
 	}
