@@ -25,11 +25,11 @@ public class TruckFactorDao {
         PreparedStatement stmt;
         try {
             stmt = c.prepareStatement(
-                    "select Artifact.id as artifact, Author.id as author from Artifact " +
-                            "inner join Commit_Artifact ca on ca.artifacts_id = Artifact.id " +
-                            "inner join Commit c on c.id = ca.commits_id " +
-                            "inner join Author on Author.id = c.author_id " +
-                            "where Artifact.project_id=? and Artifact.kind='CODE'"
+                    "select Artifact.id as artifact, Author.id as author from Artifact "+ 
+                    "inner join Modification m ON m.artifact_id = Artifact.id "+  
+                    "inner join Commit c on c.id = m.commit_id "+ 
+                    "inner join Author on Author.id = c.author_id " + 
+                    "where Artifact.project_id=? and Artifact.kind='CODE'" 
             );
             ArrayList<ArtifactAndAuthor> artifactsAndAuthors = new ArrayList<ArtifactAndAuthor>();
             stmt.setLong(1, p.getId());
@@ -53,6 +53,3 @@ public class TruckFactorDao {
         dao.listAllArtifactsByAuthorAndCommitForProject(p);
     }
 }
-
-
-

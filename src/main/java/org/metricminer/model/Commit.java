@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -33,8 +32,6 @@ public class Commit {
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Diff diff;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Artifact> artifacts;
 	@OneToMany(mappedBy = "commit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Modification> modifications;
 	private String priorCommitId;
@@ -56,7 +53,6 @@ public class Commit {
 	}
 
 	public Commit() {
-		this.artifacts = new ArrayList<Artifact>();
 		this.modifications = new ArrayList<Modification>();
 		this.sources = new ArrayList<SourceCode>();
 	}
@@ -103,17 +99,6 @@ public class Commit {
 
 	public int getId() {
 		return id;
-	}
-
-	public void addArtifact(Artifact artifact) {
-		if (artifacts == null) {
-			artifacts = new ArrayList<Artifact>();
-		}
-		artifacts.add(artifact);
-	}
-
-	public List<Artifact> getArtifacts() {
-		return artifacts;
 	}
 
 	public List<Modification> getModifications() {

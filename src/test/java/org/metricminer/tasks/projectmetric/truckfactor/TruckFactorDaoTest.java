@@ -13,6 +13,8 @@ import org.metricminer.model.Author;
 import org.metricminer.model.Commit;
 import org.metricminer.model.CommitMessage;
 import org.metricminer.model.Diff;
+import org.metricminer.model.Modification;
+import org.metricminer.model.ModificationKind;
 import org.metricminer.model.Project;
 
 public class TruckFactorDaoTest extends DaoTest {
@@ -47,8 +49,8 @@ public class TruckFactorDaoTest extends DaoTest {
         Commit commit1 = new Commit("id", author1, Calendar.getInstance(),
                 new CommitMessage("message"), new Diff("diff"), "prior",
                 project);
-        commit1.addArtifact(artifact1);
-        commit1.addArtifact(artifact2);
+        commit1.addModification(new Modification("diff", commit1, artifact1, ModificationKind.NEW));
+        commit1.addModification(new Modification("diff", commit1, artifact2, ModificationKind.NEW));
         session.save(commit1);
         return project;
     }

@@ -10,7 +10,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -29,8 +28,6 @@ public class Artifact {
     private String name;
     @Enumerated(EnumType.STRING)
     private ArtifactKind kind;
-    @ManyToMany(mappedBy = "artifacts", fetch = FetchType.LAZY)
-    private List<Commit> commits;
     @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL)
     private List<Modification> modifications;
     @ManyToOne
@@ -82,10 +79,6 @@ public class Artifact {
         modifications.add(modification);
     }
 
-    public List<Commit> getCommits() {
-        return commits;
-    }
-
     public List<Modification> getModifications() {
         return modifications;
     }
@@ -105,7 +98,4 @@ public class Artifact {
     	return getKind() != ArtifactKind.BINARY;
     }
     
-    public int getCommitCount() {
-        return commits.size();
-    }
 }

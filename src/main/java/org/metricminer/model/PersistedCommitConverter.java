@@ -60,7 +60,6 @@ public class PersistedCommitConverter {
 		        .getModificationKind());
 		artifact.addModification(modification);
 		commit.addModification(modification);
-		commit.addArtifact(artifact);
 		session.save(modification);
 	}
 
