@@ -35,7 +35,8 @@ public class SourceCodeDAO {
 	@SuppressWarnings("unchecked")
 	public Map<Long, String> listSourceCodeIdsAndNamesFor(Project project, int page) {
 		Query query = statelessSession.createQuery("select source.id, artifact.name from SourceCode source "
-                + "join source.artifact as artifact where artifact.project.id = :project_id "
+                + "join source.modification as modification " +
+                "join modification.artifact artifact where artifact.project.id = :project_id "
                 + "and source.sourceSize < :sourceSize order by source.id asc");
 		query.setParameter("project_id", project.getId())
 			.setParameter("sourceSize", MAX_SOURCE_SIZE)

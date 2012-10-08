@@ -23,6 +23,8 @@ import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Artifact;
 import org.metricminer.model.ArtifactKind;
 import org.metricminer.model.Commit;
+import org.metricminer.model.Modification;
+import org.metricminer.model.ModificationKind;
 import org.metricminer.model.Project;
 import org.metricminer.model.SourceCode;
 
@@ -115,17 +117,18 @@ public class SourceCodeDAOTest {
 	
 	@Test
     public void shouldFindSourceCodeById() throws Exception {
-        SourceCode sourceCode = new SourceCode(null, null, "");
+        SourceCode sourceCode = new SourceCode(null, "");
         statelessSession.insert(sourceCode);
         SourceCode sc = sourceCodeDAO.findByIdAndSourceSize(1L);
         assertEquals(Long.valueOf(1L), sc.getId());
     }
 
-	private void saveSourceCodesFor(Artifact A, int n) {
+	private void saveSourceCodesFor(Artifact a, int n) {
 		for (int i = 0; i < n; i++) {
 			Commit commit = new Commit();
+			Modification modification = new Modification("lala", commit, a, ModificationKind.DEFAULT);
 			session.save(commit);
-			session.save(new SourceCode(A, commit, "some code " + i));
+			session.save(new SourceCode(modification, "some code " + i));
 		}
 	}
 }

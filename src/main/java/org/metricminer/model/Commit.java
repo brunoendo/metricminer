@@ -35,8 +35,6 @@ public class Commit {
 	@OneToMany(mappedBy = "commit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Modification> modifications;
 	private String priorCommitId;
-	@OneToMany(mappedBy = "commit", fetch = FetchType.LAZY)
-	private List<SourceCode> sources;
 	@ManyToOne
 	private Project project;
 
@@ -54,7 +52,6 @@ public class Commit {
 
 	public Commit() {
 		this.modifications = new ArrayList<Modification>();
-		this.sources = new ArrayList<SourceCode>();
 	}
 
 	public String getCommitId() {
@@ -116,10 +113,6 @@ public class Commit {
 
 	public void setPriorCommit(String priorCommitId) {
 		this.priorCommitId = priorCommitId;
-	}
-
-	public void addSource(SourceCode source) {
-		sources.add(source);
 	}
 
 	public Project getProject() {

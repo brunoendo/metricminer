@@ -28,15 +28,13 @@ public class PersistedCommitConverter {
 
         for (DiffData diff : data.getDiffs()) {
             Artifact artifact = convertArtifact(session, project, diff);
-            createModification(session, commit, diff, artifact);
+            Modification modification = createModification(session, commit, diff, artifact);
 
             if (artifact.isSourceCode()) {
-                SourceCode sourceCode = new SourceCode(artifact, commit, diff.getFullSourceCode());
+                SourceCode sourceCode = new SourceCode(modification, diff.getFullSourceCode());
                 session.save(sourceCode);
                 convertBlameInformation(session, diff, sourceCode);
                 
-                artifact.addSource(sourceCode);
-                commit.addSource(sourceCode);
                 session.save(sourceCode);
             }
 
@@ -54,13 +52,14 @@ public class PersistedCommitConverter {
 		}
 	}
 
-	private void createModification(Session session, Commit commit, DiffData diff,
+	private Modification createModification(Session session, Commit commit, DiffData diff,
 			Artifact artifact) {
 		Modification modification = new Modification(diff.getDiff(), commit, artifact, diff
 		        .getModificationKind());
 		artifact.addModification(modification);
 		commit.addModification(modification);
 		session.save(modification);
+		return modification;
 	}
 
 	private Artifact convertArtifact(Session session, Project project, DiffData diff) {

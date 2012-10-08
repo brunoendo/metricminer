@@ -7,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -33,12 +32,9 @@ public class Artifact {
     @ManyToOne
     @Index(name = "project_index")
     private Project project;
-    @OneToMany(mappedBy = "artifact", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SourceCode> sources;
 
     public Artifact() {
         modifications = new ArrayList<Modification>();
-        sources = new ArrayList<SourceCode>();
     }
 
     public Artifact(String name, ArtifactKind kind) {
@@ -83,13 +79,6 @@ public class Artifact {
         return modifications;
     }
 
-    public void addSource(SourceCode source) {
-        sources.add(source);
-    }
-
-    public List<SourceCode> getSources() {
-        return sources;
-    }
     public Project getProject() {
 		return project;
 	}

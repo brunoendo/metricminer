@@ -9,8 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
@@ -22,30 +22,23 @@ public class SourceCode {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne
-    private Artifact artifact;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Commit commit;
     @Type(type = "text")
     private String source;
     @Index(name = "sourceSize_index")
     private Long sourceSize;
     @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode", cascade = CascadeType.ALL)
     private List<BlamedLine> blamedLines = new ArrayList<BlamedLine>();
+    @OneToOne(fetch = FetchType.LAZY)
+    private Modification modification;
 
     public SourceCode() {
     }
-    public SourceCode(Artifact artifact, Commit commit, String source) {
-        this.artifact = artifact;
-        this.commit = commit;
+    public SourceCode(Modification modification, String source) {
+        this.modification = modification;
         this.source = source;
         sourceSize = (long) source.length();
     }
     
-    public Artifact getArtifact() {
-    	return artifact;
-    }
-
     public String getSource() {
         return source;
     }
@@ -55,11 +48,11 @@ public class SourceCode {
     }
 
     public String getName() {
-        return artifact.getName();
+        return modification.getArtifact().getName();
     }
 
     public Commit getCommit() {
-        return commit;
+        return modification.getCommit();
     }
 
 	public List<BlamedLine> getBlamedLines() {
