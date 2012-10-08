@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 
 
 @PrototypeScoped
-@Scheduled(cron = "*/5 * * * * ?")
+@Scheduled(cron = "0 */30 * * * ?")
 public class TaskQueueCleanerJob implements br.com.caelum.vraptor.tasks.Task {
 
     private final Session daoSession;
