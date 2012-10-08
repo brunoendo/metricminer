@@ -1,5 +1,7 @@
 package org.metricminer.tasks;
 
+import java.lang.Thread.State;
+
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 
@@ -9,6 +11,7 @@ import br.com.caelum.vraptor.ioc.Component;
 public class ThreadInspector {
     
     public boolean isRunning(Thread t) {
-        return t.isAlive();
+        State state = t.getState();
+        return state != State.TERMINATED;
     }
 }

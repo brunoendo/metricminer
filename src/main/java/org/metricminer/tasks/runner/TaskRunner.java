@@ -1,7 +1,5 @@
 package org.metricminer.tasks.runner;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionException;
@@ -43,8 +41,6 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     @Override
     public void execute() {
         try {
-            List<Task> tasksToClean = queueStatus.cleanTasksNotRunning();
-            failZombieTasks(tasksToClean);
             taskToRun = taskDao.getFirstQueuedTask();
             if (shouldNotStartTask()) {
                 if (taskHasFailedDependency()) {
@@ -70,17 +66,6 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         } finally {
             closeSessions();
         }
-    }
-
-    private void failZombieTasks(List<Task> tasksToClean) {
-        for (Task task : tasksToClean) {
-            log.error("The thread running: " + task + " died, setting status to FAILED");
-            daoSession.beginTransaction();
-            task.setFailed();
-            daoSession.update(task);
-            daoSession.getTransaction().commit();
-        }
-
     }
 
     private boolean taskHasFailedDependency() {
