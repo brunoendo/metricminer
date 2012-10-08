@@ -4,6 +4,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +14,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.metricminer.config.MetricMinerConfigs;
+import org.metricminer.model.Artifact;
+import org.metricminer.model.ArtifactKind;
 import org.metricminer.model.Author;
 import org.metricminer.model.CalculatedMetric;
 import org.metricminer.model.Commit;
 import org.metricminer.model.CommitMessage;
 import org.metricminer.model.Diff;
+import org.metricminer.model.Modification;
+import org.metricminer.model.ModificationKind;
 import org.metricminer.model.Project;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskBuilder;
@@ -149,6 +154,32 @@ public class ProjectDaoTest extends DaoTest {
         }
 	    assertEquals((int)Math.ceil(100.0/ProjectDao.PAGE_SIZE), projectDao.totalPages());
     }
+	
+	@Test
+	public void shouldGetFileCountPerCommit() throws Exception {
+	    Project project = new Project();
+        Author author1 = new Author();
+        Commit commit = new Commit("message", author1, Calendar.getInstance(), new CommitMessage(""), new Diff(""), "",
+                project);
+        Artifact artifact1 = new Artifact("name", ArtifactKind.CODE, project);
+        Artifact artifact2 = new Artifact("name", ArtifactKind.CODE, project);
+        Modification modification1 = new Modification("", commit, artifact1, ModificationKind.NEW);
+        commit.addModification(modification1);
+        Modification modification2 = new Modification("", commit, artifact2, ModificationKind.NEW);
+        commit.addModification(modification2);
+        session.save(project);
+        session.save(author1);
+        session.save(artifact1);
+        session.save(artifact2);
+        session.save(modification1);
+        session.save(modification2);
+        session.save(commit);
+
+	    Map<Commit, Long> countPerCommit = projectDao.fileCountPerCommitForLastSixMonths(project);
+	    ArrayList<Entry<Commit, Long>> results = new ArrayList<Entry<Commit, Long>>(countPerCommit.entrySet());
+	    assertEquals(1, results.size());
+	    assertEquals(Long.valueOf(2l), results.get(0).getValue());
+	}
 	
 	@Test
     public void shouldDeleteProject() throws Exception {

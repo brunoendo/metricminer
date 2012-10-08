@@ -154,8 +154,8 @@ public class ProjectDao {
 			Calendar start, Project project) {
 		Map<Commit, Long> map = new HashMap<Commit, Long>();
 		Query query = session
-				.createQuery("select count(source.id),commit from SourceCode as source "
-						+ " join source.commit as commit "
+				.createQuery("select count(modification.id),commit from Modification as modification "
+						+ " join modification.commit as commit "
 						+ "where commit.project.id=:id and (commit.date >= :start AND commit.date <= :end) "
 						+ "group by commit.id");
 
