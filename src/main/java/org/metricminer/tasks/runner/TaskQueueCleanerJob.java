@@ -33,13 +33,6 @@ public class TaskQueueCleanerJob implements br.com.caelum.vraptor.tasks.Task {
         log.debug("Running TaskQueueCleanerJob...");
         daoSession.beginTransaction();
         clearZombieTasks();
-        List<Task> startedTasks = taskDao.findStartedTasks();
-        for (Task possibleZombieTask : startedTasks) {
-            if (!queueStatus.containsTask(possibleZombieTask)) {
-                log.error("Found zombie task at database: " + possibleZombieTask);
-                failTask(possibleZombieTask);
-            }
-        }
         daoSession.getTransaction().commit();
     }
 
