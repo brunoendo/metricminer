@@ -20,10 +20,6 @@ public class LinesOfCodeMetric implements Metric {
 	private LinesOfCodeVisitor visitor;
 	private String clazzName;
 
-	public String header() {
-		return "path;project;class;method;lines";
-	}
-
 	public String content(String path, String project) {
 		StringBuilder msg = new StringBuilder();
 		for(Entry<String, Integer> entry : visitor.methodLines().entrySet()) {
@@ -64,11 +60,6 @@ public class LinesOfCodeMetric implements Metric {
         return results;
     }
 
-    @Override
-    public boolean shouldCalculateMetricOf(String fileName) {
-        return fileName.endsWith(".java");
-    }
-    
     @Override
     public boolean matches(String name) {
         return name.endsWith(".java");

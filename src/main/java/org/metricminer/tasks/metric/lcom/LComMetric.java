@@ -84,10 +84,6 @@ public class LComMetric implements Metric {
 		return methods.size();
 	}
 
-	public String header() {
-		return "path;project;class;lcom";
-	}
-
 	public String content(String path, String project) {
 		return path + ";" + project + ";" + name + ";" + lcom() + "\n";
 	}
@@ -101,11 +97,6 @@ public class LComMetric implements Metric {
         return Arrays.asList((MetricResult) new LComResult(source, lcom()));
     }
 
-    @Override
-    public boolean shouldCalculateMetricOf(String fileName) {
-        return fileName.endsWith(".java");
-    }
-	
     @Override
     public boolean matches(String name) {
         return name.endsWith(".java");

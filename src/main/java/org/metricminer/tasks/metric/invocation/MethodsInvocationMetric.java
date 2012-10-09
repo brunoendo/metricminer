@@ -21,10 +21,6 @@ public class MethodsInvocationMetric implements Metric{
 	private MethodsInvocationVisitor visitor;
 	private ClassInfoVisitor info;
 	
-	public String header() {
-		return "path;project;class;method;invocations";
-	}
-
 	public String content(String path, String project) {
 		for(Entry<String, Set<String>> e : visitor.getMethods().entrySet()) {
 			System.out.println(path + ";" + project + ";" + info.getName() + ";" + e.getKey() + ";" + e.getValue().size() + "\r\n");
@@ -60,11 +56,6 @@ public class MethodsInvocationMetric implements Metric{
         return results;
     }
 
-    @Override
-    public boolean shouldCalculateMetricOf(String fileName) {
-        return fileName.endsWith(".java");
-    }
-    
     @Override
     public boolean matches(String name) {
         return name.endsWith(".java");

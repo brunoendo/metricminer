@@ -19,10 +19,6 @@ public class MethodsCountMetric implements Metric {
 
 	private MethodsAndAttributesVisitor visitor;
 
-	public String header() {
-		return "path;project;class;private methods;public methods;protected methods;default methods;constructors;private attributes;public attributes;protected attributes;default attributes";
-	}
-
 	public String content(String path, String project) {
 		return 
 			path + ";" +
@@ -108,11 +104,6 @@ public class MethodsCountMetric implements Metric {
                 getDefaultAttributes().size()));
     }
 
-    @Override
-    public boolean shouldCalculateMetricOf(String fileName) {
-        return fileName.endsWith(".java");
-    }
-    
     @Override
     public boolean matches(String name) {
         return name.endsWith(".java");

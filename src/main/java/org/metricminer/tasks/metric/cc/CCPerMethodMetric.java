@@ -47,13 +47,7 @@ public class CCPerMethodMetric implements Metric {
     }
 
     @Override
-    public boolean shouldCalculateMetricOf(String fileName) {
-        return fileName.endsWith(".java");
-    }
-
-    @Override
     public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -64,7 +58,6 @@ public class CCPerMethodMetric implements Metric {
 
 	@Override
 	public Class<?> getFactoryClass() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -66,11 +66,6 @@ public class TestedMethodFinderMetric implements Metric{
     }
 
     @Override
-    public boolean shouldCalculateMetricOf(String fileName) {
-        return fileName.endsWith(".java");
-    }
-    
-    @Override
     public boolean matches(String name) {
         return name.endsWith(".java");
     }

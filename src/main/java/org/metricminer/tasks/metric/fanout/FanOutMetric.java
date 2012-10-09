@@ -18,10 +18,6 @@ public class FanOutMetric implements Metric {
 	private FanOutVisitor visitor;
     private ClassInfoVisitor classInfo;
 
-	public String header() {
-		return "path;project;class;efferent class coupling";
-	}
-
 	public String content(String path, String project) {
 		return path + ";" + project + ";" + classInfo.getName() + ";" + fanOut() + "\n";
 	}
@@ -45,11 +41,6 @@ public class FanOutMetric implements Metric {
 	public int fanOut() {
 		return visitor.typesQty();
 	}
-
-    @Override
-    public boolean shouldCalculateMetricOf(String fileName) {
-        return fileName.endsWith(".java");
-    }
 
     @Override
     public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
