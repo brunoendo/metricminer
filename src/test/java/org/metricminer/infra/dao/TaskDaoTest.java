@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.model.Project;
 import org.metricminer.model.Query;
 import org.metricminer.model.Task;
@@ -46,7 +47,7 @@ public class TaskDaoTest {
 	@Test
 	public void shouldGetLastTenFinishedTasks() throws Exception {
 		String oldestTaskName = "should not appear";
-		Project project = new Project();
+		Project project = new ProjectBuilder().build();
 		Task task = new TaskBuilder().withName(oldestTaskName)
 				.forProject(project).build();
 		task.setFinished();
@@ -54,7 +55,7 @@ public class TaskDaoTest {
 		session.save(task);
 		Thread.sleep(1000);
 		for (int i = 0; i < 10; i++) {
-			project = new Project();
+			project = new ProjectBuilder().build();
 			task = new TaskBuilder().withName("task " + i)
 					.forProject(project).build();
 			task.setFinished();

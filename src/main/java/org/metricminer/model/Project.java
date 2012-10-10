@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.config.project.MapConfig;
@@ -58,37 +57,20 @@ public class Project {
 	private List<CalculatedMetric> calculatedMetrics;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar creationDate;
-
-	@Transient
-	private MetricMinerConfigs metricMinerConfigs;
-
+	
 	public Project() {
-		this.creationDate = Calendar.getInstance();
-		this.configurationEntries = new ArrayList<ProjectConfigurationEntry>();
-		this.tasks = new ArrayList<Task>();
-		this.tags = new ArrayList<Tag>();
-		this.calculatedMetrics = new ArrayList<CalculatedMetric>();
+	    this.configurationEntries = new ArrayList<ProjectConfigurationEntry>();
+        this.tasks = new ArrayList<Task>();
+        this.tags = new ArrayList<Tag>();
+        this.calculatedMetrics = new ArrayList<CalculatedMetric>();
 	}
 
-	private Project(MetricMinerConfigs metricMinerConfigs) {
-		this();
-		this.metricMinerConfigs = metricMinerConfigs;
-		projectPath = this.metricMinerConfigs.getRepositoriesDir() + "/projects/";
-	}
-
-	public Project(String name, String scmUrl, MetricMinerConfigs metricMinerConfigs) {
-		this(metricMinerConfigs);
+	public Project(String name, String scmUrl, String projectPath) {
+	    this();
+		this.projectPath = projectPath;
+        this.creationDate = Calendar.getInstance();
 		this.name = name;
 		this.scmUrl = scmUrl;
-
-	}
-
-	public Project(Project baseProject, MetricMinerConfigs metricMinerConfigs) {
-		this(metricMinerConfigs);
-		this.metricMinerConfigs = metricMinerConfigs;
-		this.name = baseProject.getName();
-		this.scmUrl = baseProject.getScmUrl();
-		setupInitialTasks();
 	}
 
 	public String getName() {
@@ -107,8 +89,8 @@ public class Project {
 		return configurationEntries;
 	}
 
-	public void setupInitialConfigurationsEntries() {
-		String metricMinerHome = this.metricMinerConfigs.getRepositoriesDir();
+	public void setupInitialConfigurationsEntries(MetricMinerConfigs metricMinerConfigs) {
+		String metricMinerHome = metricMinerConfigs.getRepositoriesDir();
 
 		if (scmUrl.endsWith(".git") ) {
 			configurationEntries.add(new ProjectConfigurationEntry("scm",
@@ -171,7 +153,7 @@ public class Project {
 		tasks.add(metricTask);
 	}
 
-	private void setupInitialTasks() {
+	public void setupInitialTasks() {
 		Task cloneTask = new TaskBuilder().forProject(this)
 				.withName("Clone SCM")
 				.withRunnableTaskFactory(new SCMCloneTaskFactory())

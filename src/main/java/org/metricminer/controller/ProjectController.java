@@ -1,5 +1,6 @@
 package org.metricminer.controller;
 
+import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.ProjectDao;
 import org.metricminer.infra.dao.TagDao;
@@ -109,8 +110,12 @@ public class ProjectController {
     }
 
 	private void saveProject(Project project) {
-		Project completeProject = new Project(project, configs);
-        dao.save(completeProject);
+		//Project completeProject = new Project(project, configs);
+	    Project completeProject = new ProjectBuilder()
+	        .withBaseProject(project)
+	        .withInitialTasks()
+	        .withConfigs(configs).build();
+        dao.save(completeProject, configs);
         result.redirectTo(ProjectController.class).list(1);
 	}
 

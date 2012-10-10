@@ -1,8 +1,6 @@
 package org.metricminer.infra.dao;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -13,6 +11,7 @@ import java.util.Map.Entry;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Artifact;
 import org.metricminer.model.ArtifactKind;
@@ -37,8 +36,6 @@ public class ProjectDaoTest extends DaoTest {
 	public void setUp() {
 	    projectDao = new ProjectDao(session);
 		session.getTransaction().begin();
-		mockedConfigs = mock(MetricMinerConfigs.class);
-		when(mockedConfigs.getRepositoriesDir()).thenReturn("");
 	}
 
 	@After
@@ -65,7 +62,7 @@ public class ProjectDaoTest extends DaoTest {
 
 	@Test
 	public void shouldGetCommitersCount() throws Exception {
-		Project project = new Project();
+		Project project = new ProjectBuilder().build();
 		Author author1 = new Author();
 		Author author2 = new Author();
 		session.save(project);
@@ -74,7 +71,7 @@ public class ProjectDaoTest extends DaoTest {
 		addCommitsOfAuthor(2, project, author1, Calendar.getInstance());
 		addCommitsOfAuthor(2, project, author2, Calendar.getInstance());
 
-		Project project2 = new Project();
+		Project project2 = new ProjectBuilder().build();
 		Author author3 = new Author();
 		Author author4 = new Author();
 		Author author5 = new Author();
@@ -95,7 +92,7 @@ public class ProjectDaoTest extends DaoTest {
 
 	@Test
 	public void shouldGetCommitCountForLastMonths() {
-		Project project = new Project();
+		Project project = new ProjectBuilder().build();
 		Author author = new Author();
 		session.save(author);
 		session.save(project);
@@ -127,17 +124,17 @@ public class ProjectDaoTest extends DaoTest {
 	@Test
 	public void shouldFindTenProjectCount() throws Exception {
 		for (int i = 0; i < 10; i++)
-			session.save(new Project());
+			session.save(new ProjectBuilder().build());
 		Long totalProjectCount = projectDao.totalProjects();
 		assertEquals(new Long(10L), totalProjectCount);
 	}
 	
 	@Test
 	public void shouldGetLastTenProjects() throws Exception {
-		session.save(new Project("this should not appear", "", mockedConfigs));
+		session.save(new ProjectBuilder().withName("this should not appear").build());
 		for (int i = 0; i < 10; i++) {
 			Thread.sleep(5);
-			session.save(new Project("new project " + i, "", mockedConfigs));
+			session.save(new ProjectBuilder().withName("new project " + i).build());
 		}
 		List<Project> projects = projectDao.tenNewestProjects();
 		int i = 9;
@@ -150,14 +147,14 @@ public class ProjectDaoTest extends DaoTest {
 	@Test
     public void shouldGetTotalPages() throws Exception {
 	    for (int i = 0; i < 100; i++) {
-            session.save(new Project("new project " + i, "", mockedConfigs));
+            session.save(new ProjectBuilder().withName("new project " + i).build());
         }
 	    assertEquals((int)Math.ceil(100.0/ProjectDao.PAGE_SIZE), projectDao.totalPages());
     }
 	
 	@Test
 	public void shouldGetFileCountPerCommit() throws Exception {
-	    Project project = new Project();
+	    Project project = new ProjectBuilder().build();
         Author author1 = new Author();
         Commit commit = new Commit("message", author1, Calendar.getInstance(), new CommitMessage(""), new Diff(""), "",
                 project);
@@ -183,7 +180,7 @@ public class ProjectDaoTest extends DaoTest {
 	
 	@Test
     public void shouldDeleteProject() throws Exception {
-	    Project project = new Project("some project", "", mockedConfigs);
+	    Project project = new ProjectBuilder().withName("some project").build();
 	    Task task = new TaskBuilder().build();
 	    CalculatedMetric calculatedMetric = new CalculatedMetric(project, 
 	    		LComMetricFactory.class);
@@ -198,7 +195,7 @@ public class ProjectDaoTest extends DaoTest {
     }
 
 	private Project aProjectWithCommits(int totalCommits, Calendar commitDate) {
-		Project project = new Project();
+		Project project = new ProjectBuilder().build();
 		session.save(project);
 		Author author = new Author();
 		session.save(author);

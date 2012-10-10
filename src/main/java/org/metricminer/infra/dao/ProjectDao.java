@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
+import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Commit;
 import org.metricminer.model.Project;
 
@@ -24,9 +25,9 @@ public class ProjectDao {
 		this.session = session;
 	}
 
-	public void save(Project project) {
+	public void save(Project project, MetricMinerConfigs metricminerConfigs) {
 		session.save(project);
-		project.setupInitialConfigurationsEntries();
+		project.setupInitialConfigurationsEntries(metricminerConfigs);
 		session.save(project);
 	}
 

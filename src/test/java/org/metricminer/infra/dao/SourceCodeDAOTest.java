@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Artifact;
 import org.metricminer.model.ArtifactKind;
@@ -61,8 +62,8 @@ public class SourceCodeDAOTest {
 	public void shouldGetAllSourceCodeIdsFromProject() throws Exception {
 		MetricMinerConfigs config = mock(MetricMinerConfigs.class);
 		when(config.getRepositoriesDir()).thenReturn("/tmp");
-		Project project = new Project("project", "", config);
-		Project otherProject = new Project("other project", "", config);
+		Project project = new ProjectBuilder().withName("project").build();
+		Project otherProject = new ProjectBuilder().withName("other project").build();
 
 		saveProjectData(project, otherProject);
 
@@ -87,8 +88,8 @@ public class SourceCodeDAOTest {
 	public void shouldGetSourceCodesFromIds() throws Exception {
 		MetricMinerConfigs config = mock(MetricMinerConfigs.class);
 		when(config.getRepositoriesDir()).thenReturn("/tmp");
-		Project project = new Project("project", "", config);
-		Project otherProject = new Project("other project", "", config);
+		Project project = new ProjectBuilder().withName("project").build();
+		Project otherProject = new ProjectBuilder().withName("other project").build();
 		saveProjectData(project, otherProject);
 
 		Map<Long, String> idsAndNamesMap = sourceCodeDAO
