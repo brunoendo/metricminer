@@ -48,7 +48,7 @@ public class MethodsInvocationMetric implements Metric{
 	}
 
     @Override
-    public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
+    public Collection<MetricResult> results(SourceCode source) {
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
         for (Entry<String, Set<String>> e : visitor.getMethods().entrySet()) {
             results.add(new MethodsInvocationResult(source, e.getValue().size(), e.getKey()));

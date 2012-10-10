@@ -54,7 +54,7 @@ public class TestedMethodFinderMetric implements Metric{
 	}
 
     @Override
-    public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
+    public Collection<MetricResult> results(SourceCode source) {
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
         for(Entry<String, Set<String>> testMethod : getMethods().entrySet()) {
             for(String productionMethod : testMethod.getValue()) {

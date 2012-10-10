@@ -43,7 +43,7 @@ public class FanOutMetric implements Metric {
 	}
 
     @Override
-    public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
+    public Collection<MetricResult> results(SourceCode source) {
         return Arrays.asList((MetricResult) new FanOutResult(source, fanOut()));
     }
 

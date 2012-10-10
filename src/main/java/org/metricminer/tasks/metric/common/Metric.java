@@ -7,7 +7,7 @@ import org.metricminer.model.SourceCode;
 
 
 public interface Metric {
-    Collection<MetricResult> resultsToPersistOf(SourceCode source);
+    Collection<MetricResult> results(SourceCode source);
 
     void calculate(InputStream is);
 

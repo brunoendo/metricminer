@@ -40,7 +40,7 @@ public class CalculateAllMetricsTask extends SourcesIteratorAbstractTask {
 					sourceCode.getSourceBytesArray());
 			metric.calculate(inputStream);
 			inputStream.close();
-			Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
+			Collection<MetricResult> results = metric.results(sourceCode);
 
 			statelessSession.beginTransaction();
 			for (MetricResult result : results) {

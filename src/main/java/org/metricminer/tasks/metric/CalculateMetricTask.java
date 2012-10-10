@@ -34,7 +34,7 @@ public class CalculateMetricTask extends SourcesIteratorAbstractTask {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(sourceCode.getSourceBytesArray());
 			metric.calculate(inputStream);
 			inputStream.close();
-			Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
+			Collection<MetricResult> results = metric.results(sourceCode);
 			statelessSession.beginTransaction();
 			for (MetricResult result : results) {
 				statelessSession.insert(result);

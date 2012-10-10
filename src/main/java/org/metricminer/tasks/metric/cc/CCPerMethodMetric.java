@@ -47,7 +47,7 @@ public class CCPerMethodMetric implements Metric {
     }
 
     @Override
-    public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
+    public Collection<MetricResult> results(SourceCode source) {
         return null;
     }
 

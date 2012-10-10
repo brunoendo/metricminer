@@ -21,7 +21,7 @@ public class CCMetric implements Metric {
         return "path;project;class;cc;average cc";
     }
 
-    public Collection<MetricResult> resultsToPersistOf(SourceCode sourceCode) {
+    public Collection<MetricResult> results(SourceCode sourceCode) {
         return Arrays.asList((MetricResult) new CCResult(sourceCode, cc(), avgCc()));
     }
 
