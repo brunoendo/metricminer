@@ -10,13 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.metricminer.builder.ProjectBuilder;
@@ -29,31 +23,13 @@ import org.metricminer.model.ModificationKind;
 import org.metricminer.model.Project;
 import org.metricminer.model.SourceCode;
 
-public class SourceCodeDAOTest {
+public class SourceCodeDAOTest extends DaoTest {
 
-	private static Session session;
-	private static StatelessSession statelessSession;
-	private static SourceCodeDAO sourceCodeDAO;
-
-	@BeforeClass
-	public static void setUpClass() {
-		SessionFactory sessionFactory = new Configuration().configure(
-				"/hibernate.test.cfg.xml").buildSessionFactory();
-		session = sessionFactory.openSession();
-		statelessSession = sessionFactory.openStatelessSession();
-		sourceCodeDAO = new SourceCodeDAO(statelessSession);
-	}
+	private SourceCodeDAO sourceCodeDAO;
 
 	@Before
 	public void setUp() {
-		session.getTransaction().begin();
-		statelessSession.getTransaction().begin();
-	}
-
-	@After
-	public void tearDown() {
-		session.getTransaction().rollback();
-		statelessSession.getTransaction().rollback();
+		sourceCodeDAO = new SourceCodeDAO(statelessSession);
 	}
 
 	//TODO: fix it, this test simply stop running with hsqldb >= 2.0.0, with previous

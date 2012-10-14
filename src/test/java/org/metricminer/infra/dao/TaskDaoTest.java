@@ -6,12 +6,7 @@ import static org.junit.Assert.assertNotSame;
 
 import java.util.List;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.model.Project;
@@ -21,27 +16,13 @@ import org.metricminer.model.TaskBuilder;
 import org.metricminer.model.TaskConfigurationEntryKey;
 import org.metricminer.model.TaskStatus;
 
-public class TaskDaoTest {
+public class TaskDaoTest extends DaoTest {
 
-	private static Session session;
 	private static TaskDao taskDao;
-
-	@BeforeClass
-	public static void setUpClass() {
-		SessionFactory sessionFactory = new Configuration().configure(
-				"/hibernate.test.cfg.xml").buildSessionFactory();
-		session = sessionFactory.openSession();
-		taskDao = new TaskDao(session);
-	}
 
 	@Before
 	public void setUp() {
-		session.getTransaction().begin();
-	}
-
-	@After
-	public void tearDown() {
-		session.getTransaction().rollback();
+	    taskDao = new TaskDao(session);
 	}
 
 	@Test

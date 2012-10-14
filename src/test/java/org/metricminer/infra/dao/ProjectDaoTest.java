@@ -8,11 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.metricminer.builder.ProjectBuilder;
-import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Artifact;
 import org.metricminer.model.ArtifactKind;
 import org.metricminer.model.Author;
@@ -28,20 +26,13 @@ import org.metricminer.model.TaskBuilder;
 import org.metricminer.tasks.metric.lcom.LComMetricFactory;
 
 public class ProjectDaoTest extends DaoTest {
+    
+    private ProjectDao projectDao;
 
-	private static ProjectDao projectDao;
-    private MetricMinerConfigs mockedConfigs;
-
-	@Before
-	public void setUp() {
-	    projectDao = new ProjectDao(session);
-		session.getTransaction().begin();
-	}
-
-	@After
-	public void tearDown() {
-		session.getTransaction().rollback();
-	}
+    @Before
+    public void setUp() {
+        projectDao = new ProjectDao(session);
+    }
 
 	@Test
 	public void shouldGetCommitCount() {

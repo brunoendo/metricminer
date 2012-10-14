@@ -21,7 +21,6 @@ public class TruckFactorDaoTest extends DaoTest {
 
     @Test
     public void shouldListAllArtifactsByCommitAndAuthor() throws Exception {
-        session.getTransaction().begin();
         
         TruckFactorDao truckFactorDao = new TruckFactorDao(session);
         Project project = aProjectWithTwoArtifactsAndOneCommitFromOneAuthor();
@@ -32,7 +31,6 @@ public class TruckFactorDaoTest extends DaoTest {
         List<ArtifactAndAuthor> artifactsAndAuthors = truckFactorDao.listAllArtifactsByAuthorAndCommitForProject(project);
         assertEquals(2, artifactsAndAuthors.size());
         
-        session.getTransaction().rollback();
     }
 
     private Project aProjectWithTwoArtifactsAndOneCommitFromOneAuthor() {
