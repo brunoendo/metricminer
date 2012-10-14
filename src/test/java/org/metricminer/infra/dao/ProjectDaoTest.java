@@ -124,8 +124,12 @@ public class ProjectDaoTest extends DaoTest {
 	public void shouldGetLastTenProjects() throws Exception {
 		session.save(new ProjectBuilder().withName("this should not appear").build());
 		for (int i = 0; i < 10; i++) {
-			Thread.sleep(5);
-			session.save(new ProjectBuilder().withName("new project " + i).build());
+			Calendar date = Calendar.getInstance();
+			date.add(Calendar.SECOND, i);
+			session.save(new ProjectBuilder()
+			    .withCreationDate(date)
+			    .withName("new project " + i)
+			    .build());
 		}
 		List<Project> projects = projectDao.tenNewestProjects();
 		int i = 9;

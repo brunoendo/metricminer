@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.config.MetricMinerConfigs;
@@ -32,9 +31,7 @@ public class SourceCodeDAOTest extends DaoTest {
 		sourceCodeDAO = new SourceCodeDAO(statelessSession);
 	}
 
-	//TODO: fix it, this test simply stop running with hsqldb >= 2.0.0, with previous
-	// versions it worked fine
-	@Ignore @Test
+	@Test
 	public void shouldGetAllSourceCodeIdsFromProject() throws Exception {
 		MetricMinerConfigs config = mock(MetricMinerConfigs.class);
 		when(config.getRepositoriesDir()).thenReturn("/tmp");
@@ -42,6 +39,8 @@ public class SourceCodeDAOTest extends DaoTest {
 		Project otherProject = new ProjectBuilder().withName("other project").build();
 
 		saveProjectData(project, otherProject);
+		
+		commit(); // don't know why
 
 		Map<Long, String> idsMap = sourceCodeDAO
 				.listSourceCodeIdsAndNamesFor(project, 0);
@@ -58,15 +57,16 @@ public class SourceCodeDAOTest extends DaoTest {
 		}
 	}
 	
-    //TODO: fix it, this test simply stop running with hsqldb >= 2.0.0, with previous
-    // versions it worked fine
-	@Test @Ignore
+	@Test
 	public void shouldGetSourceCodesFromIds() throws Exception {
 		MetricMinerConfigs config = mock(MetricMinerConfigs.class);
 		when(config.getRepositoriesDir()).thenReturn("/tmp");
 		Project project = new ProjectBuilder().withName("project").build();
 		Project otherProject = new ProjectBuilder().withName("other project").build();
 		saveProjectData(project, otherProject);
+		
+		
+		commit(); // don't know why
 
 		Map<Long, String> idsAndNamesMap = sourceCodeDAO
 				.listSourceCodeIdsAndNamesFor(project, 0);
@@ -77,6 +77,12 @@ public class SourceCodeDAOTest extends DaoTest {
 
 		assertEquals(entries.size(), sources.size());
 	}
+
+    private void commit() {
+        session.flush();
+        session.clear();
+        session.getTransaction().commit();
+    }
 
 	private void saveProjectData(Project project, Project otherProject) {
 		session.save(project);
@@ -105,6 +111,7 @@ public class SourceCodeDAOTest extends DaoTest {
 			Commit commit = new Commit();
 			Modification modification = new Modification("lala", commit, a, ModificationKind.DEFAULT);
 			session.save(commit);
+			session.save(modification);
 			session.save(new SourceCode(modification, "some code " + i));
 		}
 	}

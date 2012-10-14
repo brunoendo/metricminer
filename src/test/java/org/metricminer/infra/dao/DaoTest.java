@@ -25,7 +25,9 @@ public class DaoTest {
     
     @After
     public void tearDown() {
-        session.getTransaction().rollback();
+        if (session.getTransaction().isActive()) {
+            session.getTransaction().rollback();
+        }
         statelessSession.getTransaction().rollback();
         session.close();
         sessionFactory.close();

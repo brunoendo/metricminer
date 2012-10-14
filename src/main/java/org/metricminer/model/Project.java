@@ -65,10 +65,10 @@ public class Project {
         this.calculatedMetrics = new ArrayList<CalculatedMetric>();
 	}
 
-	public Project(String name, String scmUrl, String projectPath) {
+	public Project(String name, String scmUrl, String projectPath, Calendar creationDate) {
 	    this();
 		this.projectPath = projectPath;
-        this.creationDate = Calendar.getInstance();
+        this.creationDate = creationDate;
 		this.name = name;
 		this.scmUrl = scmUrl;
 	}
