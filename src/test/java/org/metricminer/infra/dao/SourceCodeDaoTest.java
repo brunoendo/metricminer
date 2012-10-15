@@ -2,6 +2,7 @@ package org.metricminer.infra.dao;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.validation.constraints.AssertFalse;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +27,13 @@ import org.metricminer.model.ModificationKind;
 import org.metricminer.model.Project;
 import org.metricminer.model.SourceCode;
 
-public class SourceCodeDAOTest extends DaoTest {
+public class SourceCodeDaoTest extends DaoTest {
 
-	private SourceCodeDAO sourceCodeDAO;
+	private SourceCodeDao sourceCodeDAO;
 
 	@Before
 	public void setUp() {
-		sourceCodeDAO = new SourceCodeDAO(statelessSession);
+		sourceCodeDAO = new SourceCodeDao(statelessSession);
 	}
 
 	@Test
@@ -105,6 +110,29 @@ public class SourceCodeDAOTest extends DaoTest {
         SourceCode sc = sourceCodeDAO.findByIdAndSourceSize(1L);
         assertEquals(Long.valueOf(1L), sc.getId());
     }
+	
+	@Test
+	public void shouldFindSourceCodeByIdsArray() throws Exception {
+		ArrayList<Long> ids = new ArrayList<Long>();
+		
+		ids.add(insertSourceWithContents("first").getId());
+		ids.add(insertSourceWithContents("second").getId());
+		insertSourceWithContents("not in query");
+		ids.add(insertSourceWithContents("third").getId());
+		
+		
+		List<SourceCode> sources = sourceCodeDAO.findWithIds(ids);
+		assertEquals(3, sources.size());
+		assertFalse(sources.get(0).getSource().equals("not in query"));
+		assertFalse(sources.get(1).getSource().equals("not in query"));
+		assertFalse(sources.get(2).getSource().equals("not in query"));
+	}
+
+	private SourceCode insertSourceWithContents(String name) {
+		SourceCode sourceCode = new SourceCode(null, name);
+		statelessSession.insert(sourceCode);
+		return sourceCode;
+	}
 
 	private void saveSourceCodesFor(Artifact a, int n) {
 		for (int i = 0; i < n; i++) {

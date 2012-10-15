@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
-import org.metricminer.infra.dao.SourceCodeDAO;
+import org.metricminer.infra.dao.SourceCodeDao;
 import org.metricminer.model.Project;
 import org.metricminer.model.SourceCode;
 import org.metricminer.model.Task;
@@ -19,12 +19,12 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 	protected Task task;
 	protected Session session;
 	protected static Logger log = Logger.getLogger(SourcesIteratorAbstractTask.class);
-	protected SourceCodeDAO sourceCodeDAO;
+	protected SourceCodeDao sourceCodeDAO;
 
 	public SourcesIteratorAbstractTask(Task task, Session session, StatelessSession statelessSession) {
 		this.task = task;
 		this.session = session;
-		this.sourceCodeDAO = new SourceCodeDAO(statelessSession);
+		this.sourceCodeDAO = new SourceCodeDao(statelessSession);
 	}
 
 	@Override
@@ -42,12 +42,11 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 
 			List<Long> sourceIds = new ArrayList<Long>(idsAndNames.keySet());
 			for (int i = 0; i < sourceIds.size(); i += PAGE_SIZE) {
-	
-				Long firstId = sourceIds.get(i);
-				Long lastId = calculateLastId(sourceIds, i);
+				
+				List<Long> ids = sourceIds.subList(i, calculateLimit(i, sourceIds));
 				
 				log.debug("Getting source codes (page " + i / PAGE_SIZE + ")");
-				List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, firstId, lastId);
+				List<SourceCode> sources = sourceCodeDAO.findWithIds(ids);
 
                 for (SourceCode sc : sources) {
                     log.debug("-- Working on " + idsAndNames.get(sc.getId()) + " id " + sc.getId());
@@ -65,6 +64,10 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 
 	}
 	
+	private int calculateLimit(int i, List<Long> sourceIds) {
+		return (i + PAGE_SIZE) > sourceIds.size() ? sourceIds.size() : (i + PAGE_SIZE); 
+	}
+
 	private Long calculateLastId(List<Long> sourceIds, int i) {
 		Long lastId;
 		int lastIdIndex = i + (PAGE_SIZE - 1);
