@@ -5,6 +5,7 @@ import java.util.List;
 import org.metricminer.infra.dao.QueryResultDAO;
 import org.metricminer.infra.dao.StatisticalTestDao;
 import org.metricminer.infra.dao.TaskDao;
+import org.metricminer.infra.interceptor.LoggedUserAccess;
 import org.metricminer.model.QueryResult;
 import org.metricminer.model.StatisticalTest;
 import org.metricminer.model.Task;
@@ -33,6 +34,7 @@ public class StatisticalTestController {
         this.queryResultDao = queryResultDao;
     }
     
+    @LoggedUserAccess
     @Get("/stats/add")
     public void statisticalTestTaskForm() {
         List<QueryResult> results = queryResultDao.list();
@@ -41,6 +43,7 @@ public class StatisticalTestController {
         result.include("tests", tests);
     }
 
+    @LoggedUserAccess
     @Post("/stats/")
     public void addStatisticalTestExecution(Long statisticalTestId, Long firstQueryResultId,
             Long secondQueryResultId, String name) {

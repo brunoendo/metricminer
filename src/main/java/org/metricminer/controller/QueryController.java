@@ -7,6 +7,7 @@ import java.util.List;
 import org.metricminer.infra.dao.QueryDao;
 import org.metricminer.infra.dao.QueryResultDAO;
 import org.metricminer.infra.dao.TaskDao;
+import org.metricminer.infra.interceptor.LoggedUserAccess;
 import org.metricminer.infra.session.UserSession;
 import org.metricminer.infra.validator.QueryValidator;
 import org.metricminer.model.Query;
@@ -42,10 +43,12 @@ public class QueryController {
         this.userSession = userSession;
     }
 
+    @LoggedUserAccess
     @Get("/queries/new")
     public void queryForm() {
     }
 
+    @LoggedUserAccess
     @Post("/queries")
     public void save(Query query) {
         queryValidator.validate(query);
@@ -55,6 +58,7 @@ public class QueryController {
         result.redirectTo(QueryController.class).detailQuery(query.getId());
     }
 
+    @LoggedUserAccess
     @Post("/query/{queryId}")
     public void updateQuery(Query updatedQuery, Long queryId) {
         Query persistedUpdatedQuery = queryDao.findBy(queryId);
@@ -102,6 +106,7 @@ public class QueryController {
                 "result.csv");
     }
 
+    @LoggedUserAccess
     @Post("/query/run")
     public void runQuery(Long queryId) {
         Query query = queryDao.findBy(queryId);

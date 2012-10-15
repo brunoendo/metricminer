@@ -4,7 +4,7 @@ import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.ProjectDao;
 import org.metricminer.infra.dao.TagDao;
-import org.metricminer.infra.interceptor.PublicAccess;
+import org.metricminer.infra.interceptor.LoggedUserAccess;
 import org.metricminer.model.Project;
 import org.metricminer.model.Tag;
 import org.metricminer.ui.TagTokenizer;
@@ -31,6 +31,7 @@ public class ProjectController {
         this.tokenize = tokenize;
     }
 
+    @LoggedUserAccess
     @Get("/projects/new")
     public void form() {
         result.include("metrics", configs.getRegisteredMetrics());
@@ -63,12 +64,14 @@ public class ProjectController {
         result.include("fileCountPerCommit", dao.fileCountPerCommitForLastSixMonths(project));
     }
 
+    @LoggedUserAccess
     @Get("/project/{projectId}/delete")
     public void deleteProject(Long projectId) {
         dao.delete(projectId);
         result.redirectTo(ProjectController.class).list(1);
     }
 
+    @LoggedUserAccess
     @Post("/projects/{projectId}/tags/remove")
     public void removeTag(Long projectId, String tagName) {
         Project project = dao.findProjectBy(projectId);
@@ -78,6 +81,7 @@ public class ProjectController {
         result.nothing();
     }
 
+    @LoggedUserAccess
     @Post("/projects/{projectId}/tags/")
     public void addTag(Long projectId, String tagName) {
         Tag tag = tagDao.byName(tagName);
@@ -92,6 +96,7 @@ public class ProjectController {
         result.nothing();
     }
 
+    @LoggedUserAccess
     @Post("/projects")
     public void createProject(String name, String scmUrl) {
         Project project = new Project();
@@ -100,7 +105,6 @@ public class ProjectController {
         saveProject(project);
     }
     
-    @PublicAccess
     @Post("/projects/06560fb292075c5eeca4ceb586185332")
     public void createProjectRemote(String name, String scmUrl) {
         Project project = new Project();
