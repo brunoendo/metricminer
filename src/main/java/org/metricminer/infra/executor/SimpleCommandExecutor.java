@@ -7,12 +7,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-
 public class SimpleCommandExecutor implements CommandExecutor {
 
 	private List<EnvironmentVar> vars = null;
-
+	
 	public void setEnvironmentVar(String name, String value) {
 		if (vars == null)
 			vars = new ArrayList<EnvironmentVar>();
@@ -25,7 +23,6 @@ public class SimpleCommandExecutor implements CommandExecutor {
 		String finalCommand = command;
 		Process proc;
 		try {
-		    Logger logger = Logger.getLogger(SimpleCommandExecutor.class);
 			proc = Runtime.getRuntime().exec(finalCommand, getEnvTokens(),
 					new File(basePath));
 		} catch (IOException e) {

@@ -92,7 +92,7 @@ public class Project {
 	public void setupInitialConfigurationsEntries(MetricMinerConfigs metricMinerConfigs) {
 		String metricMinerHome = metricMinerConfigs.getRepositoriesDir();
 
-		if (scmUrl.endsWith(".git") ) {
+		if (scmUrl.trim().endsWith(".git") ) {
 			configurationEntries.add(new ProjectConfigurationEntry("scm",
 					"org.metricminer.scm.git.GitFactory", this));
 		}
