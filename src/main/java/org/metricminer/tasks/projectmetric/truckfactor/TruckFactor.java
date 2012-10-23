@@ -5,15 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
 import org.metricminer.model.Project;
-import org.metricminer.model.Task;
-import org.metricminer.model.TaskBuilder;
-import org.metricminer.model.TaskConfigurationEntryKey;
 import org.metricminer.tasks.metric.common.MetricResult;
-import org.metricminer.tasks.projectmetric.CalculateProjectMetricTaskFactory;
 import org.metricminer.tasks.projectmetric.common.ProjectMetric;
 
 public class TruckFactor implements ProjectMetric {
@@ -99,21 +92,4 @@ public class TruckFactor implements ProjectMetric {
         return new TruckFactorResult(percentage, artifactId, authorId, total);
     }
 
-    public static void main(String[] args) throws ClassNotFoundException {
-        
-        SessionFactory sf = new Configuration().configure()
-                .buildSessionFactory();
-        Session session = sf.openSession();
-        Project p = (Project) session.load(Project.class, 1l);
-        Task task = new TaskBuilder()
-                .forProject(p)
-                .withPosition(p.taskCount() + 1)
-                .withRunnableTaskFactory(
-                        new CalculateProjectMetricTaskFactory()).build();
-        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.PROJECT_METRIC_FACTORY_CLASS, TruckFactorFactory.class.getCanonicalName());
-        p.addTask(task);
-        session.getTransaction().begin();
-        session.save(p);
-        session.getTransaction().commit();
-    }
 }
