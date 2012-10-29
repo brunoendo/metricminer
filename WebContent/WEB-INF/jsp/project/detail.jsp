@@ -168,3 +168,4 @@
 	<c:import url="../import/javascripts.jsp" />
 	<script src='<c:url value="/js/project/detail.js"/>'></script>
 </body>
+</html>

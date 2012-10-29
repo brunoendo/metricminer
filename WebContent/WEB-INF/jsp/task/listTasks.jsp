@@ -26,6 +26,7 @@
 						<thead>
 							<tr>
 								<th>Name</th>
+								<th>Project</th>
 								<th>Status</th>
 								<th>Submission date</th>
 								<th>Start date</th>
@@ -36,6 +37,7 @@
 							<c:forEach items="${tasks}" var="task">
 								<tr>
 									<td>${task.name}</td>
+									<td>${task.project.name}</td>
 									<td>${task.status}</td>
 									<td>
 										<fmt:formatDate value="${task.submitDate.time}" 
