@@ -2,6 +2,8 @@ package org.metricminer.tasks.query;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
@@ -41,16 +43,20 @@ public class ExecuteQueryTask implements RunnableTask {
     public void run() {
         Query query = queryDao.findBy(queryId);
         String csvFileName = config.getQueriesResultsDir() + "/result-"
-                + query.getId() + "-" + query.getResultCount() + ".csv";
-        FileOutputStream outputStream = createFile(csvFileName);
+                + query.getId() + "-" + query.getResultCount() + ".zip";
+        FileOutputStream fileOutputStream = createFile(csvFileName);
         try {
-            queryExecutor.execute(query, outputStream);
-            QueryResult result = new QueryResult(csvFileName, query);
-
+        	ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+        	zipOutputStream.putNextEntry(new ZipEntry("result.csv"));
+	        queryExecutor.execute(query, zipOutputStream);
+	        zipOutputStream.closeEntry();
+	        zipOutputStream.close();
+	        fileOutputStream.close();
+	        QueryResult result = new QueryResult(csvFileName, query);
             query.addResult(result);
             result.success();
         } catch (Exception e) {
-            QueryResult result = new QueryResult();
+        	QueryResult result = new QueryResult();
             result.fail(ExceptionUtils.getStackTrace(e));
             query.addResult(result);
         }

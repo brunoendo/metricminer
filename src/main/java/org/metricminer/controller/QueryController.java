@@ -102,8 +102,8 @@ public class QueryController {
     @Get("/query/download/{resultId}")
     public Download downloadCSV(Long resultId) {
         QueryResult result = queryResultDAO.findById(resultId);
-        return new FileDownload(new File(result.getCsvFilename()), "text/csv",
-                "result.csv");
+        return new FileDownload(new File(result.getCsvFilename()), "application/zip",
+                "result.zip");
     }
 
     @LoggedUserAccess
