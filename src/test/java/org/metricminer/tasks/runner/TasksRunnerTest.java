@@ -52,26 +52,37 @@ public class TasksRunnerTest {
 
 	@Test
 	public void shouldRunATaskWithoutDependencies() throws Exception {
-		Task mockedTask = mock(Task.class);
-		when(mockedDao.getFirstQueuedTask()).thenReturn(mockedTask);
-		when(mockedTask.isDependenciesFinished()).thenReturn(true);
-		Transaction mockedTransaction = mock(Transaction.class);
-		when(mockedSession.beginTransaction()).thenReturn(mockedTransaction);
+		Task mockedTask = mockTask(true, false);
 
 		taskRunner.execute();
 		verify(mockedTask).setStarted();
 	}
 
+
 	@Test
-	public void shouldNotRunATaskWithDependencies() throws Exception {
-		Task mockedTask = mock(Task.class);
-		when(mockedDao.getFirstQueuedTask()).thenReturn(mockedTask);
-		when(mockedTask.isDependenciesFinished()).thenReturn(false);
-		Transaction mockedTransaction = mock(Transaction.class);
-		when(mockedSession.beginTransaction()).thenReturn(mockedTransaction);
+	public void shouldNotRunATaskWithIncompleteDependencies() throws Exception {
+	    Task mockedTask = mockTask(false, false);
 
 		taskRunner.execute();
 		verify(mockedTask, never()).setStarted();
+	}
+	
+	@Test
+	public void shouldFailATaskWithFailedDependencies() throws Exception {
+	    Task mockedTask = mockTask(false, false);
+	    
+	    taskRunner.execute();
+	    verify(mockedTask, never()).setStarted();
+	}
+	
+	private Task mockTask(boolean hasIncompleteDependency, boolean hasFailedDependency) {
+	    Task mockedTask = mock(Task.class);
+	    when(mockedDao.getFirstQueuedTask()).thenReturn(mockedTask);
+	    when(mockedTask.isDependenciesFinished()).thenReturn(hasIncompleteDependency);
+	    when(mockedTask.hasFailedDependencies()).thenReturn(hasFailedDependency);
+	    Transaction mockedTransaction = mock(Transaction.class);
+	    when(mockedSession.beginTransaction()).thenReturn(mockedTransaction);
+	    return mockedTask;
 	}
 
 }
