@@ -12,6 +12,7 @@ import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTaskFactory;
 import org.metricminer.tasks.TaskQueueStatus;
 
+import br.com.caelum.vraptor.ioc.Container;
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 
@@ -28,7 +29,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     private TaskQueueStatus queueStatus;
     private MetricMinerConfigs config;
 
-    public TaskRunner(TaskQueueStatus status, SessionFactory sessionFactory) {
+    public TaskRunner(TaskQueueStatus status, SessionFactory sessionFactory, Container iocContainer) {
         this.queueStatus = status;
         this.config = status.getConfigs();
         this.daoSession = sessionFactory.openSession();

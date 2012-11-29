@@ -17,12 +17,16 @@ import org.metricminer.config.ClassScan;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Task;
+import org.metricminer.tasks.RunnableTask;
+import org.metricminer.tasks.RunnableTaskFactory;
 import org.metricminer.tasks.TaskQueueStatus;
 import org.metricminer.tasks.ThreadInspector;
 
+import br.com.caelum.vraptor.ioc.Container;
+
 public class TasksRunnerTest {
 
-	private Session mockedSession;
+	private Session mockedDaoSession;
 	private TaskRunner taskRunner;
 	private TaskDao mockedDao;
 	private Session mockedTaskSession;
@@ -35,16 +39,21 @@ public class TasksRunnerTest {
 		when(context.getRealPath("/WEB-INF/metricminer.properties"))
 				.thenReturn("src/test/resources/metricminer.properties");
 		
-		mockedSession = mock(Session.class);
+		mockedDaoSession = mock(Session.class);
 		mockedTaskSession = mock(Session.class);
 		mockedStatelessSession = mock(StatelessSession.class);
 		mockedDao = mock(TaskDao.class);
-		when(mockedSession.close()).thenReturn(null);
-		when(mockedTaskSession.close()).thenReturn(null);
+		Transaction mockedTransaction = mock(Transaction.class);
+		when(mockedDaoSession.beginTransaction()).thenReturn(mockedTransaction);
+        when(mockedDaoSession.getTransaction()).thenReturn(mockedTransaction);
+        when(mockedTaskSession.getTransaction()).thenReturn(mockedTransaction);
 		
-		taskRunner = new TaskRunner(new TaskQueueStatus(new MetricMinerConfigs(
-				new ClassScan(), context, null), new ThreadInspector()),sf);
-		taskRunner.daoSession = mockedSession;
+        MetricMinerConfigs configs = new MetricMinerConfigs(new ClassScan(), context, null);
+        TaskQueueStatus status = new TaskQueueStatus(configs, new ThreadInspector());
+        
+        taskRunner = new TaskRunner(status, sf, mock(Container.class));
+        
+		taskRunner.daoSession = mockedDaoSession;
 		taskRunner.taskSession = mockedTaskSession;
 		taskRunner.taskDao = mockedDao;
 		taskRunner.statelessSession = mockedStatelessSession;
@@ -56,6 +65,7 @@ public class TasksRunnerTest {
 
 		taskRunner.execute();
 		verify(mockedTask).setStarted();
+		verify(mockedTask, never()).setFailed();
 	}
 
 
@@ -65,24 +75,42 @@ public class TasksRunnerTest {
 
 		taskRunner.execute();
 		verify(mockedTask, never()).setStarted();
+		verify(mockedTask, never()).setFailed();
 	}
 	
 	@Test
 	public void shouldFailATaskWithFailedDependencies() throws Exception {
-	    Task mockedTask = mockTask(false, false);
+	    Task mockedTask = mockTask(false, true);
 	    
 	    taskRunner.execute();
 	    verify(mockedTask, never()).setStarted();
+	    verify(mockedTask).setFailed();
 	}
 	
-	private Task mockTask(boolean hasIncompleteDependency, boolean hasFailedDependency) {
+	private Task mockTask(boolean hasIncompleteDependency, boolean hasFailedDependency) throws InstantiationException, IllegalAccessException {
 	    Task mockedTask = mock(Task.class);
 	    when(mockedDao.getFirstQueuedTask()).thenReturn(mockedTask);
 	    when(mockedTask.isDependenciesFinished()).thenReturn(hasIncompleteDependency);
 	    when(mockedTask.hasFailedDependencies()).thenReturn(hasFailedDependency);
-	    Transaction mockedTransaction = mock(Transaction.class);
-	    when(mockedSession.beginTransaction()).thenReturn(mockedTransaction);
+        when(mockedTask.getRunnableTaskFactoryClass()).thenReturn(TestRunnableTaskFactory.class);
 	    return mockedTask;
 	}
 
+	
+}
+
+class TestRunnableTaskFactory implements RunnableTaskFactory {
+    
+    @Override
+    public RunnableTask build(Task task, Session session,
+            StatelessSession statelessSession, MetricMinerConfigs config) {
+        return new TestRunnableTask();
+    }
+    
+}
+class TestRunnableTask implements RunnableTask{
+    @Override
+    public void run() {
+        System.out.println("running test task");
+    }
 }
