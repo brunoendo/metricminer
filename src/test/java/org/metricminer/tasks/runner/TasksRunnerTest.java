@@ -31,6 +31,7 @@ public class TasksRunnerTest {
 	private TaskDao mockedDao;
 	private Session mockedTaskSession;
 	private StatelessSession mockedStatelessSession;
+    private Container iocContainer;
 
 	@Before
 	public void setUp() {
@@ -51,7 +52,8 @@ public class TasksRunnerTest {
         MetricMinerConfigs configs = new MetricMinerConfigs(new ClassScan(), context, null);
         TaskQueueStatus status = new TaskQueueStatus(configs, new ThreadInspector());
         
-        taskRunner = new TaskRunner(status, sf, mock(Container.class));
+        iocContainer = mock(Container.class);
+        taskRunner = new TaskRunner(status, sf, iocContainer);
         
 		taskRunner.daoSession = mockedDaoSession;
 		taskRunner.taskSession = mockedTaskSession;
@@ -93,10 +95,10 @@ public class TasksRunnerTest {
 	    when(mockedTask.isDependenciesFinished()).thenReturn(hasIncompleteDependency);
 	    when(mockedTask.hasFailedDependencies()).thenReturn(hasFailedDependency);
         when(mockedTask.getRunnableTaskFactoryClass()).thenReturn(TestRunnableTaskFactory.class);
+        when(iocContainer.instanceFor(TestRunnableTaskFactory.class)).thenReturn(new TestRunnableTaskFactory());
 	    return mockedTask;
 	}
 
-	
 }
 
 class TestRunnableTaskFactory implements RunnableTaskFactory {

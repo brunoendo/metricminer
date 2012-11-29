@@ -9,6 +9,9 @@ import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTask;
 import org.metricminer.tasks.RunnableTaskFactory;
 
+import br.com.caelum.vraptor.ioc.Component;
+
+@Component
 public class ExecuteQueryTaskFactory implements RunnableTaskFactory {
 
     @Override

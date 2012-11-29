@@ -18,6 +18,8 @@ import org.metricminer.stats.r.RScriptExecutor;
 import org.metricminer.tasks.RunnableTask;
 import org.metricminer.tasks.RunnableTaskFactory;
 
+import br.com.caelum.vraptor.ioc.Component;
+@Component
 public class ExecuteRScriptTaskFactory implements RunnableTaskFactory {
 
     @Override

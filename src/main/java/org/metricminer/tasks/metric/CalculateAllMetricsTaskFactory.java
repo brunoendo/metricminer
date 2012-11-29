@@ -14,6 +14,9 @@ import org.metricminer.tasks.RunnableTaskFactory;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricFactory;
 
+import br.com.caelum.vraptor.ioc.Component;
+
+@Component
 public class CalculateAllMetricsTaskFactory implements RunnableTaskFactory {
 
 	@Override

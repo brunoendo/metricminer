@@ -28,9 +28,11 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     Logger log;
     private TaskQueueStatus queueStatus;
     private MetricMinerConfigs config;
+    private final Container iocContainer;
 
     public TaskRunner(TaskQueueStatus status, SessionFactory sessionFactory, Container iocContainer) {
         this.queueStatus = status;
+        this.iocContainer = iocContainer;
         this.config = status.getConfigs();
         this.daoSession = sessionFactory.openSession();
         this.taskSession = sessionFactory.openSession();
@@ -72,8 +74,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         taskToRun.setStarted();
         update(taskToRun);
         queueStatus.addRunningTask(taskToRun, Thread.currentThread());
-        RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
-                .getRunnableTaskFactoryClass().newInstance();
+        RunnableTaskFactory runnableTaskFactory = iocContainer.instanceFor(taskToRun.getRunnableTaskFactoryClass());
         taskSession.beginTransaction();
         log.debug("Running task");
         runnableTaskFactory.build(taskToRun, taskSession, statelessSession,
@@ -95,12 +96,12 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     }
 
     private void handleError(Throwable e) {
+        log.error("Error while running task " + taskToRun, e);
         taskToRun.setFailed();
         queueStatus.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
         tx.commit();
-        log.error("Error while running task " + taskToRun, e);
     }
 
     private void closeOpenedSessions() {
