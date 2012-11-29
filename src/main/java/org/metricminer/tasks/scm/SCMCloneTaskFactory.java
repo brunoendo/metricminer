@@ -8,8 +8,9 @@ import org.metricminer.tasks.RunnableTask;
 import org.metricminer.tasks.RunnableTaskFactory;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 
-@Component
+@Component @PrototypeScoped
 public class SCMCloneTaskFactory implements RunnableTaskFactory {
 
 	@Override

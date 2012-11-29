@@ -19,7 +19,8 @@ import org.metricminer.tasks.RunnableTask;
 import org.metricminer.tasks.RunnableTaskFactory;
 
 import br.com.caelum.vraptor.ioc.Component;
-@Component
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
+@Component @PrototypeScoped
 public class ExecuteRScriptTaskFactory implements RunnableTaskFactory {
 
     @Override

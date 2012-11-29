@@ -49,7 +49,6 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
                 if (taskHasFailedDependency()) {
                     failTask();
                 }
-                closeOpenedSessions();
             } else {
                 log.info("Starting task: " + taskToRun);
                 runTask();

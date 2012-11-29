@@ -11,8 +11,9 @@ import org.metricminer.tasks.parser.SCMLogParser;
 import org.metricminer.tasks.parser.SCMLogParserFactory;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 
-@Component
+@Component @PrototypeScoped
 public class ParseSCMLogTaskFactory implements RunnableTaskFactory {
 
 	@Override

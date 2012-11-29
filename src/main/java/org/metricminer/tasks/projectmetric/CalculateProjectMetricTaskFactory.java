@@ -15,8 +15,9 @@ import org.metricminer.tasks.projectmetric.common.ProjectMetric;
 import org.metricminer.tasks.projectmetric.common.ProjectMetricFactory;
 
 import br.com.caelum.vraptor.ioc.Component;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 
-@Component
+@Component @PrototypeScoped
 public class CalculateProjectMetricTaskFactory implements RunnableTaskFactory {
 
     @Override

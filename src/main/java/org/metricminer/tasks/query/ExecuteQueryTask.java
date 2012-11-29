@@ -27,14 +27,14 @@ public class ExecuteQueryTask implements RunnableTask {
     private static Logger logger = Logger.getLogger(ExecuteQueryTask.class);
 
     public ExecuteQueryTask(Task task, QueryExecutor queryExecutor,
-            QueryDao queryDao, MetricMinerConfigs config) {
+            QueryDao queryDao, MetricMinerConfigs config, Mailer mailer) {
         this.queryDao = queryDao;
         this.config = config;
         this.queryId = Long
                 .parseLong(task
                         .getTaskConfigurationValueFor(TaskConfigurationEntryKey.QUERY_ID));
         this.queryExecutor = queryExecutor;
-        this.mailer = config.getMailer();
+        this.mailer = mailer;
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.metricminer.tasks.scm.SCMCloneTaskFactory;
 public class TaskBuilder {
 
     private String name;
-    private RunnableTaskFactory runnableTaskFactory;
+    private Class<? extends RunnableTaskFactory> runnableTaskFactory;
     private Integer position;
     private Project project;
     private Long id;
@@ -14,7 +14,7 @@ public class TaskBuilder {
     public TaskBuilder() {
         position = 0;
         name = "Default task name";
-        this.runnableTaskFactory = new SCMCloneTaskFactory();
+        this.runnableTaskFactory = SCMCloneTaskFactory.class;
     }
 
     public TaskBuilder withName(String name) {
@@ -23,6 +23,11 @@ public class TaskBuilder {
     }
 
     public TaskBuilder withRunnableTaskFactory(RunnableTaskFactory runnableTaskFactory) {
+        this.runnableTaskFactory = runnableTaskFactory.getClass();
+        return this;
+    }
+    
+    public TaskBuilder withRunnableTaskFactory(Class<? extends RunnableTaskFactory> runnableTaskFactory) {
         this.runnableTaskFactory = runnableTaskFactory;
         return this;
     }

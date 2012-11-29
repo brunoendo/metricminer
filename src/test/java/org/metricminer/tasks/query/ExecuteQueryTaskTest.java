@@ -39,12 +39,11 @@ public class ExecuteQueryTaskTest {
         MetricMinerConfigs config = mock(MetricMinerConfigs.class);
         when(config.getQueriesResultsDir()).thenReturn("tmp/");
         Mailer mailer = mock(Mailer.class);
-        when(config.getMailer()).thenReturn(mailer);
         
         QueryExecutor queryExecutor = mock(QueryExecutor.class);
         Mockito.doThrow(new RuntimeException("error message")).when(queryExecutor).execute(Mockito.any(Query.class), Mockito.any(OutputStream.class));
         
-        ExecuteQueryTask queryTask = new ExecuteQueryTask(task, queryExecutor, queryDao, config);
+        ExecuteQueryTask queryTask = new ExecuteQueryTask(task, queryExecutor, queryDao, config, mailer);
         queryTask.run();
         
         assertEquals(1, queryToRun.getResultCount());

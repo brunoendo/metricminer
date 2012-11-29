@@ -71,7 +71,7 @@ public class TaskDao {
     public void saveTaskToExecuteQuery(Query query) {
         Task task = new TaskBuilder()
                 .withName("Execute query " + query.getName())
-                .withRunnableTaskFactory(new ExecuteQueryTaskFactory()).build();
+                .withRunnableTaskFactory(ExecuteQueryTaskFactory.class).build();
         task.addTaskConfigurationEntry(TaskConfigurationEntryKey.QUERY_ID,
                 query.getId().toString());
         save(task);

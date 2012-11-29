@@ -22,7 +22,9 @@ import org.metricminer.tasks.RunnableTaskFactory;
 import org.metricminer.tasks.TaskQueueStatus;
 import org.metricminer.tasks.ThreadInspector;
 
+import br.com.caelum.vraptor.ioc.Component;
 import br.com.caelum.vraptor.ioc.Container;
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
 
 public class TasksRunnerTest {
 
@@ -49,7 +51,7 @@ public class TasksRunnerTest {
         when(mockedDaoSession.getTransaction()).thenReturn(mockedTransaction);
         when(mockedTaskSession.getTransaction()).thenReturn(mockedTransaction);
 		
-        MetricMinerConfigs configs = new MetricMinerConfigs(new ClassScan(), context, null);
+        MetricMinerConfigs configs = new MetricMinerConfigs(new ClassScan(), context);
         TaskQueueStatus status = new TaskQueueStatus(configs, new ThreadInspector());
         
         iocContainer = mock(Container.class);
@@ -101,6 +103,7 @@ public class TasksRunnerTest {
 
 }
 
+@Component @PrototypeScoped
 class TestRunnableTaskFactory implements RunnableTaskFactory {
     
     @Override

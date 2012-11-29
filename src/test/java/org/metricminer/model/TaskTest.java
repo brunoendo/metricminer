@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.metricminer.tasks.metric.CalculateMetricTaskFactory;
 import org.metricminer.tasks.metric.cc.CCMetricFactory;
@@ -13,10 +14,17 @@ import org.metricminer.tasks.metric.lcom.LComMetricFactory;
 
 public class TaskTest {
 
-	@Test
+	private Task task;
+    private Project project;
+    
+    @Before
+    public void setUp() {
+        project = mock(Project.class);
+        task = new Task(project, "Task", CalculateMetricTaskFactory.class, 0);
+    }
+
+    @Test
 	public void shouldFindAConfigurationEntryForAGivenKey() throws Exception {
-		Project project = mock(Project.class);
-		Task task = new Task(project, "Task", new CalculateMetricTaskFactory(), 0);
 		task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRIC_FACTORY_CLASS, "someclass");
 		String entryValue = task
 				.getTaskConfigurationValueFor(TaskConfigurationEntryKey.METRIC_FACTORY_CLASS);
@@ -26,8 +34,6 @@ public class TaskTest {
 
 	@Test
 	public void shouldVerifyThatATaskWillCaclulateAMetric() throws Exception {
-		Project project = mock(Project.class);
-		Task task = new Task(project, "Task", new CalculateMetricTaskFactory(), 0);
 		task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRIC_FACTORY_CLASS,
 				new RegisteredMetric("cc", CCMetricFactory.class).getMetricFactoryClassName());
 		assertTrue(task.willCalculate(new RegisteredMetric("some metric", CCMetricFactory.class)));
@@ -35,8 +41,6 @@ public class TaskTest {
 
 	@Test
 	public void shouldVerifyThatATaskWillNotCaclulateAMetric() throws Exception {
-		Project project = mock(Project.class);
-		Task task = new Task(project, "Task", new CalculateMetricTaskFactory(), 0);
 		task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRIC_FACTORY_CLASS,
 				new RegisteredMetric("cc", LComMetricFactory.class).getMetricFactoryClassName());
 		assertFalse(task.willCalculate(new RegisteredMetric("some metric", CCMetricFactory.class)));
