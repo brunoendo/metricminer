@@ -99,12 +99,18 @@ public class QueryController {
         result.include("scheduledToRun", !tasksToRunThisQuery.isEmpty());
     }
 
-    @Get("/query/download/{resultId}")
-    public Download downloadCSV(Long resultId) {
-        QueryResult result = queryResultDAO.findById(resultId);
-        return new FileDownload(new File(result.getCsvFilename()), "application/zip",
-                "result.zip");
-    }
+	@Get("/query/download/{resultId}")
+	public Download downloadCSV(Long resultId) {
+		QueryResult result = queryResultDAO.findById(resultId);
+		final String csvFilename = result.getCsvFilename();
+		if (csvFilename.endsWith("zip")) {
+			return new FileDownload(new File(csvFilename), "application/zip",
+					"result.zip");
+		} else {
+			return new FileDownload(new File(csvFilename), "text/csv",
+					"result.csv");
+		}
+	}
 
     @LoggedUserAccess
     @Post("/query/run")
