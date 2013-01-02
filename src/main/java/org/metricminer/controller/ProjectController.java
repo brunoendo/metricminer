@@ -1,10 +1,13 @@
 package org.metricminer.controller;
 
+import java.util.List;
+
 import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.ProjectDao;
 import org.metricminer.infra.dao.TagDao;
 import org.metricminer.infra.interceptor.LoggedUserAccess;
+import org.metricminer.model.Author;
 import org.metricminer.model.Project;
 import org.metricminer.model.Tag;
 import org.metricminer.ui.TagTokenizer;
@@ -47,9 +50,10 @@ public class ProjectController {
     @Get("/project/{id}")
     public void detail(Long id) {
         Project project = dao.findProjectBy(id);
+        List<Author> commiters = dao.commitersFor(project);
         result.include("tags", tokenize.tags(project.getTags()));
-        result.include("avaiableMetrics", project.avaiableMetricsToAddBasedOn(configs.getRegisteredMetrics()));
-        result.include("project", project);
+        result.include("commiters", commiters);
+        result.include("project", project);	
     }
     
     @Get("/projects/{id}/commitChartData")
