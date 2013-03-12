@@ -31,7 +31,7 @@ public class CCPerMethodMetric implements Metric {
         return null;
     }
 
-    public void calculate(InputStream is) {
+    public void calculate(SourceCode sourceCode, InputStream is) {
         try {
             CompilationUnit cunit = JavaParser.parse(is);
 
@@ -47,8 +47,8 @@ public class CCPerMethodMetric implements Metric {
     }
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
-        return null;
+    public Collection<MetricResult> results() {
+        return null; // WTF?
     }
 
     @Override

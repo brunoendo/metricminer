@@ -19,6 +19,7 @@ public class LinesOfCodeMetric implements Metric {
 
 	private LinesOfCodeVisitor visitor;
 	private String clazzName;
+	private SourceCode source;
 
 	public String content(String path, String project) {
 		StringBuilder msg = new StringBuilder();
@@ -29,7 +30,8 @@ public class LinesOfCodeMetric implements Metric {
 		return msg.toString();
 	}
 
-	public void calculate(InputStream is) {
+	public void calculate(SourceCode source, InputStream is) {
+		this.source = source;
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
@@ -52,7 +54,7 @@ public class LinesOfCodeMetric implements Metric {
 	}
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
+    public Collection<MetricResult> results() {
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
         for (Entry<String, Integer> entry : visitor.methodLines().entrySet()) {
             results.add(new LinesOfCodeResult(source, entry.getKey(), entry.getValue()));

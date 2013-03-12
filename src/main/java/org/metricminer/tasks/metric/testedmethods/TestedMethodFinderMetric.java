@@ -20,6 +20,7 @@ public class TestedMethodFinderMetric implements Metric{
 
 	private ClassInfoVisitor classInfo;
 	private TestedMethodVisitor visitor;
+	private SourceCode source;
 
 	public String header() {
 		return "path;project;class;test method; production method";
@@ -34,7 +35,8 @@ public class TestedMethodFinderMetric implements Metric{
 		return null;
 	}
 
-	public void calculate(InputStream is) {
+	public void calculate(SourceCode source, InputStream is) {
+		this.source = source;
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
@@ -54,7 +56,7 @@ public class TestedMethodFinderMetric implements Metric{
 	}
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
+    public Collection<MetricResult> results() {
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
         for(Entry<String, Set<String>> testMethod : getMethods().entrySet()) {
             for(String productionMethod : testMethod.getValue()) {

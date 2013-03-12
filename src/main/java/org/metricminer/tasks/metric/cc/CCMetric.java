@@ -16,17 +16,19 @@ public class CCMetric implements Metric {
 
     private CCVisitor visitor;
     private ClassInfoVisitor classInfo;
+	private SourceCode sourceCode;
 
     public String header() {
         return "path;project;class;cc;average cc";
     }
 
-    public Collection<MetricResult> results(SourceCode sourceCode) {
+    public Collection<MetricResult> results() {
         return Arrays.asList((MetricResult) new CCResult(sourceCode, cc(), avgCc()));
     }
 
-    public void calculate(InputStream is) {
-        try {
+    public void calculate(SourceCode sourceCode, InputStream is) {
+		this.sourceCode = sourceCode;
+		try {
             CompilationUnit cunit = JavaParser.parse(is);
 
             classInfo = new ClassInfoVisitor();

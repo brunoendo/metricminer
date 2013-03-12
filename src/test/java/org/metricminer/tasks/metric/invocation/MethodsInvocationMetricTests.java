@@ -6,19 +6,23 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.model.SourceCode;
+import org.mockito.Mockito;
 
 public class MethodsInvocationMetricTests {
 
 	private MethodsInvocationMetric metric;
+	private SourceCode source;
 
 	@Before
 	public void setUp() {
 		this.metric = new MethodsInvocationMetric();
+		this.source = Mockito.mock(SourceCode.class);
 	}
 
 	@Test
 	public void shouldCountMethodsInvocationPerMethod() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method() {"+
@@ -32,7 +36,7 @@ public class MethodsInvocationMetricTests {
 	
 	@Test
 	public void shouldCountMethodsInvocationPerMethodRegardlessOfVisibility() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method1() {"+
@@ -61,7 +65,7 @@ public class MethodsInvocationMetricTests {
 	
 	@Test
 	public void shouldNotCountRepeatedInvocations() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method() {"+
@@ -76,7 +80,7 @@ public class MethodsInvocationMetricTests {
 	
 	@Test
 	public void shouldCountBigSequenceInvocations() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method() {"+

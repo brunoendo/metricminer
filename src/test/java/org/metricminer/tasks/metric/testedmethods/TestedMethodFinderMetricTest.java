@@ -7,18 +7,22 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.model.SourceCode;
+import org.mockito.Mockito;
 
 public class TestedMethodFinderMetricTest {
 	private TestedMethodFinderMetric metric;
+	private SourceCode source;
 
 	@Before
 	public void setUp() {
 		this.metric = new TestedMethodFinderMetric();
+		this.source = Mockito.mock(SourceCode.class);
 	}
 	
 	@Test
 	public void shouldFindTheLastProductionClassMethodInvocationInATest() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"@Test " +
@@ -38,7 +42,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldFindAllProductionClassMethodInvocationsInATest() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"@Test " +
@@ -60,7 +64,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldFindAllProductionClassMethodInvocationsInDifferentVariablesInATest() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"@Test " +
@@ -83,7 +87,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldFindTheProductionClassMethodInvocationWhenAnAttributeIsInvoked() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"private Bla x = new Bla();" +
@@ -102,7 +106,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldReturnNothingIfNoInvokationWasFound() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"private Bla x = new Bla();" +
@@ -120,7 +124,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldFindTheLastProductionClassMethodInvocationInManyMethodsATest() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"private Bla k = new Bla();" +
@@ -149,7 +153,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldIgnoreInvocationsThatYouDontKnow() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"@Test " +
@@ -167,7 +171,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldIgnoreConstructors() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"public BlaTest() {" +
@@ -182,7 +186,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldUnderstandSetupInitializations() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"private Bla x;" +
@@ -201,7 +205,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldUnderstandInlineVariableDeclarations() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"class BlaTest {" +
 						"@Test public void aTest() {" +
@@ -217,7 +221,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldUnderstandInvocationTogetherWithVariableDeclaration() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 			"class IntervaloTest {" +
 			"@Test " +
 			"public void getMesesFuncionaMesmoQuandoIntervaloComecaNoUltimoMillisegundoDoMes() throws Exception {" +
@@ -238,7 +242,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldNotUnderstandOnlyConstructor() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 			"class CaelumHeaderTest { " +
 			"@Test "+
 			"public void enderecoDeSaoPauloEstaCorreto() throws Exception {"+
@@ -263,7 +267,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldUnderstandConstructorExpressionsAndInvocationWithVariableDeclaration() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 				"class ParcelasTest { " +
 				"@Test "+
 				"public void pendenciasQuandoAsSituacoesSaoAVistaGeramAvisoCorreto() throws Exception {"+
@@ -290,7 +294,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldUnderstandStaticInvocations() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 			"public class FormatadorParaLoteDeNotasTest {" +
 			"@Test "+
 			"public void formatadorDeValorMonetarioDevolveOValorEmCentavos() throws Exception {"+
@@ -306,7 +310,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldUnderstandDeclarationAndInvokationInSequence() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 			"class ParcelaTest {" +
 			"@Test "+
 			"public void parcelaEhInicializadaComNumeroDeParcelamentoIgualAUm() throws Exception {"+
@@ -322,7 +326,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldNotBeFooledByAConstructorThatReceivesAnotherNewDeclaration() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 				"class TurmasPorMesTest {" +
 				"	@Test "+
 				"	public void retornaMediaDePagosZeradosSeNecessario() {"+
@@ -338,7 +342,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldUnderstandListOfTypeThatIsBeingTested() {
-		metric.calculate(toInputStream("class BlaTest {" +
+		metric.calculate(source,toInputStream("class BlaTest {" +
 				"@Test " +
 				"public void test1() {" +
 				"List<Bla> list = new ArrayList<Bla>();" +
@@ -353,7 +357,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldLookToConcreteTypes() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 		"public class BowlingGameTest extends TestCase {"+
 		"	  private Bowling g;"+
 
@@ -375,7 +379,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldLookToConcreteTypesEvenIfTheyMatchReferenceType() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 		"public class BowlingGameTest extends TestCase {"+
 		"	  private BowlingGame g;"+
 
@@ -397,7 +401,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldNotBeFooledByCrazyConcreteTypes() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 		"public class BowlingGameTest extends TestCase {"+
 		"	  private Bowling g;"+
 
@@ -418,7 +422,7 @@ public class TestedMethodFinderMetricTest {
 	
 	@Test
 	public void shouldLookToConcreteTypesInsideTestMethod() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 		"public class BowlingGameTest extends TestCase {"+
 		"	  private Bowling g;"+
 		"	  @Test public void test1() {" +
@@ -479,7 +483,7 @@ public class TestedMethodFinderMetricTest {
 			  "}" +
 			  "}";
 		
-		metric.calculate(toInputStream(code));
+		metric.calculate(source,toInputStream(code));
 		
 		assertEquals(1, metric.getMethods().size());
 		assertTrue(metric.getMethods().get("testPageMatchesQueryWithIncludedSetUps").contains("pageMatches"));

@@ -18,6 +18,7 @@ import org.metricminer.tasks.metric.common.MetricResult;
 public class MethodsCountMetric implements Metric {
 
 	private MethodsAndAttributesVisitor visitor;
+	private SourceCode source;
 
 	public String content(String path, String project) {
 		return 
@@ -35,7 +36,8 @@ public class MethodsCountMetric implements Metric {
 			visitor.getDefaultAttributes().size() + "\r\n";
 	}
 
-	public void calculate(InputStream is) {
+	public void calculate(SourceCode source, InputStream is) {
+		this.source = source;
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
@@ -96,7 +98,7 @@ public class MethodsCountMetric implements Metric {
 	}
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
+    public Collection<MetricResult> results() {
         return Arrays.asList((MetricResult) new MethodsCountResult(source, getPrivateAttributes()
                 .size(), getPublicMethods().size(), getProtectedMethods().size(),
                 getDefaultMethods().size(), getConstructorMethods().size(), getPrivateAttributes()

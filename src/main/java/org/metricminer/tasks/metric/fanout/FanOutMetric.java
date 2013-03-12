@@ -17,12 +17,14 @@ public class FanOutMetric implements Metric {
 
 	private FanOutVisitor visitor;
     private ClassInfoVisitor classInfo;
+	private SourceCode source;
 
 	public String content(String path, String project) {
 		return path + ";" + project + ";" + classInfo.getName() + ";" + fanOut() + "\n";
 	}
 
-	public void calculate(InputStream is) {
+	public void calculate(SourceCode source, InputStream is) {
+		this.source = source;
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
@@ -43,7 +45,7 @@ public class FanOutMetric implements Metric {
 	}
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
+    public Collection<MetricResult> results() {
         return Arrays.asList((MetricResult) new FanOutResult(source, fanOut()));
     }
 

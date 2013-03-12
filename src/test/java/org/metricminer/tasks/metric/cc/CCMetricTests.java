@@ -2,21 +2,26 @@ package org.metricminer.tasks.metric.cc;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.model.SourceCode;
+import org.mockito.Mockito;
+
 import static br.com.aniche.msr.tests.ParserTestUtils.*;
 import static org.junit.Assert.assertEquals;
 
 public class CCMetricTests {
 
 	private CCMetric metric;
+	private SourceCode source;
 
 	@Before
 	public void setUp() {
 		metric = new CCMetric();
+		source = Mockito.mock(SourceCode.class);
 	}
 	
 	@Test
 	public void shouldCalculateCCForAPlainClass() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"a=a+1;" +
@@ -29,7 +34,7 @@ public class CCMetricTests {
 
 	@Test
 	public void shouldCalculateCCForOverridedMethods() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"a=a+1;" +
@@ -60,7 +65,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachIf() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"if(y) a=a+1;" +
@@ -73,7 +78,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachIfAndIgnoreElse() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"if(y) a=a+1; else a=a+2;" +
@@ -86,7 +91,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachIfAndElseIfAndIgnoreElse() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"if(y) a=a+1; else if(y2) a=a+2; else a=a+3;" +
@@ -99,7 +104,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachAndInAnIf() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"if(y && y1) a=a+1;" +
@@ -112,7 +117,7 @@ public class CCMetricTests {
 
 	@Test
 	public void shouldAddOneForEachOrInAnIf() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"if(y || y1) a=a+1;" +
@@ -125,7 +130,7 @@ public class CCMetricTests {
 
 	@Test
 	public void shouldAddOneForEachAndOrOrInAnIf() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"if(y && y1 || y2) a=a+1;" +
@@ -139,7 +144,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachFor() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"for(int i = 0; i < 10; i++) {"+
@@ -153,7 +158,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachForEach() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 								"for(Item a : itens) {"+
@@ -168,7 +173,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachWhile() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"while(true) {"+
@@ -182,7 +187,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachDoWhile() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"do {"+
@@ -196,7 +201,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachCase() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"switch(a) {"+
@@ -212,7 +217,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachCaseButIgnoreDefault() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"switch(a) {"+
@@ -229,7 +234,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachCatch() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"try { bla(); }" +
@@ -243,7 +248,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachCatchButIgnoreFinally() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"try { bla(); }" +
@@ -258,7 +263,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachTernaryIf() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"a=a==10? 1 : 2;" +
@@ -270,7 +275,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldAddOneForEachTernaryIfInMiddleOfExpression() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"x.invoke((a=a==10? 1 : 2));" +
@@ -282,7 +287,7 @@ public class CCMetricTests {
 
 	@Test
 	public void shouldCalculateTheAverageCC() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method1() {" +
 						"if(x) {}" +
@@ -298,7 +303,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldCalculateForMoreThanOneMethod() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method1() {" +
 						"if(x) {}" +
@@ -321,7 +326,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldCalculateForInnerMethodsSeparately() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method1() {" +
 						"if(x) {}" +
@@ -337,7 +342,7 @@ public class CCMetricTests {
 
 	@Test
 	public void shouldCalculateCCForAllOperatorsTogethers() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public int method() {" +
 						"if(x) bla();" +
@@ -357,7 +362,7 @@ public class CCMetricTests {
 
 	@Test
 	public void shouldCalculateCCInConstructors() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"public Program() {" +
 						"if(x) bla(); }")));
@@ -367,7 +372,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldCalculateCCForStaticBlock() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"static {"+
 						 "if(a) x();"+
@@ -379,7 +384,7 @@ public class CCMetricTests {
 	
 	@Test
 	public void shouldCalculateCCInAttributes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(classDeclaration(
 						"private static int a = x ? 1 : 2;"+
 						"private static int b = x ? 1 : 2;"))

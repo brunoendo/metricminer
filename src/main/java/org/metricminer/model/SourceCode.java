@@ -33,6 +33,7 @@ public class SourceCode {
 
     public SourceCode() {
     }
+    
     public SourceCode(Modification modification, String source) {
         this.modification = modification;
         this.source = source;
