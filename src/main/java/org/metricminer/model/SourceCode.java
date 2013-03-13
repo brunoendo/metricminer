@@ -55,6 +55,10 @@ public class SourceCode {
     public Commit getCommit() {
         return modification.getCommit();
     }
+    
+    public String getDiff() {
+    	return modification.getDiff();
+    }
 
 	public List<BlamedLine> getBlamedLines() {
 		return Collections.unmodifiableList(blamedLines);
