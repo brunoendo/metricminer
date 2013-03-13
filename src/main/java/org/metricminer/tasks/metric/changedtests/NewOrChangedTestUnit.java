@@ -113,7 +113,7 @@ public class NewOrChangedTestUnit implements Metric {
 	}
 	@Override
 	public boolean matches(String name) {
-		return name.endsWith(".java");
+		return name.endsWith("Test.java") || name.endsWith("Tests.java");
 	}
 
 	@Override
