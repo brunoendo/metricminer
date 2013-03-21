@@ -54,6 +54,7 @@
         <mapping class="org.metricminer.tasks.metric.lines.LinesOfCodeResult" />
         <mapping class="org.metricminer.tasks.metric.methods.MethodsCountResult" />
         <mapping class="org.metricminer.tasks.metric.testedmethods.TestedMethodFinderResult" />
+        <mapping class="org.metricminer.tasks.metric.changedtests.NewOrChangedTestUnitResult" />
         
         <mapping class="org.metricminer.tasks.projectmetric.truckfactor.TruckFactorResult" />
 

@@ -21,9 +21,11 @@ public class TestFinderVisitor extends VoidVisitorAdapter<Object> {
 	
 	public void visit(MethodDeclaration method, Object arg) {
 		
-		for(AnnotationExpr expr : method.getAnnotations()) {
-			if(expr.toString().equals("@Test")) {
-				
+		if (method.getAnnotations() == null)
+			return;
+		
+		for (AnnotationExpr expr : method.getAnnotations()) {
+			if (expr.toString().equals("@Test")) {
 				String testName = method.getName().toString();
 				testAttributes.put(testName, new StartAndEnd(testName, method.getBeginLine(), method.getEndLine()));
 				tests.add(testName);

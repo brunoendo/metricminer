@@ -74,7 +74,7 @@ public class SourceCodeDao {
 	@SuppressWarnings("unchecked")
 	public List<SourceCode> findWithIds(List<Long> ids) {
 		String idsString = parseIds(ids);
-		Query query = statelessSession.createQuery("select source from SourceCode source " +
+		Query query = statelessSession.createQuery("select source from SourceCode source left join fetch source.modification " +
 				"where source.id in " + idsString + " and source.sourceSize < :sourceSize");
         
         query.setParameter("sourceSize", MAX_SOURCE_SIZE);

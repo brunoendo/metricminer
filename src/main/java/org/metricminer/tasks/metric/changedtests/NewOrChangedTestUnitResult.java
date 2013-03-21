@@ -1,5 +1,6 @@
 package org.metricminer.tasks.metric.changedtests;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -14,6 +15,7 @@ import org.metricminer.tasks.metric.common.MetricResult;
 
 @Entity
 public class NewOrChangedTestUnitResult implements MetricResult {
+	
     @Id
     @GeneratedValue
     private Long id;
@@ -22,8 +24,15 @@ public class NewOrChangedTestUnitResult implements MetricResult {
     @ManyToOne
     private Commit commit;
     private String testName;
+    @Column(name="`change`")
     @Enumerated(EnumType.STRING)
     private UnitTestChangeStatus change;
+    
+    /**
+     * @deprecated
+     */
+    NewOrChangedTestUnitResult() {
+	}
     
 	public NewOrChangedTestUnitResult(SourceCode sourceCode,
 			String testName, UnitTestChangeStatus change) {
@@ -52,9 +61,6 @@ public class NewOrChangedTestUnitResult implements MetricResult {
 	public UnitTestChangeStatus getChange() {
 		return change;
 	} 
-    
-	
-    
 
 	
 }

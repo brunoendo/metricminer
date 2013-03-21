@@ -2,6 +2,7 @@ package org.metricminer.tasks.metric.changedtests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import static br.com.aniche.msr.tests.ParserTestUtils.classDeclaration;
 import static br.com.aniche.msr.tests.ParserTestUtils.toInputStream;
@@ -16,6 +17,7 @@ import org.metricminer.model.Commit;
 import org.metricminer.model.Modification;
 import org.metricminer.model.ModificationKind;
 import org.metricminer.model.SourceCode;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class NewOrChangedTestUnitTest {
@@ -26,8 +28,8 @@ public class NewOrChangedTestUnitTest {
 
 	@Before
 	public void setUp() {
-		commit = Mockito.mock(Commit.class);
-		artifact = Mockito.mock(Artifact.class);
+		commit = mock(Commit.class);
+		artifact = mock(Artifact.class);
 		metric = new NewOrChangedTestUnit();
 	}
 	
@@ -88,6 +90,23 @@ public class NewOrChangedTestUnitTest {
 
 		Set<String> modifiedTests = metric.modifiedTests();
 		assertTrue(modifiedTests.contains("someTest"));
+	}
+	
+	@Test
+	public void shouldWorkProperlyWithMethodsWithoutAnnotation() {
+		String diff = "+ // new\n";
+		
+		String fullTestClass = "class Test {\n" +
+				"@Test\n" +
+				"public void someTest() {\n" +
+				"   // new\n" +
+				"}\n" +
+				"public void someMethod() {\n" +
+				"}\n" +
+				"}\n";
+		
+		SourceCode sc = new SourceCode(new Modification(diff, commit, artifact, ModificationKind.NEW), fullTestClass);
+		metric.calculate(sc, toInputStream(fullTestClass));
 	}
 }
 
