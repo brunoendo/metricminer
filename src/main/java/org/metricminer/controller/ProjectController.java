@@ -11,6 +11,11 @@ import org.metricminer.model.Author;
 import org.metricminer.model.Project;
 import org.metricminer.model.Tag;
 import org.metricminer.ui.TagTokenizer;
+import org.metricminer.worker.InitialTasks;
+import org.metricminer.worker.Worker;
+import org.metricminer.worker.http.Response;
+import org.metricminer.worker.http.Status;
+import org.metricminer.worker.representations.TaskRepresentation;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
@@ -25,13 +30,19 @@ public class ProjectController {
     private final MetricMinerConfigs configs;
     private final TagTokenizer tokenize;
     private final TagDao tagDao;
+	private final InitialTasks initialTasks;
+	private final Worker worker;
+    
     public ProjectController(Result result, ProjectDao dao, TagDao tagDao,
-            MetricMinerConfigs metricMinerConfigs, TagTokenizer tokenize) {
+            MetricMinerConfigs metricMinerConfigs, TagTokenizer tokenize, 
+            InitialTasks initialTasks, Worker worker) {
         this.result = result;
         this.dao = dao;
         this.tagDao = tagDao;
         this.configs = metricMinerConfigs;
         this.tokenize = tokenize;
+		this.initialTasks = initialTasks;
+		this.worker = worker;
     }
 
     @LoggedUserAccess
@@ -107,6 +118,21 @@ public class ProjectController {
         project.setName(name);
         project.setScmUrl(scmUrl);
         saveProject(project);
+        result.redirectTo(this).addTasks(project.getId());
+    }
+    
+    @LoggedUserAccess
+    @Get("/project/{projectId}/tasks")
+    public void addTasks(Long projectId) {
+		List<TaskRepresentation> tasksFor = initialTasks.tasksFor(projectId);
+		for (TaskRepresentation taskRepresentation : tasksFor) {
+			Response sendTask = worker.sendTask(taskRepresentation);
+			Status status = sendTask.status();
+			if (!status.equals(Status.Code.CREATED)) {
+				throw new IllegalStateException("Could not create task");
+			}
+		}
+		result.redirectTo(this).list(1);
     }
     
     @Post("/projects/06560fb292075c5eeca4ceb586185332")
@@ -118,13 +144,10 @@ public class ProjectController {
     }
 
 	private void saveProject(Project project) {
-		//Project completeProject = new Project(project, configs);
 	    Project completeProject = new ProjectBuilder()
 	        .withBaseProject(project)
-	        .withInitialTasks()
 	        .withConfigs(configs).build();
         dao.save(completeProject, configs);
-        result.redirectTo(ProjectController.class).list(1);
 	}
 
 }

@@ -12,3 +12,5 @@ src/main/resources/development.properties
 src/main/resources/production.properties
 *.swp
 
+*.iml
+.idea/
