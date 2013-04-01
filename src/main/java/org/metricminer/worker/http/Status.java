@@ -33,6 +33,11 @@ public class Status {
 	public enum Code {
 		CREATED
 	}
+	
+	@Override
+	public String toString() {
+		return statusLine.toString();
+	}
 
 
 
