@@ -117,7 +117,7 @@ public class ProjectController {
         Project project = new Project();
         project.setName(name);
         project.setScmUrl(scmUrl);
-        saveProject(project);
+        project = saveProject(project);
         result.redirectTo(this).addTasks(project.getId());
     }
     
@@ -126,9 +126,10 @@ public class ProjectController {
     public void addTasks(Long projectId) {
 		List<TaskRepresentation> tasksFor = initialTasks.tasksFor(projectId);
 		for (TaskRepresentation taskRepresentation : tasksFor) {
-			Response sendTask = worker.sendTask(taskRepresentation);
-			Status status = sendTask.status();
-			if (!status.equals(Status.Code.CREATED)) {
+			Response response = worker.sendTask(taskRepresentation);
+			System.out.println(response.toString());
+			Status status = response.status();
+			if (!status.is(Status.Code.CREATED)) {
 				throw new IllegalStateException("Could not create task");
 			}
 		}
@@ -143,11 +144,12 @@ public class ProjectController {
     	saveProject(project);
     }
 
-	private void saveProject(Project project) {
+	private Project saveProject(Project project) {
 	    Project completeProject = new ProjectBuilder()
 	        .withBaseProject(project)
 	        .withConfigs(configs).build();
         dao.save(completeProject, configs);
+        return completeProject;
 	}
 
 }
