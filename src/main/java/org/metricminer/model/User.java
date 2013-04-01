@@ -126,6 +126,10 @@ public class User implements Serializable {
 	public UserRole getRole() {
 		return role;
 	}
+	
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
 
     @Override
     public int hashCode() {
