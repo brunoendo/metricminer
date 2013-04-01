@@ -30,6 +30,7 @@ public class ProjectDao {
 		session.save(project);
 		project.setupInitialConfigurationsEntries(metricminerConfigs);
 		session.save(project);
+		session.flush();
 	}
 
 	@SuppressWarnings("unchecked")
