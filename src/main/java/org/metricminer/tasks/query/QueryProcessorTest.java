@@ -21,7 +21,7 @@ public class QueryProcessorTest {
 	@Test
 	public void shouldReplaceAuthorNameForMD5Function() throws Exception {
 		query.setSqlQuery("select AuthorName(  ) from Author");
-		Query prcessedQuery = processor.process(query);
+		Query prcessedQuery = processor.process(query, 1);
 		
 		assertEquals("select MD5("+Author.NAME_COLUMN+") from Author", prcessedQuery.getSqlQuery());
 	}
@@ -29,7 +29,7 @@ public class QueryProcessorTest {
 	@Test
 	public void shouldReplaceAuthorEmailForMD5Function() throws Exception {
 		query.setSqlQuery("select AuthorEmail () from Author");
-		Query prcessedQuery = processor.process(query);
+		Query prcessedQuery = processor.process(query, 1);
 		
 		assertEquals("select MD5("+Author.EMAIL_COLUMN+") from Author", prcessedQuery.getSqlQuery());
 	}
