@@ -4,6 +4,7 @@ import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map.Entry;
 
@@ -17,22 +18,16 @@ public class CCPerMethodMetric implements Metric {
 
     private CCVisitor visitor;
     private ClassInfoVisitor classInfo;
+	private SourceCode sourceCode;
 
     public String header() {
         return "path;project;class;method;cc";
     }
 
-    public String content(String path, String project) {
-        for (Entry<String, Integer> method : visitor.getCcPerMethod().entrySet()) {
-            System.out.println(path + ";" + project + ";" + classInfo.getName() + ";"
-                    + method.getKey() + ";" + method.getValue());
-        }
-
-        return null;
-    }
-
     public void calculate(SourceCode sourceCode, InputStream is) {
-        try {
+        this.sourceCode = sourceCode;
+        
+		try {
             CompilationUnit cunit = JavaParser.parse(is);
 
             classInfo = new ClassInfoVisitor();
@@ -48,7 +43,16 @@ public class CCPerMethodMetric implements Metric {
 
     @Override
     public Collection<MetricResult> results() {
-        return null; // WTF?
+    	
+    	Collection<MetricResult> list = new ArrayList<MetricResult>();
+        for (Entry<String, Integer> method : visitor.getCcPerMethod().entrySet()) {
+        	int cc = method.getValue();
+        	String methodName = method.getKey();
+        	
+        	list.add(new CCPerMethodResult(sourceCode, methodName, cc));
+        }
+        
+        return list;
     }
 
     @Override

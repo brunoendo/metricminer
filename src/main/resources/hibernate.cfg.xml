@@ -49,6 +49,7 @@
         
         <mapping class="org.metricminer.tasks.metric.lcom.LComResult" />
         <mapping class="org.metricminer.tasks.metric.cc.CCResult" />
+        <mapping class="org.metricminer.tasks.metric.cc.CCPerMethodResult" />
         <mapping class="org.metricminer.tasks.metric.fanout.FanOutResult" />
         <mapping class="org.metricminer.tasks.metric.invocation.MethodsInvocationResult" />
         <mapping class="org.metricminer.tasks.metric.lines.LinesOfCodeResult" />

@@ -29,17 +29,17 @@
 	</appender>
 	
 	<logger name="org.metricminer">
-		<priority value="DEBUG" />
+		<priority value="INFO" />
 		<appender-ref ref="logfile" />
 	</logger>
 
 	<logger name="org.metricminer.infra.log.hibernate">
-		<priority value="DEBUG" />
+		<priority value="INFO" />
 		<appender-ref ref="statsfile" />
 	</logger>
 
 	<logger name="org.metricminer.infra.log.memory">
-		<priority value="DEBUG" />
+		<priority value="INFO" />
 		<appender-ref ref="memoryfile" />
 	</logger>
 			
