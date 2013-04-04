@@ -5,7 +5,7 @@ import org.metricminer.model.Query;
 
 public class QueryProcessor {
 
-	public static final int PER_PAGE = 50000;
+	public static final int PER_PAGE = 100000;
 	private static final String NAME_FUNCTION = "AuthorName";
 	private static final String EMAIL_FUNCTION = "AuthorEmail";
 
