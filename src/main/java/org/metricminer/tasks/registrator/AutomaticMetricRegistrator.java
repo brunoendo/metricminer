@@ -36,7 +36,6 @@ public class AutomaticMetricRegistrator {
 		for (Project project : projects) {
 		    logger.info("Adding new metric to project " + project);
 			project.addNewMetrics(metricMinerConfigs.getRegisteredMetrics());
-			projectDao.update(project);
 		}
 		projectDaoSession.getTransaction().commit();
 		projectDaoSession.close();
