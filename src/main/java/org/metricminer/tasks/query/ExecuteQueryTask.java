@@ -69,7 +69,7 @@ public class ExecuteQueryTask implements RunnableTask {
         try {
             SimpleEmail simpleEmail = new SimpleEmail();
             simpleEmail.addTo(email);
-            simpleEmail.setSubject("Your query '" + query.getName() + "' at metricminer.org.br finished!");
+            simpleEmail.setSubject("Your query '" + query.getName() + "' at metricminer.org.br has finished!");
             simpleEmail.setMsg("Go to metricminer.org.br/query/" + query.getId() + " and download the results");
             mailer.send(simpleEmail);
         } catch (EmailException e) {
