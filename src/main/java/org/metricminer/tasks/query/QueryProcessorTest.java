@@ -46,4 +46,20 @@ public class QueryProcessorTest {
 		
 	}
 	
+	@Test
+	public void shouldLimitQueryWithColon() {
+		query.setSqlQuery("select * from LOC;");
+		
+		Query processedQuery = processor.process(query, 1);
+		assertTrue(processedQuery.getSqlQuery().contains("LOC LIMIT"));
+	}
+	
+	@Test
+	public void shouldLimitQueryWithColonAndSpaces() {
+		query.setSqlQuery("select * from LOC;  \r\n\t");
+		
+		Query processedQuery = processor.process(query, 1);
+		assertTrue(processedQuery.getSqlQuery().contains("LOC LIMIT"));
+	}
+	
 }

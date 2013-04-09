@@ -15,6 +15,9 @@ public class QueryProcessor {
 		String sql = originalQuery.getSqlQuery();
 		sql = sql.replaceAll(NAME_FUNCTION + "\\s*\\(\\s*\\)", "MD5(" + Author.NAME_COLUMN + ")");
 		sql = sql.replaceAll(EMAIL_FUNCTION + "\\s*\\(\\s*\\)", "MD5(" + Author.EMAIL_COLUMN + ")");
+		if (sql.trim().endsWith(";")) {
+			sql = sql.trim().substring(0, sql.trim().length() - 1);
+		}
 		sql = sql + " LIMIT " + next(page) + ", " + PER_PAGE;
 		query.setSqlQuery(sql);
 		return query;
