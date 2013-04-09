@@ -20,7 +20,7 @@
 				<li><a href="${linkTo[QueryController].listQueries}">List</a></li>
 			</ul>
 		</li>
-		<li><a href="${linkTo[StatisticalTestController].statisticalTestTaskForm}">Stats</a>
+		<li><a href="${linkTo[StatisticalTestController].statisticalTestTaskForm}">Statistical Test</a>
 		</li>
 		<li><a href="${linkTo[TaskController].listTasks}">Tasks</a></li>
 		<li><a href="${linkTo[StatusController].showStatus}">Status</a></li>
