@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.metricminer.model.Query;
+import org.metricminer.model.QueryResult;
 
 import br.com.caelum.vraptor.ioc.Component;
 
@@ -33,4 +34,8 @@ public class QueryDao {
     public List<Query> list() {
         return session.createCriteria(Query.class).addOrder(Order.desc("submitDate")).list();
     }
+
+	public void save(QueryResult result) {
+		session.save(result);
+	}
 }

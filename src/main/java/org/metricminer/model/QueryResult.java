@@ -17,22 +17,24 @@ public class QueryResult {
 	private Long id;
 	private String csvFilename;
 	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar executedDate;
+	private Calendar executedDate = Calendar.getInstance();
 	@ManyToOne
 	private Query query;
 	@Embedded
 	private QueryResultStatus status;
 	
-	public QueryResult() {
-	    executedDate = Calendar.getInstance();
+	QueryResult() {
 	}
 
 	public QueryResult(String csvFilename, Query query) {
-	    this();
 		this.csvFilename = csvFilename;
         this.query = query;
 	}
 	
+	public QueryResult(Query query) {
+		this(null, query);
+	}
+
 	public String getCsvFilename() {
 		return csvFilename;
 	}
@@ -46,11 +48,11 @@ public class QueryResult {
 	}
 	
 	public void fail(String message) {
-	    status = QueryResultStatus.FAILED(message);
+	    status = QueryResultStatus.failed(message);
 	}
 	
 	public void success() {
-	    status = QueryResultStatus.SUCCESS();
+	    status = QueryResultStatus.success();
 	}
 	
 	public QueryResultStatus getStatus() {

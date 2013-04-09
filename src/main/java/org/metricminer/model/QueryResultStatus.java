@@ -15,11 +15,11 @@ public class QueryResultStatus {
     public QueryResultStatus() {
     }
 
-    public static QueryResultStatus FAILED(String message) {
+    public static QueryResultStatus failed(String message) {
         return new QueryResultStatus(FAILED_STATUS, message);
     }
     
-    public static QueryResultStatus SUCCESS() {
+    public static QueryResultStatus success() {
         return new QueryResultStatus(SUCCESS_STATUS);
     }
     

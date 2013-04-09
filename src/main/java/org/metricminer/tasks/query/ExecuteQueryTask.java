@@ -45,6 +45,7 @@ public class ExecuteQueryTask implements RunnableTask {
         String csvFileName = config.getQueriesResultsDir() + "/result-"
                 + query.getId() + "-" + query.getResultCount() + ".zip";
         FileOutputStream fileOutputStream = createFile(csvFileName);
+        QueryResult result = null;
         try {
         	ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
         	zipOutputStream.putNextEntry(new ZipEntry("result.csv"));
@@ -52,15 +53,16 @@ public class ExecuteQueryTask implements RunnableTask {
 	        zipOutputStream.closeEntry();
 	        zipOutputStream.close();
 	        fileOutputStream.close();
-	        QueryResult result = new QueryResult(csvFileName, query);
+	        result = new QueryResult(csvFileName, query);
             query.addResult(result);
             result.success();
         } catch (Exception e) {
-        	QueryResult result = new QueryResult();
+        	result = new QueryResult(query);
             result.fail(ExceptionUtils.getStackTrace(e));
             query.addResult(result);
         }
         sendMail(query);
+        queryDao.save(result);
         queryDao.update(query);
     }
 
