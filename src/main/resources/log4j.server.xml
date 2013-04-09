@@ -20,16 +20,11 @@
         <param name="DatePattern" value=".yyyy-ww" />
 	</appender>
 	
-	<logger name="org.metricminer">
+	<logger name="org.metricminer.tasks">
 		<priority value="INFO" />
 		<appender-ref ref="logfile" />
 	</logger>
 
-	<logger name="org.metricminer.infra.log.memory">
-		<priority value="DEBUG" />
-		<appender-ref ref="memoryfile" />
-	</logger>
-			
 	<category name="br.com.caelum.vraptor">
 		<priority value="INFO" />
 		<appender-ref ref="logfile" />
