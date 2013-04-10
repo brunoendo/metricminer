@@ -25,6 +25,11 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+				
+					<c:if test="${added}">
+					<div class="message success"><p>Your project will be processed as soon as possible!</p></div>
+					</c:if>
+					
 					<table cellpadding="0" cellspacing="0" width="100%" class="tablesorter zebra">
 						<thead>
 							<tr>

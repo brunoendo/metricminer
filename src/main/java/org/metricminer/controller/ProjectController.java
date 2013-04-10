@@ -124,6 +124,8 @@ public class ProjectController {
 	        .withInitialTasks()
 	        .withConfigs(configs).build();
         dao.save(completeProject, configs);
+        
+        result.include("added", true);
         result.redirectTo(ProjectController.class).list(1);
 	}
 

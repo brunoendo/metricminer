@@ -22,6 +22,11 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+				
+					<c:if test="${toRun}">
+					<div class="message success"><p>Your query will be executed as soon as possible!</p></div>
+					</c:if>
+					
 					<table>
 						<tr>
 							<th>Name</th>
