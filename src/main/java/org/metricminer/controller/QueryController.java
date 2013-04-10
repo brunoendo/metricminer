@@ -118,6 +118,6 @@ public class QueryController {
     public void runQuery(Long queryId) {
         Query query = queryDao.findBy(queryId);
         taskDao.saveTaskToExecuteQuery(query);
-        result.redirectTo(TaskController.class).listTasks();
+        result.redirectTo(this).listQueries();
     }
 }

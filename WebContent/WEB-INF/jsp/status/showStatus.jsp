@@ -73,6 +73,53 @@
 							</c:forEach>
 						</table>
 					</c:if>
+					
+					<h2>Tasks</h2>
+					<table cellpadding="0" cellspacing="0" class="tablesorter zebra">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Project</th>
+								<th>Status</th>
+								<th>Submission date</th>
+								<th>Start date</th>
+								<th>End date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${tasks}" var="task">
+								<tr>
+									<td>${task.name}</td>
+									<td>${task.project.name}</td>
+									<td>${task.status}</td>
+									<td>
+										<fmt:formatDate value="${task.submitDate.time}" 
+											pattern="yyyy/MM/dd - HH:mm:ss"/>
+									</td>
+									<td>
+										<c:if test="${task.hasStarted() or task.hasFinished()}">
+											<fmt:formatDate value="${task.startDate.time}" 
+												pattern="yyyy/MM/dd - HH:mm:ss"/>
+										</c:if>
+										<c:if test="${!task.hasStarted() and !task.hasFinished()}">
+											-
+										</c:if>
+									</td>
+									<td>
+										<c:if test="${task.hasFinished()}">
+											<fmt:formatDate value="${task.endDate.time}" 
+												pattern="yyyy/MM/dd - HH:mm:ss"/>
+										</c:if>
+										<c:if test="${!task.hasFinished()}">
+											-
+										</c:if>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+					
+					
 				</div>		<!-- .block_content ends -->
 				<div class="bendl"></div>
 				<div class="bendr"></div>
