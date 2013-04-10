@@ -16,7 +16,7 @@ public class SimpleOneColumnCSVReader implements OneColumnCSVReader {
 		
 		while(sc.hasNextLine()) {
 			try {
-				String token = sc.nextLine().replace(";", "");
+				String token = sc.nextLine().replace(";", "").replace("\"", "");
 				numbers.add(Double.parseDouble(token));
 			} catch (NumberFormatException e) {
 				// oops!?

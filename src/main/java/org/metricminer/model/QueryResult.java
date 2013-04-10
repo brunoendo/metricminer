@@ -39,6 +39,10 @@ public class QueryResult {
 		return csvFilename;
 	}
 	
+	public String getFilenameAsCsv() {
+		return csvFilename + ".csv";
+	}
+	
 	public Long getId() {
 		return id;
 	}
