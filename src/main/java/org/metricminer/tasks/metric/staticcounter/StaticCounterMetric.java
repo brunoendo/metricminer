@@ -16,16 +16,24 @@ import org.metricminer.tasks.metric.common.MetricResult;
 
 public class StaticCounterMetric implements Metric {
 
+	private SourceCode source;
+	
 	private Set<String> staticAttributesName;
 	private int staticAttributesCounter;
-	private SourceCode source;
-	private int staticMethodsCounter;
+	
 	private Set<String> staticMethodsName;
+	private int staticMethodsCounter;
 
 	@Override
 	public Collection<MetricResult> results() {
 		String attributeNames = StringUtils.join(staticAttributesName.toArray(), ",");
-		MetricResult staticAttributesResult = new StaticCounterResult(source, attributeNames, staticAttributesCounter);
+		String methodNames = StringUtils.join(staticMethodsName.toArray(), ",");
+		MetricResult staticAttributesResult = new StaticCounterResult(
+				source,
+				attributeNames,
+				staticAttributesCounter,
+				methodNames,
+				staticMethodsCounter);
 
 		return Arrays.asList(staticAttributesResult);
 	}

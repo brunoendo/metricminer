@@ -80,4 +80,21 @@ public class StaticCounterMetricTest {
 		assertEquals(0, metric.getNumberOfStaticMethods());
 		assertTrue(metric.getStaticMethodsName().isEmpty());
 	}
+	
+	@Test
+	public void shouldReturnOnlyAttributeNameEvenIfAttributeIsInitialized(){
+		metric.calculate(source,
+				toInputStream(
+						classDeclaration(
+								"private static int attr1 = 0;\r\n" +
+								"private int attr2;\r\n" +
+								"public static int attr3;\r\n" +
+								"public int attr4;\r\n" +
+								"public static void method() {}\r\n"
+								)));
+		assertEquals(2, metric.getNumberOfStaticAttributes());
+		System.out.println(metric.getStaticAttributesName());
+		assertTrue(metric.getStaticAttributesName().contains("attr1"));
+		assertTrue(metric.getStaticAttributesName().contains("attr3"));
+	}
 }

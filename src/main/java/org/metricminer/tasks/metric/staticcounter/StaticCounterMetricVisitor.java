@@ -17,7 +17,7 @@ public class StaticCounterMetricVisitor extends VoidVisitorAdapter<Object> {
 	public void visit(FieldDeclaration fieldDeclaration, Object arg) {
 		if (isStatic(fieldDeclaration.getModifiers())) {
 			staticAttributesCounter++;
-			staticAttributesName.add(fieldDeclaration.getVariables().get(0).toString());
+			staticAttributesName.add(fieldDeclaration.getVariables().get(0).getId().getName());
 		}
 		
 		super.visit(fieldDeclaration, arg);
