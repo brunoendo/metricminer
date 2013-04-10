@@ -5,7 +5,7 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -18,24 +18,31 @@ public class StaticCounterMetric implements Metric {
 
 	private SourceCode source;
 	
-	private Set<String> staticAttributesName;
-	private int staticAttributesCounter;
+	private Set<String> attributesName;
+	private int attributesCounter;
 	
-	private Set<String> staticMethodsName;
-	private int staticMethodsCounter;
+	private Set<String> methodsName;
+	private int methodsCounter;
 
 	@Override
 	public Collection<MetricResult> results() {
-		String attributeNames = StringUtils.join(staticAttributesName.toArray(), ",");
-		String methodNames = StringUtils.join(staticMethodsName.toArray(), ",");
-		MetricResult staticAttributesResult = new StaticCounterResult(
-				source,
-				attributeNames,
-				staticAttributesCounter,
-				methodNames,
-				staticMethodsCounter);
+		Collection<MetricResult> results = new ArrayList<MetricResult>();
 
-		return Arrays.asList(staticAttributesResult);
+		if(this.attributesCounter > 0 || this.methodsCounter > 0) {
+			String attributesName = StringUtils.join(this.attributesName.toArray(), ",");
+			String methodsName = StringUtils.join(this.methodsName.toArray(), ",");
+			
+			MetricResult staticAttributesResult = new StaticCounterResult(
+					source,
+					attributesName,
+					attributesCounter,
+					methodsName,
+					methodsCounter);
+			
+			results.add(staticAttributesResult);
+		}
+
+		return results;
 	}
 
 	@Override
@@ -47,11 +54,12 @@ public class StaticCounterMetric implements Metric {
 
 			StaticCounterMetricVisitor nameVisitor = new StaticCounterMetricVisitor();
 			nameVisitor.visit(cunit, null);
-			staticAttributesName = nameVisitor.staticAttributesName;
-			staticAttributesCounter = nameVisitor.staticAttributesCounter;
 			
-			staticMethodsCounter = nameVisitor.staticMethodsCounter;
-			staticMethodsName = nameVisitor.staticMethodsName;
+			attributesName = nameVisitor.attributesName;
+			attributesCounter = nameVisitor.attributesCounter;
+			
+			methodsCounter = nameVisitor.methodsCounter;
+			methodsName = nameVisitor.methodsName;
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
@@ -68,19 +76,19 @@ public class StaticCounterMetric implements Metric {
 	}
 
 	public int getNumberOfStaticAttributes() {
-		return staticAttributesCounter;
+		return attributesCounter;
 	}
 
 	public Set<String> getStaticAttributesName() {
-		return staticAttributesName;
+		return attributesName;
 	}
 
 	public int getNumberOfStaticMethods() {
-		return staticMethodsCounter;
+		return methodsCounter;
 	}
 
 	public Set<String> getStaticMethodsName() {
-		return staticMethodsName;
+		return methodsName;
 	}
 
 }

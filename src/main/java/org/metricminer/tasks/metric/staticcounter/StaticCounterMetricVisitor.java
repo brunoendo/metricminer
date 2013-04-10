@@ -9,15 +9,16 @@ import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 public class StaticCounterMetricVisitor extends VoidVisitorAdapter<Object> {
 
-	public int staticAttributesCounter = 0;
-	public Set<String> staticAttributesName = new HashSet<String>();
-	public int staticMethodsCounter = 0;
-	public Set<String> staticMethodsName = new HashSet<String>();
+	public int attributesCounter = 0;
+	public Set<String> attributesName = new HashSet<String>();
+	
+	public int methodsCounter = 0;
+	public Set<String> methodsName = new HashSet<String>();
 
 	public void visit(FieldDeclaration fieldDeclaration, Object arg) {
 		if (isStatic(fieldDeclaration.getModifiers())) {
-			staticAttributesCounter++;
-			staticAttributesName.add(fieldDeclaration.getVariables().get(0).getId().getName());
+			attributesCounter++;
+			attributesName.add(fieldDeclaration.getVariables().get(0).getId().getName());
 		}
 		
 		super.visit(fieldDeclaration, arg);
@@ -26,8 +27,8 @@ public class StaticCounterMetricVisitor extends VoidVisitorAdapter<Object> {
 	@Override
 	public void visit(MethodDeclaration methodDeclaration, Object arg1) {
 		if (isStatic(methodDeclaration.getModifiers())) {
-			staticMethodsCounter++;
-			staticMethodsName.add(methodDeclaration.getName());
+			methodsCounter++;
+			methodsName.add(methodDeclaration.getName());
 		}
 		super.visit(methodDeclaration, arg1);
 	}
