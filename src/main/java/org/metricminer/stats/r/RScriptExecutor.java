@@ -31,8 +31,8 @@ public class RScriptExecutor {
 		FileReader f2 = null;
 
 		try {
-			f1 = new FileReader(q1.getCsvFilename());
-			f2 = new FileReader(q2.getCsvFilename());
+			f1 = new FileReader(q1.getFilename());
+			f2 = new FileReader(q2.getFilename());
 			
 			List<Double> set1 = reader.readNumbers(f1);
 			List<Double> set2 = reader.readNumbers(f2);

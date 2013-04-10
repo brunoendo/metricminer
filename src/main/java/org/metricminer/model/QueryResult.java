@@ -35,7 +35,7 @@ public class QueryResult {
 		this(null, query);
 	}
 
-	public String getCsvFilename() {
+	public String getFilename() {
 		return csvFilename;
 	}
 	

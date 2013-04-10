@@ -25,7 +25,7 @@ public class QueryExecutor {
     }
     
     @SuppressWarnings("unchecked")
-    public void execute(Query query, OutputStream csvOutputStream) {
+    public void execute(Query query, OutputStream... outputs) {
 
     	int currentPage = 1;
     	do {
@@ -35,15 +35,28 @@ public class QueryExecutor {
 	        List<Map<String, Object>> results = sqlQuery.list();
 	
 	        if (results.isEmpty() && currentPage == 1) {
-	        	writer.emptyResult(csvOutputStream);
+	        	writeEmptyIn(outputs);
 	        }
 	        else if(results.isEmpty()) break;
 	        else {
-	        	writer.write(csvOutputStream, results);
+	        	writeResultIn(results, outputs);
 	        }
 	        
 	        currentPage++;
     	} while(true);
     }
+
+	private void writeResultIn(List<Map<String, Object>> results,
+			OutputStream... outputs) {
+		for (OutputStream out : outputs) {
+			writer.write(out, results);
+		}
+	}
+
+	private void writeEmptyIn(OutputStream... outputs) {
+		for (OutputStream out : outputs) {
+			writer.emptyResult(out);
+		}
+	}
 
 }

@@ -65,11 +65,13 @@
 						<tr>
 							<th></th>
 							<th>Status</th>
+							<th>Result</th>
+							<th>Date</th>
 						</tr>
 						<c:if test="${scheduledToRun}">
 							<tr>
 								<td>#${query.results.size() + 1}</td>
-								<td>SCHEDULED</td>
+								<td colspan="3">SCHEDULED</td>
 							</tr>
 						</c:if>
 						<c:forEach items="${query.results}" var="result" varStatus="status" >
@@ -83,8 +85,11 @@
 								<td>${result.status}</td>
 									<c:if test="${result.hasFailed() eq false}">
 										<td>
-											<a href="<c:url value="/query/download/${result.id}" />">
-												Download results
+											<a href="<c:url value="/query/download/${result.id}/zip" />">
+												ZIP
+											</a> |
+											<a href="<c:url value="/query/download/${result.id}/csv" />">
+												CSV
 											</a>
 										</td>
 									</c:if>

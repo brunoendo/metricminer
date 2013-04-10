@@ -1,7 +1,10 @@
 package org.metricminer.tasks.query;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -41,19 +44,19 @@ public class ExecuteQueryTask implements RunnableTask {
 
     @Override
     public void run() {
-        Query query = queryDao.findBy(queryId);
-        String csvFileName = config.getQueriesResultsDir() + "/result-"
-                + query.getId() + "-" + query.getResultCount() + ".zip";
-        FileOutputStream fileOutputStream = createFile(csvFileName);
-        QueryResult result = null;
-        try {
-        	ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
-        	zipOutputStream.putNextEntry(new ZipEntry("result.csv"));
-	        queryExecutor.execute(query, zipOutputStream);
+    	QueryResult result = null;
+    	Query query = queryDao.findBy(queryId);
+    	try {
+	        String filename = config.getQueriesResultsDir() + "/result-"
+	                + query.getId() + "-" + query.getResultCount();
+	        ZipOutputStream zipOutputStream  = zipOutStreamFor(filename);
+	        OutputStream csvOutputStream = csvOutStreamFor(filename);
+	        queryExecutor.execute(query, zipOutputStream, csvOutputStream);
 	        zipOutputStream.closeEntry();
 	        zipOutputStream.close();
-	        fileOutputStream.close();
-	        result = new QueryResult(csvFileName, query);
+	        csvOutputStream.close();
+	        
+	        result = new QueryResult(filename, query);
             query.addResult(result);
             result.success();
         } catch (Exception e) {
@@ -66,7 +69,18 @@ public class ExecuteQueryTask implements RunnableTask {
         queryDao.update(query);
     }
 
-    private void sendMail(Query query) {
+    private OutputStream csvOutStreamFor(String filename) throws FileNotFoundException {
+		return new FileOutputStream(new File(filename + ".csv"));
+	}
+
+	private ZipOutputStream zipOutStreamFor(String filename) throws IOException {
+    	FileOutputStream fileOutputStream = createFile(filename + ".zip");
+        ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+        zipOutputStream.putNextEntry(new ZipEntry("result.csv"));
+		return zipOutputStream;
+	}
+
+	private void sendMail(Query query) {
         String email = query.getAuthor().getEmail();
         try {
             SimpleEmail simpleEmail = new SimpleEmail();
