@@ -23,7 +23,7 @@ public class StatusController {
 	@Get("/status")
 	public void showStatus() {
 		result.include("status", status);
-		result.include("tasks", taskDao.listTasks());
+		result.include("tasks", taskDao.listLast50Tasks());
 	}
 	
 }

@@ -26,7 +26,7 @@
 						<div class="message info"><p>There are no tasks running currently</p></div>
 					</c:if>
 					<h2>Configurations</h2>
-					<table>
+					<table class="results">
 						<tr>
 							<th>Max concurrent tasks</th>
 							<td>${status.configs.maxConcurrentTasks }</td>
@@ -37,10 +37,11 @@
 						</tr>
 					</table>
 					<h2>Registered metrics</h2>
-					<table cellpadding="0" cellspacing="0" class="tablesorter zebra">
+					<table cellpadding="0" cellspacing="0" class="tablesorter zebra results">
 						<thead>
 							<tr>
 								<th>Name</th>
+								<th>Factory class</th>
 							</tr>
 						</thead>
 						<thead>
@@ -54,7 +55,7 @@
 					</table>
 					<c:if test="${! empty status.taskQueue}">
 						<h2>Tasks running</h2>
-						<table>
+						<table class="results">
 							<c:forEach items="${status.taskQueue}" var="task">
 								<tr>
 									<td>
@@ -74,8 +75,8 @@
 						</table>
 					</c:if>
 					
-					<h2>Tasks</h2>
-					<table cellpadding="0" cellspacing="0" class="tablesorter zebra">
+					<h2>Last 50 Tasks</h2>
+					<table cellpadding="0" cellspacing="0" class="tablesorter zebra results">
 						<thead>
 							<tr>
 								<th>Name</th>

@@ -41,6 +41,17 @@ public class QueryValidatorTest {
         query.setSqlQuery("select " + Author.NAME_COLUMN + " from Author;");
         shouldFailValidation(QueryValidator.SECRETNAME_MESSAGE);
     }
+    
+    @Test
+    public void shouldNotValidateQueryContainingSource() {
+    	query.setSqlQuery("select source from SourceCode;");
+    	shouldFailValidation(QueryValidator.SOURCECODE_MESSAGE);
+    }
+    @Test
+    public void shouldNotValidateQueryContainingDiff() {
+    	query.setSqlQuery("select diff from SourceCode;");
+    	shouldFailValidation(QueryValidator.DIFF_MESSAGE);
+    }
 
     @Test
     public void shouldNotValidateQueryContainingAuthorEmail() {
