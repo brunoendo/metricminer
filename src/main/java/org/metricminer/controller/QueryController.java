@@ -96,6 +96,6 @@ public class QueryController {
         Query query = queryDao.findBy(queryId);
         taskDao.saveTaskToExecuteQuery(query);
         result.include("toRun", true);
-        result.redirectTo(this).listQueries();
+        result.redirectTo(this).detailQuery(queryId);
     }
 }

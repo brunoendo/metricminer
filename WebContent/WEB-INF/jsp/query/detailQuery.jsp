@@ -40,8 +40,12 @@
 				
 				<div class="block_content">
 				
-					<c:if test="${included}">
+					<c:if test="${toRun}">
 					<div class="message success"><p>Your query will be executed as soon as possible!</p></div>
+					</c:if>
+
+					<c:if test="${included}">
+					<div class="message success"><p>Your query was added and will be executed as soon as possible!</p></div>
 					</c:if>
 					
 					<h2>${query.name}</h2>
