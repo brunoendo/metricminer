@@ -14,8 +14,8 @@ import org.metricminer.model.Project;
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
 
-//@ApplicationScoped
-//@Component
+@ApplicationScoped
+@Component
 public class AutomaticMetricRegistrator {
 
 	private ProjectDao projectDao;
