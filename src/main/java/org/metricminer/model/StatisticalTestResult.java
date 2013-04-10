@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 public class StatisticalTestResult {
 
 	@Id @GeneratedValue
-	private int id;
+	private Long id;
 	@ManyToOne
 	private QueryResult q1;
 	@ManyToOne
@@ -23,25 +23,30 @@ public class StatisticalTestResult {
 	private String output;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar date;
+	@ManyToOne
+	private User author;
+	private String name;
 
 	public StatisticalTestResult(QueryResult q1, QueryResult q2,
-			StatisticalTest test, String output) {
+			StatisticalTest test, String output, User author, String name) {
 		this.q1 = q1;
 		this.q2 = q2;
 		this.test = test;
 		this.output = output;
+		this.author = author;
+		this.name = name;
 		this.date = Calendar.getInstance();
 	}
 
-	public StatisticalTestResult(int id) {
+	public StatisticalTestResult(Long id) {
 		this.id = id;
 	}
 	
 	protected StatisticalTestResult() {
-		this(0);
+		this(0l);
 	}
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 	public QueryResult getQ1() {
@@ -74,6 +79,12 @@ public class StatisticalTestResult {
 	public void setDate(Calendar date) {
 		this.date = date;
 	}
-
 	
+	public User getAuthor() {
+		return author;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

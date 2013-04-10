@@ -44,6 +44,7 @@
 									<option value=${result.id}>${result.query.name} (${result.id})</option>
 								</c:forEach>
 							</select>
+							<span class="note">*This should to be a single column dataset</span>
 						</p>
 						<p>
 							<label for="statisticalTestId">Statistical test</label> <br />
@@ -52,7 +53,6 @@
 									<option value=${test.id}>${test.name}</option>
 								</c:forEach>
 							</select>
-							</select><span class="note">*This should to be a single column dataset</span>
 						</p>
 					
 						<p>

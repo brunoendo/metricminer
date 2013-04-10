@@ -14,6 +14,7 @@ import org.metricminer.model.StatisticalTest;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskConfigurationEntry;
 import org.metricminer.model.TaskConfigurationEntryKey;
+import org.metricminer.model.User;
 import org.metricminer.stats.r.RScriptExecutor;
 import org.metricminer.tasks.RunnableTask;
 import org.metricminer.tasks.RunnableTaskFactory;
@@ -28,10 +29,13 @@ public class ExecuteRScriptTaskFactory implements RunnableTaskFactory {
         String firstQueryIdString = configurationEntries.get(TaskConfigurationEntryKey.FIRST_QUERY_RESULT).getValue();
         String secondQueryIdString = configurationEntries.get(TaskConfigurationEntryKey.SECOND_QUERY_RESULT).getValue();
         String statisticalTestIdString = configurationEntries.get(TaskConfigurationEntryKey.STATISTICAL_TEST).getValue();
+        String authorIdString = configurationEntries.get(TaskConfigurationEntryKey.AUTHOR_ID).getValue();
         
         long firstQueryId = Long.parseLong(firstQueryIdString);
         long secondQueryId = Long.parseLong(secondQueryIdString);
         long statisticalTestId = Long.parseLong(statisticalTestIdString);
+        long authorId = Long.parseLong(authorIdString);
+        User author = (User) session.load(User.class, authorId);
         
         QueryResultDAO queryResultDao = new QueryResultDAO(session);
         QueryResult firstQuery = queryResultDao.findById(firstQueryId);
@@ -42,8 +46,7 @@ public class ExecuteRScriptTaskFactory implements RunnableTaskFactory {
         
         RScriptExecutor rScriptExecutor = new RScriptExecutor(new SimpleCommandExecutor(), 
                 config, new SimpleOneColumnCSVReader());
-        ExecuteRScriptTask runnableTask = new ExecuteRScriptTask(session, rScriptExecutor, statiscalTest, firstQuery, secondQuery);
-        
+        ExecuteRScriptTask runnableTask = new ExecuteRScriptTask(session, rScriptExecutor, statiscalTest, firstQuery, secondQuery, author, task.getName());
         
         return runnableTask;
     }

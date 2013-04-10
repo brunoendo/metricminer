@@ -35,10 +35,10 @@ public class RScriptExecutorTest {
 	@Test
 	public void shouldInvokeR() throws Exception {
 		StatisticalTest test = new StatisticalTest("wilcoxon", wilcoxon(), new User());
-		QueryResult q1 = new QueryResult(path + "/q1.csv", null);
-		QueryResult q2 = new QueryResult(path + "/q2.csv", null);
+		QueryResult q1 = new QueryResult(path + "/q1", null);
+		QueryResult q2 = new QueryResult(path + "/q2", null);
 		
-		StatisticalTestResult result = r.execute(test, q1, q2);
+		StatisticalTestResult result = r.execute(test, q1, q2, null, "test");
 		
 		assertTrue(result.getOutput().contains("Wilcoxon signed rank test"));
 		assertTrue(result.getOutput().contains("p-value = 0.25"));
