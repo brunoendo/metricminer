@@ -61,8 +61,9 @@
 						
 					</c:if>
 					<c:if test="${scheduledToRun}">
-						<h4>Query scheduled to run, you will receive a email when the results are ready.</h4>
+						<div class="message success"><p>Query scheduled to run, you will receive a email when the results are ready.</p></div>
 					</c:if>
+					
 					
 					<h3 class="clear">Results:</h3>
 					<table class="clear results">
