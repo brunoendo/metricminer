@@ -37,7 +37,7 @@ public class StatisticalTestController {
     @LoggedUserAccess
     @Get("/stats/add")
     public void statisticalTestTaskForm() {
-        List<QueryResult> results = queryResultDao.list();
+        List<QueryResult> results = queryResultDao.allSucceded();
         List<StatisticalTest> tests = statisticalTestDao.list();
         result.include("results", results);
         result.include("tests", tests);

@@ -6,8 +6,8 @@ import org.hibernate.annotations.Type;
 
 @Embeddable
 public class QueryResultStatus {
-    private static final String SUCCESS_STATUS = "SUCCESS";
-    private static final String FAILED_STATUS = "FAILED";
+    public static final String SUCCESS_STATUS = "SUCCESS";
+    public static final String FAILED_STATUS = "FAILED";
     @Type(type = "text")
     private String message;
     private String status;
