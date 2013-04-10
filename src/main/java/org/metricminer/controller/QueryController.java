@@ -102,14 +102,14 @@ public class QueryController {
 	@Get("/query/download/{resultId}/zip")
 	public Download downloadZip(Long resultId) {
 		QueryResult result = queryResultDAO.findById(resultId);
-		final String csvFilename = result.getFilename() + ".zip";
+		String csvFilename = result.getFilenameAsZip();
 		return new FileDownload(new File(csvFilename), "application/zip", "result.zip");
 	}
 	
 	@Get("/query/download/{resultId}/csv")
 	public Download downloadCsv(Long resultId) {
 		QueryResult result = queryResultDAO.findById(resultId);
-		final String csvFilename = result.getFilename() + ".csv";
+		String csvFilename = result.getFilenameAsCsv();
 		return new FileDownload(new File(csvFilename), "text/csv", "result.csv");
 	}
 

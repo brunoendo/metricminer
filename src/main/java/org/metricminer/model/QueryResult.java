@@ -71,4 +71,8 @@ public class QueryResult {
         return query;
     }
 
+	public String getFilenameAsZip() {
+		return csvFilename + ".zip";
+	}
+
 }
