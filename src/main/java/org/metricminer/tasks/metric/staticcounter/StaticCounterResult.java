@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Type;
 import org.metricminer.model.SourceCode;
 import org.metricminer.tasks.metric.common.MetricResult;
 
@@ -18,7 +19,9 @@ public class StaticCounterResult implements MetricResult {
 	@OneToOne
 	private SourceCode sourceCode;
 
+	@Type(type = "text")
 	private String attributesName;
+	@Type(type = "text")
 	private String methodsName;
 	
 	private int atrributesCount;
