@@ -43,7 +43,7 @@ public class AutomaticMetricRegistrator {
 					    logger.info("Adding new metric to project " + project);
 						project.addNewMetrics(metricMinerConfigs.getRegisteredMetrics());
 					} catch(Exception e) {
-						logger.error("Error when adding metric to project " + project);
+						logger.error("Error when adding metric to project " + project, e);
 					}
 				}
 				projectDaoSession.getTransaction().commit();
