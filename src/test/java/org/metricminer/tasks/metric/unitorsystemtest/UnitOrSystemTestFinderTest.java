@@ -170,4 +170,87 @@ public class UnitOrSystemTestFinderTest {
 		assertFalse(metric.getTests().get("aSimpleTest2").isIntegration());
 		
 	}
+	
+	
+	@Test
+	public void shouldTellThatIsAnUnitTestIfMethodReceivesConcreteStuffFromSamePackage() {
+		metric.calculate(source,
+				toInputStream(
+					"class BlaTest {" +
+						"@Test " +
+						"public void aSimpleTest() {" +
+							"Dep1 x = new Dep1();" +
+							"Dep2 y = new Dep2();" +
+							"Bla obj = new Bla(x);" +
+							"obj.method1(y);" +
+							"assertEquals(obj.isAbc());" +
+						"}" +
+					"}"
+								));
+		
+		assertFalse(metric.getTests().get("aSimpleTest").isIntegration());
+		
+	}
+	
+	@Test
+	public void shouldTellThatIsAnIntegrationTestIfMethodReceivesConcreteStuff() {
+		metric.calculate(source,
+				toInputStream(
+						"import a.b.Dep1;" +
+						"class BlaTest {" +
+								"@Test " +
+								"public void aSimpleTest() {" +
+								"Dep1 x = new Dep1();" +
+								"Dep2 y = new Dep2();" +
+								"Bla obj = new Bla(y);" +
+								"obj.method1(x);" +
+								"assertEquals(obj.isAbc());" +
+								"}" +
+								"}"
+						));
+		
+		assertTrue(metric.getTests().get("aSimpleTest").isIntegration());
+		
+	}
+	
+	@Test
+	public void shouldTellThatIsAnIntegrationTestIfConcreteMethodIsInvoked() {
+		metric.calculate(source,
+				toInputStream(
+						"import a.b.Dep1;" +
+								"class BlaTest {" +
+								"@Test " +
+								"public void aSimpleTest() {" +
+								"Dep1 x = new Dep1();" +
+								"Dep2 y = new Dep2();" +
+								"Bla obj = new Bla(y);" +
+								"x.doMagic();" +
+								"assertEquals(obj.isAbc());" +
+								"}" +
+								"}"
+						));
+		
+		assertTrue(metric.getTests().get("aSimpleTest").isIntegration());
+		
+	}
+	
+	@Test
+	public void shouldTellThatIsAUnitTestIfConcreteMethodFromSamePackageIsInvoked() {
+		metric.calculate(source,
+				toInputStream(
+								"class BlaTest {" +
+								"@Test " +
+								"public void aSimpleTest() {" +
+								"Dep1 x = new Dep1();" +
+								"Bla obj = new Bla();" +
+								"x.doMagic();" +
+								"obj.doOtherMagic();" +
+								"assertEquals(obj.isAbc());" +
+								"}" +
+								"}"
+						));
+		
+		assertFalse(metric.getTests().get("aSimpleTest").isIntegration());
+		
+	}
 }
