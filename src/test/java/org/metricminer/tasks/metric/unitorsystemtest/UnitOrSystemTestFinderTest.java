@@ -41,7 +41,7 @@ public class UnitOrSystemTestFinderTest {
 		
 	}
 	@Test
-	public void shouldTellThatIsAnIntegrationTestIfConstructorReceivesConcreteStuffWithCot() {
+	public void shouldTellThatIsAnIntegrationTestIfConstructorReceivesConcreteStuffWithCtor() {
 		metric.calculate(source,
 				toInputStream(
 					"import a.b.Dep1;" +
@@ -198,15 +198,15 @@ public class UnitOrSystemTestFinderTest {
 				toInputStream(
 						"import a.b.Dep1;" +
 						"class BlaTest {" +
-								"@Test " +
-								"public void aSimpleTest() {" +
+							"@Test " +
+							"public void aSimpleTest() {" +
 								"Dep1 x = new Dep1();" +
 								"Dep2 y = new Dep2();" +
 								"Bla obj = new Bla(y);" +
 								"obj.method1(x);" +
 								"assertEquals(obj.isAbc());" +
-								"}" +
-								"}"
+							"}" +
+						"}"
 						));
 		
 		assertTrue(metric.getTests().get("aSimpleTest").isIntegration());
@@ -218,16 +218,36 @@ public class UnitOrSystemTestFinderTest {
 		metric.calculate(source,
 				toInputStream(
 						"import a.b.Dep1;" +
-								"class BlaTest {" +
-								"@Test " +
-								"public void aSimpleTest() {" +
+						"class BlaTest {" +
+							"@Test " +
+							"public void aSimpleTest() {" +
 								"Dep1 x = new Dep1();" +
 								"Dep2 y = new Dep2();" +
 								"Bla obj = new Bla(y);" +
 								"x.doMagic();" +
 								"assertEquals(obj.isAbc());" +
-								"}" +
-								"}"
+							"}" +
+						"}"
+						));
+		
+		assertTrue(metric.getTests().get("aSimpleTest").isIntegration());
+		
+	}
+	
+	@Test
+	public void shouldTellThatIsAnIntegrationTestIfConcreteMethodIsInvokedWithoutInstance() {
+		metric.calculate(source,
+				toInputStream(
+						"import a.b.Dep1;" +
+						"class BlaTest {" +
+							"@Test " +
+							"public void aSimpleTest() {" +
+								"Bla obj = new Bla();" +
+								"int result = new Dep1().doMagic();" +
+								"new Dep1().doMagic2();" +
+								"assertEquals(obj.isAbc());" +
+							"}" +
+						"}"
 						));
 		
 		assertTrue(metric.getTests().get("aSimpleTest").isIntegration());
@@ -238,16 +258,16 @@ public class UnitOrSystemTestFinderTest {
 	public void shouldTellThatIsAUnitTestIfConcreteMethodFromSamePackageIsInvoked() {
 		metric.calculate(source,
 				toInputStream(
-								"class BlaTest {" +
-								"@Test " +
-								"public void aSimpleTest() {" +
-								"Dep1 x = new Dep1();" +
-								"Bla obj = new Bla();" +
-								"x.doMagic();" +
-								"obj.doOtherMagic();" +
-								"assertEquals(obj.isAbc());" +
-								"}" +
-								"}"
+					"class BlaTest {" +
+						"@Test " +
+						"public void aSimpleTest() {" +
+							"Dep1 x = new Dep1();" +
+							"Bla obj = new Bla();" +
+							"x.doMagic();" +
+							"obj.doOtherMagic();" +
+							"assertEquals(obj.isAbc());" +
+						"}" +
+					"}"
 						));
 		
 		assertFalse(metric.getTests().get("aSimpleTest").isIntegration());
