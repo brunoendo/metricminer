@@ -3,7 +3,6 @@ package org.metricminer.infra.validator;
 import org.metricminer.controller.QueryController;
 import org.metricminer.model.Author;
 import org.metricminer.model.Query;
-import org.metricminer.model.User;
 
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.Component;
@@ -92,14 +91,6 @@ public class QueryValidator {
     		invalid = true;
     	}
     	return invalid;
-    }
-
-	public void validateEditByAuthor(Query query, User user) {
-        if (!query.isAllowedToEdit(user)) {
-            validator.add(new ValidationMessage(NOT_ALLOWED_MESSAGE,
-                    "InvalidQuery"));
-        }
-        validator.onErrorRedirectTo(QueryController.class).editQueryForm(query.getId());
     }
 
 }

@@ -31,14 +31,26 @@ public class AutomaticMetricRegistrator {
 
 	@PostConstruct
 	public void execute() {
-		List<Project> projects = projectDao.listAll();
-		projectDaoSession.beginTransaction();
-		for (Project project : projects) {
-		    logger.info("Adding new metric to project " + project);
-			project.addNewMetrics(metricMinerConfigs.getRegisteredMetrics());
-		}
-		projectDaoSession.getTransaction().commit();
-		projectDaoSession.close();
+		
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				List<Project> projects = projectDao.listAll();
+				projectDaoSession.beginTransaction();
+				for (Project project : projects) {
+					try {
+					    logger.info("Adding new metric to project " + project);
+						project.addNewMetrics(metricMinerConfigs.getRegisteredMetrics());
+					} catch(Exception e) {
+						logger.error("Error when adding metric to project " + project, e);
+					}
+				}
+				projectDaoSession.getTransaction().commit();
+				projectDaoSession.close();				
+			}
+		}).start();
+
 	}
 	
 }

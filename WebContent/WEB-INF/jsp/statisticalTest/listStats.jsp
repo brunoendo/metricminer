@@ -22,6 +22,11 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+				
+					<c:if test="${added}">
+					<div class="message success"><p>Your statistical test will be executed as soon as possible!</p></div>
+					</c:if>
+					
 					<table class="results">
 						<tr>
 							<th>Name</th>
