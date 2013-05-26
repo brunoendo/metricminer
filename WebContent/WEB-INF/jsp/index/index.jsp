@@ -69,6 +69,8 @@
 							</tr>
 						</c:forEach>
 					</table>
+				    <div id="top-committers" style="width: 900px; height: 500px;"></div>
+					
 				</div>
 				<div class="bendl"></div>
 				<div class="bendr"></div>

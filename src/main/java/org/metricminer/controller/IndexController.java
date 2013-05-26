@@ -20,7 +20,8 @@ public class IndexController {
 	private final AuthorDao authorDao;
 	private final TaskDao taskDao;
 
-	public IndexController(Result result, ProjectDao projectDao, CommitDao commitDao, ArtifactDao artifactDao, AuthorDao authorDao, TaskDao taskDao) {
+	public IndexController(Result result, ProjectDao projectDao, CommitDao commitDao, 
+			ArtifactDao artifactDao, AuthorDao authorDao, TaskDao taskDao) {
 		this.projectDao = projectDao;
 		this.commitDao = commitDao;
 		this.artifactDao = artifactDao;
