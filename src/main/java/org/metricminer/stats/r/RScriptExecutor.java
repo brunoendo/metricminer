@@ -13,6 +13,7 @@ import org.metricminer.infra.executor.CommandExecutor;
 import org.metricminer.model.QueryResult;
 import org.metricminer.model.StatisticalTest;
 import org.metricminer.model.StatisticalTestResult;
+import org.metricminer.model.User;
 
 public class RScriptExecutor {
 
@@ -26,13 +27,13 @@ public class RScriptExecutor {
 		this.reader = reader;
 	}
 	
-	public StatisticalTestResult execute(StatisticalTest test, QueryResult q1, QueryResult q2) throws Exception {
+	public StatisticalTestResult execute(StatisticalTest test, QueryResult q1, QueryResult q2, User author, String name) throws Exception {
 		FileReader f1 = null;
 		FileReader f2 = null;
 
 		try {
-			f1 = new FileReader(q1.getCsvFilename());
-			f2 = new FileReader(q2.getCsvFilename());
+			f1 = new FileReader(q1.getFilenameAsCsv());
+			f2 = new FileReader(q2.getFilenameAsCsv());
 			
 			List<Double> set1 = reader.readNumbers(f1);
 			List<Double> set2 = reader.readNumbers(f2);
@@ -42,7 +43,7 @@ public class RScriptExecutor {
 			
 			String output = cmd.execute("Rscript " + rFile, ".");
 			
-			return new StatisticalTestResult(q1, q2, test, output);
+			return new StatisticalTestResult(q1, q2, test, output, author, name);
 		}
 		finally {
 			if(f1!=null) f1.close();

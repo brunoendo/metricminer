@@ -6,6 +6,7 @@ import org.metricminer.infra.dao.QueryResultDAO;
 import org.metricminer.infra.dao.StatisticalTestDao;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.infra.interceptor.LoggedUserAccess;
+import org.metricminer.infra.session.UserSession;
 import org.metricminer.model.QueryResult;
 import org.metricminer.model.StatisticalTest;
 import org.metricminer.model.Task;
@@ -25,19 +26,21 @@ public class StatisticalTestController {
     private final TaskDao taskDao;
     private final Result result;
     private final QueryResultDAO queryResultDao;
+	private final UserSession userSession;
 
     public StatisticalTestController(StatisticalTestDao statisticalTestDao, TaskDao taskDao,
-            Result result, QueryResultDAO queryResultDao) {
+            Result result, QueryResultDAO queryResultDao, UserSession userSession) {
         this.taskDao = taskDao;
         this.statisticalTestDao = statisticalTestDao;
         this.result = result;
         this.queryResultDao = queryResultDao;
+		this.userSession = userSession;
     }
     
     @LoggedUserAccess
     @Get("/stats/add")
     public void statisticalTestTaskForm() {
-        List<QueryResult> results = queryResultDao.list();
+        List<QueryResult> results = queryResultDao.allSucceded();
         List<StatisticalTest> tests = statisticalTestDao.list();
         result.include("results", results);
         result.include("tests", tests);
@@ -58,22 +61,21 @@ public class StatisticalTestController {
                 secondQueryResultId.toString());
         task.addTaskConfigurationEntry(TaskConfigurationEntryKey.STATISTICAL_TEST, 
                 statisticalTestId.toString());
+        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.AUTHOR_ID, 
+        		userSession.user().getId().toString());
         taskDao.save(task);
-        result.redirectTo(StatisticalTestController.class).detailStatiscalTestExecution(task.getId());
+        
+        result.include("added", true);
+        result.redirectTo(this).listStats();
     }
     
-    @Get("/stat/{taskId}")
-    public void detailStatiscalTestExecution(Long taskId) {
-        Task task = taskDao.findById(taskId);
-        result.include("task", task);
-        long firstQueryId = Long.parseLong(task.getTaskConfigurationValueFor(TaskConfigurationEntryKey.FIRST_QUERY_RESULT));
-        long secondQueryId = Long.parseLong(task.getTaskConfigurationValueFor(TaskConfigurationEntryKey.SECOND_QUERY_RESULT));
-        long statisticalTestId = Long.parseLong(task.getTaskConfigurationValueFor(TaskConfigurationEntryKey.STATISTICAL_TEST));
-        result.include("firstDataset", 
-                queryResultDao.findById(firstQueryId));
-        result.include("secondDataset", 
-                queryResultDao.findById(secondQueryId));
-        result.include("statisticalTest", 
-                statisticalTestDao.findById(statisticalTestId));
+    @Get("/stats")
+    public void listStats() {
+    	result.include("results", statisticalTestDao.results());
+    }
+    
+    @Get("/stats/results/{resultId}")
+    public void showResult(Long resultId) {
+    	result.include("result", statisticalTestDao.findResult(resultId));
     }
 }

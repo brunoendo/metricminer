@@ -5,18 +5,30 @@ import org.hibernate.StatelessSession;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 public class DaoTest {
     
     protected Session session;
-    private SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
     protected StatelessSession statelessSession;
+    
+    @BeforeClass
+    public static void setupClass() {
+    	sessionFactory = new Configuration().configure(
+    			"/hibernate.test.cfg.xml").buildSessionFactory();
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    	sessionFactory.close();
+    }
+    
     
     @Before
     public void setUpSuper() {
-        sessionFactory = new Configuration().configure(
-                "/hibernate.test.cfg.xml").buildSessionFactory();
         session = sessionFactory.openSession();
         session.getTransaction().begin();
         statelessSession = sessionFactory.openStatelessSession();
@@ -30,7 +42,6 @@ public class DaoTest {
         }
         statelessSession.getTransaction().rollback();
         session.close();
-        sessionFactory.close();
     }
     
 }

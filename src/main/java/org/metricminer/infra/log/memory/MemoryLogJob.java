@@ -22,11 +22,11 @@ public class MemoryLogJob implements Task {
 		long allocatedMemory = runtime.totalMemory();  
 		long freeMemory = runtime.freeMemory();  
 		
-		log.info("------- " + Calendar.getInstance().getTime());
-		log.info("free memory: " + freeMemory / 1024);  
-		log.info("allocated memory: " + allocatedMemory / 1024);  
-		log.info("max memory: " + maxMemory /1024);  
-		log.info("total free memory: " +   
+		log.debug("------- " + Calendar.getInstance().getTime());
+		log.debug("free memory: " + freeMemory / 1024);  
+		log.debug("allocated memory: " + allocatedMemory / 1024);  
+		log.debug("max memory: " + maxMemory /1024);  
+		log.debug("total free memory: " +   
 				(freeMemory + (maxMemory - allocatedMemory)) / 1024);
 	}
 }

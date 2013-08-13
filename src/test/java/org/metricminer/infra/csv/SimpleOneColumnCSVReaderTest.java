@@ -19,7 +19,7 @@ public class SimpleOneColumnCSVReaderTest {
 	
 	@Test
 	public void shouldIdentifyTheHeader() {
-		StringReader is = new StringReader("cc;");
+		StringReader is = new StringReader("\"cc\";");
 		
 		List<Double> numbers = reader.readNumbers(is);
 		
@@ -28,7 +28,7 @@ public class SimpleOneColumnCSVReaderTest {
 
 	@Test
 	public void shouldParseANumber() {
-		StringReader is = new StringReader("cc;\n1.2;");
+		StringReader is = new StringReader("\"cc\";\n\"1.2\";");
 		
 		List<Double> numbers = reader.readNumbers(is);
 		
@@ -38,7 +38,7 @@ public class SimpleOneColumnCSVReaderTest {
 
 	@Test
 	public void shouldParseUnlimitedNumbers() {
-		StringReader is = new StringReader("cc;\n1.2;\n2.3;\n3.4;\n");
+		StringReader is = new StringReader("cc;\n\"1.2\";\n\"2.3\";\n\"3.4\";\n");
 		
 		List<Double> numbers = reader.readNumbers(is);
 		

@@ -10,4 +10,5 @@ scripts/send.csv
 tmp/
 src/main/resources/development.properties
 src/main/resources/production.properties
+*.swp
 

@@ -11,6 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.metricminer.config.MetricMinerConfigs;
+import org.metricminer.model.Author;
 import org.metricminer.model.Commit;
 import org.metricminer.model.Project;
 
@@ -70,7 +71,15 @@ public class ProjectDao {
 		query.setParameter("id", project.getId());
 		return (Long) query.uniqueResult();
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	public List<Author> commitersFor(Project project){
+		Query query = session.createQuery("select distinct author From Commit as commit"
+						+ " join commit.author as author where commit.project.id = :id");
+		query.setParameter("id", project.getId());
+		return (List<Author>) query.list();
+		
+	}
 	public Commit firstCommitFor(Project project) {
 		Query query = session
 				.createQuery("select commit From Commit as commit where "

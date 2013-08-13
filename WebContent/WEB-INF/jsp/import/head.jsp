@@ -12,6 +12,7 @@
 		@import url("<c:url value='/css/facebox.css' />");
 		@import url("<c:url value='/css/visualize.css' />");
 		@import url("<c:url value='/css/date_input.css' />");
+		@import url("<c:url value='/css/metricminer.css' />");
     </style>
     
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/jquery.tagsinput.css' />" />

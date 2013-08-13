@@ -20,6 +20,7 @@ public class MethodsInvocationMetric implements Metric{
 
 	private MethodsInvocationVisitor visitor;
 	private ClassInfoVisitor info;
+	private SourceCode source;
 	
 	public String content(String path, String project) {
 		for(Entry<String, Set<String>> e : visitor.getMethods().entrySet()) {
@@ -28,7 +29,8 @@ public class MethodsInvocationMetric implements Metric{
 		return null;
 	}
 
-	public void calculate(InputStream is) {
+	public void calculate(SourceCode source, InputStream is) {
+		this.source = source;
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
@@ -48,7 +50,7 @@ public class MethodsInvocationMetric implements Metric{
 	}
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
+    public Collection<MetricResult> results() {
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
         for (Entry<String, Set<String>> e : visitor.getMethods().entrySet()) {
             results.add(new MethodsInvocationResult(source, e.getValue().size(), e.getKey()));

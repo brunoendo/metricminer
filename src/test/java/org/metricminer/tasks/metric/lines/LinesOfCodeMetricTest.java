@@ -6,18 +6,22 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.model.SourceCode;
+import org.mockito.Mockito;
 
 public class LinesOfCodeMetricTest {
 
 	private LinesOfCodeMetric metric;
+	private SourceCode source;
 	@Before
 	public void setUp() {
 		this.metric = new LinesOfCodeMetric();
+		this.source = Mockito.mock(SourceCode.class);
 	}
 	
 	@Test
 	public void shouldCountNumberOfLinesInAMethod() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void x() {\r\n"+
@@ -32,7 +36,7 @@ public class LinesOfCodeMetricTest {
 	
 	@Test
 	public void shouldCountNumberOfLinesInOverridedMethod() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void x() {\r\n"+
@@ -53,7 +57,7 @@ public class LinesOfCodeMetricTest {
 	
 	@Test
 	public void shouldCountNumberOfLinesInAMethodRegardlessOfModifier() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void x1() {\r\n"+

@@ -38,6 +38,8 @@ function drawCommitChart() {
 		url : CONTEXT_ROOT + '/projects/' + id + '/commitChartData',
 		dataType : 'json',
 		success : function(commitData) {
+			if (commitData.length <= 1)
+				return;
 			var data = google.visualization.arrayToDataTable(commitData);
 
 			var options = {
@@ -61,6 +63,8 @@ function drawFileCountChart() {
 		url : CONTEXT_ROOT + '/projects/' + id + '/fileCountChartData',
 		dataType : 'json',
 		success : function(fileCountData) {
+			if (fileCountData.length <= 1)
+				return;
 			var data = google.visualization
 					.arrayToDataTable(fileCountData);
 	

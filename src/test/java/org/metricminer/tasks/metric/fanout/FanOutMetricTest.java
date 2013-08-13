@@ -5,20 +5,23 @@ import static br.com.aniche.msr.tests.ParserTestUtils.toInputStream;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.metricminer.tasks.metric.fanout.FanOutMetric;
+import org.metricminer.model.SourceCode;
+import org.mockito.Mockito;
 
 
 public class FanOutMetricTest {
 
 	private FanOutMetric metric;
+	private SourceCode source;
 
 	public FanOutMetricTest() {
 		this.metric = new FanOutMetric();
+		this.source = Mockito.mock(SourceCode.class);
 	}
 	
 	@Test
 	public void shouldCountDifferentReferencedTypesInClassAttributes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private ClassA a;\r\n"+
@@ -33,7 +36,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountDifferentReferencedTypesInsideMethods() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method1() { ClassA a; ClassB b; x(); }"+
@@ -46,7 +49,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountDifferentImportedReferencedTypesInsideMethods() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						imports("import bla.ble.ClassA;import bli.blo.ClassC;", classDeclaration(
 								"public void method1() { ClassA a; ClassB b; x(); }"+
@@ -59,7 +62,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountDifferentReferencedTypesInMethodSignatura() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method1(ClassA a){}\r\n"+
@@ -74,7 +77,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountDifferentReferencedTypesInsideInnerClasses() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method1() { new Thread(new Runnable() { public void run() {" + 
@@ -87,7 +90,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldIgnoreItsOwnClass() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method1() { new A(); new Program(); }"
@@ -98,7 +101,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountReferencedInsideMethodsAndAttributes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private ClassF a;\r\n"+
@@ -113,7 +116,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountTypesOfInstantiatedObjects() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void method1() { ClassA a = new ConcreteClassA(); }"
@@ -124,7 +127,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldIgnorePrimitipeTypes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -138,7 +141,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountStaticImports() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						imports("import static org.mockito.Mockito.*;", classDeclaration(
 								"public void method3() { ClassA x = mock(bla); }"
@@ -149,7 +152,7 @@ public class FanOutMetricTest {
 
 	@Test
 	public void shouldCountStaticImportsInDefaultPackage() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						imports("import static Mockito.*;", classDeclaration(
 								"public void method3() { ClassA x = mock(bla); }"
@@ -160,7 +163,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldIgnoreUnusedImports() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						imports("import br.com.packet.NonUsedClass;", classDeclaration(
 								"public void method3() { new ClassA().doSomething(); }"
@@ -171,7 +174,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountStaticInvocations() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						imports("import org.junit.Assert;",
 						classDeclaration(
@@ -183,7 +186,7 @@ public class FanOutMetricTest {
 	
 	@Test
 	public void shouldCountInterfaces() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"import p1.p2.InterfaceA;"+
 						"class Program implements InterfaceA, InterfaceB {"+
@@ -197,7 +200,7 @@ public class FanOutMetricTest {
 	@Test
 	public void shouldCountInheritance() {
 
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						"import p1.p2.ClassA;"+
 						"class Program extends ClassA {"+
@@ -211,7 +214,7 @@ public class FanOutMetricTest {
 
 	@Test // too hard to implement! ;(
 	public void unfortunatelyShouldIgnoreStaticInvocationsImportedWithStart() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						imports("import org.junit.*;",
 						classDeclaration(
@@ -353,7 +356,7 @@ public class FanOutMetricTest {
 						""+
 						"}";
 		
-		metric.calculate(toInputStream(code));
+		metric.calculate(source,toInputStream(code));
 		
 		assertEquals(19, metric.fanOut());
 

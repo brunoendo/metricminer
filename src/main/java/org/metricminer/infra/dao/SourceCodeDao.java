@@ -1,6 +1,5 @@
 package org.metricminer.infra.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,7 +22,7 @@ public class SourceCodeDao {
 	@SuppressWarnings("unchecked")
 	public List<SourceCode> listSourcesOf(Project project, int page) {
 		Query query = statelessSession.createQuery("select source from SourceCode source "
-                + " where and source.sourceSize < :sourceSize");
+                + " where and source.length < :sourceSize");
         
         query.setParameter("project_id", project.getId())
 	         .setParameter("sourceSize", MAX_SOURCE_SIZE)
@@ -38,7 +37,7 @@ public class SourceCodeDao {
 		Query query = statelessSession.createQuery("select source.id, artifact.name from SourceCode source "
                 + "join source.modification as modification " +
                 "join modification.artifact artifact where artifact.project.id = :project_id "
-                + "and source.sourceSize < :sourceSize");
+                + "and source.length < :sourceSize");
 		query.setParameter("project_id", project.getId())
 			.setParameter("sourceSize", MAX_SOURCE_SIZE)
 			.setFirstResult(500*page)
@@ -54,7 +53,7 @@ public class SourceCodeDao {
 	@SuppressWarnings("unchecked")
 	public List<SourceCode> listSourcesOf(Project project, Long firstId, Long lastId) {
 		Query query = statelessSession.createQuery("select source from SourceCode source " +
-				"where source.id >= :first_id and source.id <= :last_id and source.sourceSize < :sourceSize");
+				"where source.id >= :first_id and source.id <= :last_id and source.length < :sourceSize");
         
         query.setParameter("first_id", firstId)
         	 .setParameter("last_id", lastId)
@@ -65,7 +64,7 @@ public class SourceCodeDao {
 
     public SourceCode findByIdAndSourceSize(Long id) {
         Query query = statelessSession.createQuery("select source from SourceCode source " +
-        		"where id=:id and source.sourceSize < :sourceSize");
+        		"where id=:id and source.length < :sourceSize");
         query.setParameter("id", id)
              .setParameter("sourceSize", MAX_SOURCE_SIZE);
         return (SourceCode) query.uniqueResult();
@@ -74,8 +73,8 @@ public class SourceCodeDao {
 	@SuppressWarnings("unchecked")
 	public List<SourceCode> findWithIds(List<Long> ids) {
 		String idsString = parseIds(ids);
-		Query query = statelessSession.createQuery("select source from SourceCode source " +
-				"where source.id in " + idsString + " and source.sourceSize < :sourceSize");
+		Query query = statelessSession.createQuery("select source from SourceCode source left join fetch source.modification " +
+				"where source.id in " + idsString + " and source.length < :sourceSize");
         
         query.setParameter("sourceSize", MAX_SOURCE_SIZE);
         

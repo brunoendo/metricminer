@@ -20,7 +20,6 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.download.Download;
 import br.com.caelum.vraptor.interceptor.download.FileDownload;
-import br.com.caelum.vraptor.view.Results;
 
 @Resource
 public class QueryController {
@@ -55,22 +54,10 @@ public class QueryController {
         query.setAuthor(userSession.user());
         queryDao.save(query);
         taskDao.saveTaskToExecuteQuery(query);
+        result.include("included", true);
         result.redirectTo(QueryController.class).detailQuery(query.getId());
     }
 
-    @LoggedUserAccess
-    @Post("/query/{queryId}")
-    public void updateQuery(Query updatedQuery, Long queryId) {
-        Query persistedUpdatedQuery = queryDao.findBy(queryId);
-        persistedUpdatedQuery.setSqlQuery(updatedQuery.getSqlQuery());
-        queryValidator.validate(persistedUpdatedQuery);
-        queryValidator.validateEditByAuthor(persistedUpdatedQuery, userSession.user());
-        
-        queryDao.update(persistedUpdatedQuery);
-        
-        taskDao.saveTaskToExecuteQuery(persistedUpdatedQuery);
-        result.redirectTo(QueryController.class).detailQuery(queryId);
-    }
 
     @Get("/queries")
     public void listQueries() {
@@ -79,38 +66,36 @@ public class QueryController {
         result.include("queries", queries);
     }
 
-    @Get("/query/edit/{queryId}")
-    public void editQueryForm(Long queryId) {
-        Query query = queryDao.findBy(queryId);
-        if (!query.isAllowedToEdit(userSession.user())) {
-            result.use(Results.http()).setStatusCode(403);
-        }
-        result.include("query", query);
-    }
 
     @Get("/query/{queryId}")
     public void detailQuery(Long queryId)  {
         Query query = queryDao.findBy(queryId);
-        boolean allowedToEdit = query.isAllowedToEdit(userSession.user());
         List<Task> tasksToRunThisQuery = taskDao.findTasksScheduledToRunQuery(query);
         
         result.include("query", query);
-        result.include("allowedToEdit", allowedToEdit);
         result.include("scheduledToRun", !tasksToRunThisQuery.isEmpty());
     }
 
-    @Get("/query/download/{resultId}")
-    public Download downloadCSV(Long resultId) {
-        QueryResult result = queryResultDAO.findById(resultId);
-        return new FileDownload(new File(result.getCsvFilename()), "text/csv",
-                "result.csv");
-    }
+	@Get("/query/download/{resultId}/zip")
+	public Download downloadZip(Long resultId) {
+		QueryResult result = queryResultDAO.findById(resultId);
+		String csvFilename = result.getFilenameAsZip();
+		return new FileDownload(new File(csvFilename), "application/zip", "result.zip");
+	}
+	
+	@Get("/query/download/{resultId}/csv")
+	public Download downloadCsv(Long resultId) {
+		QueryResult result = queryResultDAO.findById(resultId);
+		String csvFilename = result.getFilenameAsCsv();
+		return new FileDownload(new File(csvFilename), "text/csv", "result.csv");
+	}
 
     @LoggedUserAccess
     @Post("/query/run")
     public void runQuery(Long queryId) {
         Query query = queryDao.findBy(queryId);
         taskDao.saveTaskToExecuteQuery(query);
-        result.redirectTo(TaskController.class).listTasks();
+        result.include("toRun", true);
+        result.redirectTo(this).detailQuery(queryId);
     }
 }

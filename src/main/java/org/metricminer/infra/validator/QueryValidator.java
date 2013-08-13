@@ -3,7 +3,6 @@ package org.metricminer.infra.validator;
 import org.metricminer.controller.QueryController;
 import org.metricminer.model.Author;
 import org.metricminer.model.Query;
-import org.metricminer.model.User;
 
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.ioc.Component;
@@ -13,6 +12,7 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 public class QueryValidator {
 
     static final String SOURCECODE_MESSAGE = "It is forbidden to get source code from projects";
+    static final String DIFF_MESSAGE = "It is forbidden to get diff from projects";
     static final String WILDCARD_MESSAGE = "The query should not contain '*' wildcard";
     static String SECRETNAME_MESSAGE = "It is forbidden to get author's names, try using 'AuthorName()' function instead "
             + Author.NAME_COLUMN;
@@ -65,15 +65,32 @@ public class QueryValidator {
             validator.add(new ValidationMessage(SECRETEMAIL_MESSAGE,
                     "InvalidQuery"));
         }
+        if (containsSource(query)) {
+        	validator.add(new ValidationMessage(SOURCECODE_MESSAGE,
+        			"InvalidQuery"));
+        }
+        if (containsDiff(query)) {
+        	validator.add(new ValidationMessage(DIFF_MESSAGE,
+        			"InvalidQuery"));
+        }
         validator.onErrorRedirectTo(QueryController.class).queryForm();
     }
 
-    public void validateEditByAuthor(Query query, User user) {
-        if (!query.isAllowedToEdit(user)) {
-            validator.add(new ValidationMessage(NOT_ALLOWED_MESSAGE,
-                    "InvalidQuery"));
+    private boolean containsSource(Query query) {
+        boolean invalid = false;
+        String sql = query.getSqlQuery();
+        if (sql.contains("source")) {
+            invalid = true;
         }
-        validator.onErrorRedirectTo(QueryController.class).editQueryForm(query.getId());
+        return invalid;
+	}
+    private boolean containsDiff(Query query) {
+    	boolean invalid = false;
+    	String sql = query.getSqlQuery();
+    	if (sql.contains("diff")) {
+    		invalid = true;
+    	}
+    	return invalid;
     }
 
 }

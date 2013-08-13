@@ -32,8 +32,10 @@ public class LComMetric implements Metric {
 	private Map<String, Set<String>> methodsPerAttribute;
 	private boolean isInterface;
 	private String name;
+	private SourceCode source;
 
-	public void calculate(InputStream is) {
+	public void calculate(SourceCode source, InputStream is) {
+		this.source = source;
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
@@ -93,7 +95,7 @@ public class LComMetric implements Metric {
 	}
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
+    public Collection<MetricResult> results() {
         return Arrays.asList((MetricResult) new LComResult(source, lcom()));
     }
 

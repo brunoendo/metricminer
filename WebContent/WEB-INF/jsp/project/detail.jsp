@@ -14,7 +14,7 @@
 	width: 35%;
 	padding-top: 30px;
 	display: inline-block;
-	height: 470px;
+	height: 500px;
 	margin-left: 20px;
 }
 .googlechart {
@@ -26,6 +26,9 @@
 	padding-top: 15px;
 	margin: auto;
 	display: inline-block;
+}
+.table-title {
+	margin-top: 45px;
 }
 </style>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -105,6 +108,16 @@
 							</tr>
 							
 						</table>
+						<h2 class="table-title">Committers</h2>
+						<table>
+							<c:forEach items="${commiters}" var="a">
+								<tr>
+									<td>#${a.id}</td>
+									<td>${a.name}</td>
+									<td>${a.email}</td>
+								</tr>
+							</c:forEach>
+						</table>
 					</div>
 					
 					<div id="charts">
@@ -155,6 +168,7 @@
 							</tr>
 						</c:forEach>
 					</table>
+
 				</div>
 				<div class="bendl"></div>
 				<div class="bendr"></div>
@@ -168,3 +182,4 @@
 	<c:import url="../import/javascripts.jsp" />
 	<script src='<c:url value="/js/project/detail.js"/>'></script>
 </body>
+</html>

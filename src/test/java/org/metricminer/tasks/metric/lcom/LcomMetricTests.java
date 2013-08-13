@@ -7,19 +7,23 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.model.SourceCode;
+import org.mockito.Mockito;
 
 public class LcomMetricTests {
 
 	private LComMetric metric;
+	private SourceCode source;
 
 	@Before
 	public void setUp() {
 		metric = new LComMetric();
+		this.source = Mockito.mock(SourceCode.class);
 	}
 	@Test
 	public void shouldCalculateLcomForASimpleClass() {
 		
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -32,7 +36,7 @@ public class LcomMetricTests {
 	@Test
 	public void shouldCalculateLcomForAMethodThatConsumesOnlyOneAttribute() {
 		
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -46,7 +50,7 @@ public class LcomMetricTests {
 	@Test
 	public void shouldCalculateLcomForAClassThatDoesNotConsumeAttributes() {
 		
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -59,7 +63,7 @@ public class LcomMetricTests {
 	@Test
 	public void shouldCalculateLcomForAClassThatContainsMethodThatConsumesOnlyOneAttributeEach() {
 		
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -74,7 +78,7 @@ public class LcomMetricTests {
 	@Test
 	public void shouldCalculateLcomForAClassInWhichTheAttributesAreSpread() {
 		
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -89,7 +93,7 @@ public class LcomMetricTests {
 	
 	@Test
 	public void shouldPutLessCohesiveValueForAClassWithoutAttributesOrMethods() {
-		metric.calculate(toInputStream(
+		metric.calculate(source,toInputStream(
 			"public class Total extends ElementWrapper {"+
 			    "public Total(Element internal) {"+
 			        "super(internal);"+
@@ -113,7 +117,7 @@ public class LcomMetricTests {
 	@Test
 	public void shouldIgnoreNonAttributes() {
 		
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -126,7 +130,7 @@ public class LcomMetricTests {
 	
 	@Test
 	public void shouldNotCountInnerClassesInNumberOfMethodsButShouldConsiderItsBody() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -140,7 +144,7 @@ public class LcomMetricTests {
 	
 	@Test
 	public void shouldCalculateBadCohesiveClassesWithInnerClasses() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -154,7 +158,7 @@ public class LcomMetricTests {
 	
 	@Test
 	public void shouldReturnMinusOneToInterfaces() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						interfaceDeclaration(
 								"void x();" 
@@ -165,7 +169,7 @@ public class LcomMetricTests {
 	
 	@Test
 	public void shouldGetNameOfTheClass() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+
@@ -177,7 +181,7 @@ public class LcomMetricTests {
 
 	@Test
 	public void shouldNotBeFooledByInnerClassesAndSoOn() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a;\r\n"+

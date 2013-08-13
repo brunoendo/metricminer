@@ -25,7 +25,7 @@ public class SourceCode {
     @Type(type = "text")
     private String source;
     @Index(name = "sourceSize_index")
-    private Long sourceSize;
+    private Long length;
     @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode", cascade = CascadeType.ALL)
     private List<BlamedLine> blamedLines = new ArrayList<BlamedLine>();
     @OneToOne(fetch = FetchType.LAZY)
@@ -33,10 +33,11 @@ public class SourceCode {
 
     public SourceCode() {
     }
+    
     public SourceCode(Modification modification, String source) {
         this.modification = modification;
         this.source = source;
-        sourceSize = (long) source.length();
+        length = (long) source.length();
     }
     
     public String getSource() {
@@ -54,6 +55,10 @@ public class SourceCode {
     public Commit getCommit() {
         return modification.getCommit();
     }
+    
+    public String getDiff() {
+    	return modification.getDiff();
+    }
 
 	public List<BlamedLine> getBlamedLines() {
 		return Collections.unmodifiableList(blamedLines);
@@ -70,6 +75,6 @@ public class SourceCode {
 	}
 	
 	public Long getSourceSize() {
-		return sourceSize;
+		return length;
 	}
 }

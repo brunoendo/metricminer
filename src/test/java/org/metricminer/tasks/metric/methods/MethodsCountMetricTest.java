@@ -6,19 +6,23 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.model.SourceCode;
+import org.mockito.Mockito;
 
 public class MethodsCountMetricTest {
 
 	private MethodsCountMetric metric;
+	private SourceCode source;
 	
 	@Before
 	public void setUp() {
 		this.metric = new MethodsCountMetric();
+		this.source = Mockito.mock(SourceCode.class);
 	}
 	
 	@Test
 	public void shouldCountPrivateMethods() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private void a1() {}"+
@@ -32,7 +36,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountPublicMethods() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void a1() {}"+
@@ -46,7 +50,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountProtectedMethods() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"protected void a1() {}"+
@@ -60,7 +64,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountDefaultMethods() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"void a1() {}"+
@@ -74,7 +78,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountConstructors() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public Program() {}"+
@@ -88,7 +92,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountPrivateAttributes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"private int a1;"+
@@ -102,7 +106,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountPublicAttributes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public int a1;"+
@@ -116,7 +120,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountProtectedAttributes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"protected int a1;"+
@@ -130,7 +134,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldCountDefaultAttributes() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"int a1;"+
@@ -144,7 +148,7 @@ public class MethodsCountMetricTest {
 	
 	@Test
 	public void shouldDifferentMethodsWithSameName() {
-		metric.calculate(
+		metric.calculate(source,
 				toInputStream(
 						classDeclaration(
 								"public void a1() {}"+

@@ -20,21 +20,14 @@ public class TestedMethodFinderMetric implements Metric{
 
 	private ClassInfoVisitor classInfo;
 	private TestedMethodVisitor visitor;
+	private SourceCode source;
 
 	public String header() {
 		return "path;project;class;test method; production method";
 	}
 
-	public String content(String path, String project) {
-		for(Entry<String, Set<String>> testMethod : getMethods().entrySet()) {
-			for(String productionMethod : testMethod.getValue()) {
-				System.out.println(path + ";" + project + ";" + classInfo.getName() + ";" + testMethod.getKey()  +";" + productionMethod);
-			}
-		}
-		return null;
-	}
-
-	public void calculate(InputStream is) {
+	public void calculate(SourceCode source, InputStream is) {
+		this.source = source;
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
@@ -54,7 +47,7 @@ public class TestedMethodFinderMetric implements Metric{
 	}
 
     @Override
-    public Collection<MetricResult> results(SourceCode source) {
+    public Collection<MetricResult> results() {
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
         for(Entry<String, Set<String>> testMethod : getMethods().entrySet()) {
             for(String productionMethod : testMethod.getValue()) {
@@ -67,7 +60,7 @@ public class TestedMethodFinderMetric implements Metric{
 
     @Override
     public boolean matches(String name) {
-        return name.endsWith(".java");
+        return name.endsWith("Test.java") || name.endsWith("Tests.java");
     }
 
 	@Override

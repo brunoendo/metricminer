@@ -1,7 +1,12 @@
 package org.metricminer.tasks.query;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.mail.EmailException;
@@ -39,31 +44,48 @@ public class ExecuteQueryTask implements RunnableTask {
 
     @Override
     public void run() {
-        Query query = queryDao.findBy(queryId);
-        String csvFileName = config.getQueriesResultsDir() + "/result-"
-                + query.getId() + "-" + query.getResultCount() + ".csv";
-        FileOutputStream outputStream = createFile(csvFileName);
-        try {
-            queryExecutor.execute(query, outputStream);
-            QueryResult result = new QueryResult(csvFileName, query);
-
+    	QueryResult result = null;
+    	Query query = queryDao.findBy(queryId);
+    	try {
+	        String filename = config.getQueriesResultsDir() + "/result-"
+	                + query.getId() + "-" + query.getResultCount();
+	        ZipOutputStream zipOutputStream  = zipOutStreamFor(filename);
+	        OutputStream csvOutputStream = csvOutStreamFor(filename);
+	        queryExecutor.execute(query, zipOutputStream, csvOutputStream);
+	        zipOutputStream.closeEntry();
+	        zipOutputStream.close();
+	        csvOutputStream.close();
+	        
+	        result = new QueryResult(filename, query);
             query.addResult(result);
             result.success();
         } catch (Exception e) {
-            QueryResult result = new QueryResult();
+        	result = new QueryResult(query);
             result.fail(ExceptionUtils.getStackTrace(e));
             query.addResult(result);
         }
         sendMail(query);
+        queryDao.save(result);
         queryDao.update(query);
     }
 
-    private void sendMail(Query query) {
+    private OutputStream csvOutStreamFor(String filename) throws FileNotFoundException {
+		return new FileOutputStream(new File(filename + ".csv"));
+	}
+
+	private ZipOutputStream zipOutStreamFor(String filename) throws IOException {
+    	FileOutputStream fileOutputStream = createFile(filename + ".zip");
+        ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+        zipOutputStream.putNextEntry(new ZipEntry("result.csv"));
+		return zipOutputStream;
+	}
+
+	private void sendMail(Query query) {
         String email = query.getAuthor().getEmail();
         try {
             SimpleEmail simpleEmail = new SimpleEmail();
             simpleEmail.addTo(email);
-            simpleEmail.setSubject("Your query '" + query.getName() + "' at metricminer.org.br finished!");
+            simpleEmail.setSubject("Your query '" + query.getName() + "' at metricminer.org.br has finished!");
             simpleEmail.setMsg("Go to metricminer.org.br/query/" + query.getId() + " and download the results");
             mailer.send(simpleEmail);
         } catch (EmailException e) {

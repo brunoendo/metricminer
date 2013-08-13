@@ -39,6 +39,15 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+				
+					<c:if test="${toRun}">
+					<div class="message success"><p>Your query will be executed as soon as possible!</p></div>
+					</c:if>
+
+					<c:if test="${included}">
+					<div class="message success"><p>Your query was added and will be executed as soon as possible!</p></div>
+					</c:if>
+					
 					<h2>${query.name}</h2>
 					
 					<pre>${query.sqlQuery}</pre>
@@ -50,26 +59,24 @@
 							<input type="hidden" name="queryId" value="${query.id}" />
 						</form>
 						
-						<c:if test="${allowedToEdit}">
-							<form method="get" action="<c:url value="/query/edit/${query.id}" />">
-								<input type="submit" class="submit small" value="Edit" />
-							</form>
-						</c:if>
 					</c:if>
 					<c:if test="${scheduledToRun}">
-						<h4>Query scheduled to run, you will receive a email when the results are ready.</h4>
+						<div class="message success"><p>Query scheduled to run, you will receive a email when the results are ready.</p></div>
 					</c:if>
+					
 					
 					<h3 class="clear">Results:</h3>
 					<table class="clear results">
 						<tr>
 							<th></th>
 							<th>Status</th>
+							<th>Result</th>
+							<th>Date</th>
 						</tr>
 						<c:if test="${scheduledToRun}">
 							<tr>
 								<td>#${query.results.size() + 1}</td>
-								<td>SCHEDULED</td>
+								<td colspan="3">SCHEDULED</td>
 							</tr>
 						</c:if>
 						<c:forEach items="${query.results}" var="result" varStatus="status" >
@@ -83,8 +90,11 @@
 								<td>${result.status}</td>
 									<c:if test="${result.hasFailed() eq false}">
 										<td>
-											<a href="<c:url value="/query/download/${result.id}" />">
-												Download results
+											<a href="<c:url value="/query/download/${result.id}/zip" />">
+												ZIP
+											</a> |
+											<a href="<c:url value="/query/download/${result.id}/csv" />">
+												CSV
 											</a>
 										</td>
 									</c:if>

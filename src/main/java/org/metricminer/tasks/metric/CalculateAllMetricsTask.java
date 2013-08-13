@@ -38,9 +38,9 @@ public class CalculateAllMetricsTask extends SourcesIteratorAbstractTask {
 		try {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(
 					sourceCode.getSourceBytesArray());
-			metric.calculate(inputStream);
+			metric.calculate(sourceCode, inputStream);
 			inputStream.close();
-			Collection<MetricResult> results = metric.results(sourceCode);
+			Collection<MetricResult> results = metric.results();
 
 			statelessSession.beginTransaction();
 			for (MetricResult result : results) {

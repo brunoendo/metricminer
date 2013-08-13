@@ -22,6 +22,7 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+				
 					<table>
 						<tr>
 							<th>Name</th>

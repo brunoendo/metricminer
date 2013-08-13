@@ -7,9 +7,9 @@ import org.metricminer.model.SourceCode;
 
 
 public interface Metric {
-    Collection<MetricResult> results(SourceCode source);
+    Collection<MetricResult> results();
 
-    void calculate(InputStream is);
+    void calculate(SourceCode source, InputStream is);
 
     boolean matches(String name);
     

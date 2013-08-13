@@ -68,16 +68,6 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 		return (i + PAGE_SIZE) > sourceIds.size() ? sourceIds.size() : (i + PAGE_SIZE); 
 	}
 
-	private Long calculateLastId(List<Long> sourceIds, int i) {
-		Long lastId;
-		int lastIdIndex = i + (PAGE_SIZE - 1);
-		if (lastIdIndex < sourceIds.size())
-			lastId = sourceIds.get(lastIdIndex);
-		else
-			lastId = sourceIds.get(sourceIds.size() - 1);
-		return lastId;
-	}
-
 	protected abstract void manipulate(SourceCode sourceCode, String name);
 	
 	protected abstract void onComplete();

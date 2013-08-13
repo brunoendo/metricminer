@@ -24,12 +24,10 @@ public class Svn extends Git {
 
 	@Override
 	public String clone(String scmUrl, String destinationPath) {
-	
 		// git git svn to import repository
-		String command = "git svn clone --stdlayout " + scmUrl + " " + destinationPath;
 		this.exec.execute("mkdir -p " + destinationPath, "/");
+		String command = "git svn clone " + scmUrl + " " + destinationPath;
 		return exec.execute(command, destinationPath);
-		
 	}
 
 

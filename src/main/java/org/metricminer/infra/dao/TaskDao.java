@@ -48,8 +48,12 @@ public class TaskDao {
     }
 
     @SuppressWarnings("unchecked")
-    public List<Task> listTasks() {
-        return session.createCriteria(Task.class).addOrder(Order.desc("submitDate")).list();
+    public List<Task> listLast50Tasks() {
+        return session.createCriteria(Task.class)
+        		.addOrder(Order.desc("submitDate"))
+        		.setFirstResult(0)
+        		.setMaxResults(50)
+        		.list();
     }
 
     @SuppressWarnings("unchecked")
