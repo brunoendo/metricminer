@@ -4,7 +4,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-[["Month", "count"]
+[["Month", "Commit count"]
 <c:forEach items="${lastSixMonthsCommitCountMap}" var="entry">
 	,["<fmt:formatDate value="${entry.key.time}" pattern="MMM yy"/>",
     ${entry.value}]

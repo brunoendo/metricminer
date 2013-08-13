@@ -11,24 +11,22 @@
 <c:import url="../import/head.jsp" />
 <style type="text/css">
 #details {
-	width: 35%;
-	padding-top: 30px;
 	display: inline-block;
-	height: 500px;
-	margin-left: 20px;
+	width: 100%;
+}
+.detail-box {
+	vertical-align: top;
+	display: inline-block;
+	width: 48%;
 }
 .googlechart {
 	width: 100%;
-	height: 250px;
+	height: 300px;
 }
 #charts {
-	width: 60%;
+	width: 100%;
 	padding-top: 15px;
 	margin: auto;
-	display: inline-block;
-}
-.table-title {
-	margin-top: 45px;
 }
 </style>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -67,57 +65,60 @@
 				<!-- .block_head ends -->
 
 				<div class="block_content" id="project-content">
-
 					<div id="details">
-						<table>
-							<tr>
-								<th>Name</th>
-								<td>${project.name} <input type="hidden" name="id"
-									id="projectId" value="${project.id}" /></td>
-							</tr>
-	
-							<tr>
-								<th>Repo's path</th>
-								<td>${project.scmUrl}</td>
-							</tr>
-							
-							<tr>
-								<th>Total commits</th>
-								<td>${project.totalCommits}</td>
-							</tr>
-							
-							<tr>
-								<th>Total commiters</th>
-								<td>${project.totalCommiters}</td>
-							</tr>
-							
-							<tr>
-								<th>First commit</th>
-								<td><fmt:formatDate value="${project.firstCommit.date.time}" pattern="yyyy/MM/dd"/></td>
-							</tr>
-							
-							<tr>
-								<th>Last commit</th>
-								<td><fmt:formatDate value="${project.lastCommit.date.time}" pattern="yyyy/MM/dd"/></td>
-							</tr>
-	
-							<tr>
-								<th>Tags</th>
-								<td><input type="text" class="tags" name="tags" id="tags"
-									value="${tags}" style="display: none;" /></td>
-							</tr>
-							
-						</table>
-						<h2 class="table-title">Committers</h2>
-						<table>
-							<c:forEach items="${commiters}" var="a">
+						<div class="detail-box">
+							<table>
 								<tr>
-									<td>#${a.id}</td>
-									<td>${a.name}</td>
-									<td>${a.email}</td>
+									<th>Name</th>
+									<td>${project.name} <input type="hidden" name="id"
+										id="projectId" value="${project.id}" /></td>
 								</tr>
-							</c:forEach>
-						</table>
+		
+								<tr>
+									<th>Repo's path</th>
+									<td>${project.scmUrl}</td>
+								</tr>
+								
+								<tr>
+									<th>Total commits</th>
+									<td>${project.totalCommits}</td>
+								</tr>
+								
+								<tr>
+									<th>Total commiters</th>
+									<td>${project.totalCommiters}</td>
+								</tr>
+								
+								<tr>
+									<th>First commit</th>
+									<td><fmt:formatDate value="${project.firstCommit.date.time}" pattern="yyyy/MM/dd"/></td>
+								</tr>
+								
+								<tr>
+									<th>Last commit</th>
+									<td><fmt:formatDate value="${project.lastCommit.date.time}" pattern="yyyy/MM/dd"/></td>
+								</tr>
+		
+								<tr>
+									<th>Tags</th>
+									<td><input type="text" class="tags" name="tags" id="tags"
+										value="${tags}" style="display: none;" /></td>
+								</tr>
+								
+							</table>
+						</div>
+						<div class="detail-box">
+							<h2>Top committers</h2>
+							<table>
+								<c:forEach items="${commiters}" var="a" varStatus="status">
+									<tr>
+										<td>#${status.index+1}</td>
+										<td>${a.name}</td>
+										<td>${a.email}</td>
+									</tr>
+								</c:forEach>
+							</table>
+						</div>
 					</div>
 					
 					<div id="charts">

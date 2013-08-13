@@ -73,10 +73,10 @@ public class ProjectDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Author> commitersFor(Project project){
-		Query query = session.createQuery("select distinct author From Commit as commit"
-						+ " join commit.author as author where commit.project.id = :id");
-		query.setParameter("id", project.getId());
+	public List<Author> commitersFor(Project project, int maxResults){
+		Query query = session.createQuery("select author From Commit as commit"
+						+ " join commit.author as author where commit.project.id = :id group by author order by count(commit) desc");
+		query.setParameter("id", project.getId()).setMaxResults(maxResults);
 		return (List<Author>) query.list();
 		
 	}

@@ -50,7 +50,7 @@ public class ProjectController {
     @Get("/project/{id}")
     public void detail(Long id) {
         Project project = dao.findProjectBy(id);
-        List<Author> commiters = dao.commitersFor(project);
+        List<Author> commiters = dao.commitersFor(project, 9);
         result.include("tags", tokenize.tags(project.getTags()));
         result.include("commiters", commiters);
         result.include("project", project);	
