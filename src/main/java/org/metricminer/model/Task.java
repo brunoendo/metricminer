@@ -178,7 +178,7 @@ public class Task implements Comparable {
         return name;
     }
 
-    public Class getRunnableTaskFactoryClass() {
+    public Class<? extends RunnableTaskFactory> getRunnableTaskFactoryClass() {
         return runnableTaskFactoryClass;
     }
 

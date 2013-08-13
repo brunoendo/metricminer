@@ -73,7 +73,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         taskToRun.setStarted();
         update(taskToRun);
         queueStatus.addRunningTask(taskToRun, Thread.currentThread());
-        RunnableTaskFactory runnableTaskFactory = iocContainer.instanceFor(taskToRun.getRunnableTaskFactoryClass());
+		RunnableTaskFactory runnableTaskFactory = iocContainer.instanceFor(taskToRun.getRunnableTaskFactoryClass());
         taskSession.beginTransaction();
         log.debug("Running task");
         runnableTaskFactory.build(taskToRun, taskSession, statelessSession,
