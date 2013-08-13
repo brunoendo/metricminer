@@ -28,4 +28,10 @@
 		</li>
 		<li><a href="${linkTo[StatusController].showStatus}">Status</a></li>
 	</ul>
+	<c:if test="${not empty userSession.user}">
+		<p class="user">Hello, ${userSession.user.name} | <a href="<c:url value="/logout" />">Logout</a></p>
+	</c:if>
+	<c:if test="${empty userSession.user}">
+		<p class="user"><a href="<c:url value="/login" />">Login</a></p>
+	</c:if>
 </div>		<!-- #header ends -->

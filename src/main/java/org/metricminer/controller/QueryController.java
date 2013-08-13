@@ -51,7 +51,7 @@ public class QueryController {
     @Post("/queries")
     public void save(Query query) {
         queryValidator.validate(query);
-        query.setAuthor(userSession.user());
+        query.setAuthor(userSession.getUser());
         queryDao.save(query);
         taskDao.saveTaskToExecuteQuery(query);
         result.include("included", true);

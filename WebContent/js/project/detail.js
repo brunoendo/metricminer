@@ -92,6 +92,9 @@ $(document).ready(function() {
 	google.load("visualization", "1", {
 		packages : [ "corechart" ]
 	});
+	if ($('#projectId').length == 0) {
+		return;
+	}
 	google.setOnLoadCallback(drawCharts);
 	$('#tags').tagsInput({
 		width : 'auto',

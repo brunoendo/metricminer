@@ -71,4 +71,10 @@ public class UserController {
 		result.include("message", "You can login into MetricMiner now.");
 		result.redirectTo(UserController.class).loginForm();
 	}
+	
+	@Get("/logout")
+	public void logout() {
+		session.logout();
+		result.redirectTo(IndexController.class).index();
+	}
 }

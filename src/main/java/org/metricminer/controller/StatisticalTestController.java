@@ -62,7 +62,7 @@ public class StatisticalTestController {
         task.addTaskConfigurationEntry(TaskConfigurationEntryKey.STATISTICAL_TEST, 
                 statisticalTestId.toString());
         task.addTaskConfigurationEntry(TaskConfigurationEntryKey.AUTHOR_ID, 
-        		userSession.user().getId().toString());
+        		userSession.getUser().getId().toString());
         taskDao.save(task);
         
         result.include("added", true);
