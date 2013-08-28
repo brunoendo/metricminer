@@ -74,24 +74,12 @@ public class QueryValidator {
             validator.add(new ValidationMessage(SECRETEMAIL_MESSAGE,
                     "InvalidQuery"));
         }
-        if (containsSource(query)) {
-        	validator.add(new ValidationMessage(SOURCECODE_MESSAGE,
-        			"InvalidQuery"));
-        }
         if (containsDiff(query)) {
         	validator.add(new ValidationMessage(DIFF_MESSAGE,
         			"InvalidQuery"));
         }
     }
 
-    private boolean containsSource(Query query) {
-        boolean invalid = false;
-        String sql = query.getSqlQuery();
-        if (sql.contains("source")) {
-            invalid = true;
-        }
-        return invalid;
-	}
     private boolean containsDiff(Query query) {
     	boolean invalid = false;
     	String sql = query.getSqlQuery();
