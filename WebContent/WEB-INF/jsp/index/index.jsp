@@ -8,8 +8,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
+
+
 <c:import url="../import/head.jsp" />
 
+<style type="text/css">
+.projects-summary {
+	display: inline-block;
+	vertical-align: top;
+}
+#top-committers {
+	display: inline-block;
+	vertical-align: top;
+}
+</style>
 <title>Metric Miner</title>
 </head>
 
@@ -27,35 +39,39 @@
 				<!-- .block_head ends -->
 
 				<div class="block_content">
-					<table>
-						<tr>
-							<th>Total projects</th> 
-							<td>${totalProjects}</td>
-						</tr>
-						<tr>
-							<th>Total committers</th> 
-							<td>${totalAuthors}</td>
-						</tr>
-						<tr>
-							<th>Total commits processed</th> 
-							<td>${totalCommits}</td>
-						</tr>
-						<tr>
-							<th>Total artifacts processed</th> 
-							<td>${totalArtifacts}</td>
-						</tr>
-					</table>
-					<h2>Last projects added</h2>
-					<table>
-						<tr>
-							<th>Name</th>
-						</tr>
-						<c:forEach items="${newProjects}" var="project">
+					<div class="projects-summary">
+						<table>
 							<tr>
-								<td><a href="<c:url value="/project/${project.id}"/>">${project.name}</a></td>
+								<th>Total projects</th> 
+								<td>${totalProjects}</td>
 							</tr>
-						</c:forEach>
-					</table>
+							<tr>
+								<th>Total committers</th> 
+								<td>${totalAuthors}</td>
+							</tr>
+							<tr>
+								<th>Total commits processed</th> 
+								<td>${totalCommits}</td>
+							</tr>
+							<tr>
+								<th>Total artifacts processed</th> 
+								<td>${totalArtifacts}</td>
+							</tr>
+						</table>
+						<h2>Last projects added</h2>
+						<table>
+							<tr>
+								<th>Name</th>
+							</tr>
+							<c:forEach items="${newProjects}" var="project">
+								<tr>
+									<td><a href="<c:url value="/project/${project.id}"/>">${project.name}</a></td>
+								</tr>
+							</c:forEach>
+						</table>
+					</div>
+					<div id="top-committers" style="width: 700px; height: 400px;"></div>
+					
 					<h2>Last tasks executed</h2>
 					<table>
 						<tr>
@@ -69,7 +85,6 @@
 							</tr>
 						</c:forEach>
 					</table>
-				    <div id="top-committers" style="width: 900px; height: 500px;"></div>
 					
 				</div>
 				<div class="bendl"></div>
