@@ -37,18 +37,27 @@ public class UserController {
 	@Post("/login")
 	public void login(String email, String password) {
 		User user = dao.findByEmail(email);
+		validatePassword(email, password);
+		validator.onErrorRedirectTo(UserController.class).loginForm();
 		password = encryptor.encrypt(password);
 		if (user != null && user.getPassword().equals(password)) {
 			session.login(user);
 			result.redirectTo(IndexController.class).index();
-		} else {
+			return;
+		}
+		
+		result.include("email", email);
+		validator.add(new ValidationMessage(
+				"The email or password you entered is incorrect.", "error"));
+		validator.onErrorRedirectTo(UserController.class).loginForm();
+	}
+
+	private void validatePassword(String email, String password) {
+		if (password == null || password.isEmpty()) {
 			result.include("email", email);
-			validator
-					.add(new ValidationMessage(
-							"The email or password you entered is incorrect.",
+			validator.add(new ValidationMessage("The email or password you entered is incorrect.",
 							"error"));
 		}
-		validator.onErrorRedirectTo(UserController.class).loginForm();
 	}
 
 	@Get("/signup")
