@@ -16,6 +16,8 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
+import br.com.caelum.vraptor.validator.ValidationMessage;
 
 @Resource
 public class ProjectController {
@@ -25,13 +27,17 @@ public class ProjectController {
     private final MetricMinerConfigs configs;
     private final TagTokenizer tokenize;
     private final TagDao tagDao;
+	private Validator validator;
+    
     public ProjectController(Result result, ProjectDao dao, TagDao tagDao,
-            MetricMinerConfigs metricMinerConfigs, TagTokenizer tokenize) {
+            MetricMinerConfigs metricMinerConfigs, TagTokenizer tokenize, 
+            Validator validator) {
         this.result = result;
         this.dao = dao;
         this.tagDao = tagDao;
         this.configs = metricMinerConfigs;
         this.tokenize = tokenize;
+		this.validator = validator;
     }
 
     @LoggedUserAccess
@@ -103,6 +109,17 @@ public class ProjectController {
     @LoggedUserAccess
     @Post("/projects")
     public void createProject(String name, String scmUrl) {
+    	if (name == null || name.isEmpty()) {
+    		validator.add(new ValidationMessage("The name of the project cannot be empty", "error"));
+    		result.include("scmUrl", scmUrl);
+    	}
+    	if (scmUrl == null || scmUrl.isEmpty()) {
+    		validator.add(new ValidationMessage("The SCM url cannot be empty", "error"));
+    		result.include("name", name);
+    	}
+    	
+    	validator.onErrorRedirectTo(this).form();
+    	
         Project project = new Project();
         project.setName(name);
         project.setScmUrl(scmUrl);
@@ -111,10 +128,7 @@ public class ProjectController {
     
     @Post("/projects/06560fb292075c5eeca4ceb586185332")
     public void createProjectRemote(String name, String scmUrl) {
-        Project project = new Project();
-        project.setName(name);
-        project.setScmUrl(scmUrl);
-    	saveProject(project);
+        createProject(name, scmUrl);
     }
 
 	private void saveProject(Project project) {

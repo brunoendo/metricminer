@@ -21,14 +21,18 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
-					<form method="post" action='<c:url value="/projects"></c:url>' '>
+						<c:forEach var="error" items="${errors}">
+							<div class="message errormsg"><p>${error.message}</p></div>
+						</c:forEach>
+				
+					<form method="post" action='<c:url value="/projects"/>'>
 						<p>
 							<label for="project.name">Name: </label> <br />
-							<input type="text" class="text small" name="name" />
+							<input type="text" class="text small" name="name" value="${name}" />
 						</p>
 						<p>
 							<label for="project.scmUrl">Git url: </label><br />
-							<input type="text" class="text small" name="scmUrl" />
+							<input type="text" class="text small" name="scmUrl" value="${scmUrl}" />
 						</p>
 						
 						<p>
