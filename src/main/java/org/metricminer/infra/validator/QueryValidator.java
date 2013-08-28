@@ -53,6 +53,15 @@ public class QueryValidator {
     }
 
     public void validate(Query query) {
+    	if (query.getName() == null || query.getName().isEmpty()) {
+    		validator.add(new ValidationMessage("The name of the query cannot be empty",
+    				"Validation error"));
+    	}
+    	if (query.getSqlQuery() == null || query.getSqlQuery().isEmpty()) {
+    		validator.add(new ValidationMessage("The query cannot be empty",
+    				"Validation error"));
+    		return;
+    	}
         if (containsWildCard(query)) {
             validator.add(new ValidationMessage(WILDCARD_MESSAGE,
                     "InvalidQuery"));
@@ -73,7 +82,6 @@ public class QueryValidator {
         	validator.add(new ValidationMessage(DIFF_MESSAGE,
         			"InvalidQuery"));
         }
-        validator.onErrorRedirectTo(QueryController.class).queryForm();
     }
 
     private boolean containsSource(Query query) {

@@ -18,6 +18,7 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.interceptor.download.Download;
 import br.com.caelum.vraptor.interceptor.download.FileDownload;
 
@@ -30,16 +31,18 @@ public class QueryController {
     private final QueryResultDAO queryResultDAO;
     private final QueryValidator queryValidator;
     private final UserSession userSession;
+	private Validator validator;
 
     public QueryController(TaskDao taskDao, QueryDao queryDao,
             QueryResultDAO queryResultDAO, Result result,
-            QueryValidator queryValidator, UserSession userSession) {
+            QueryValidator queryValidator, UserSession userSession, Validator validator) {
         this.taskDao = taskDao;
         this.queryDao = queryDao;
         this.queryResultDAO = queryResultDAO;
         this.result = result;
         this.queryValidator = queryValidator;
         this.userSession = userSession;
+		this.validator = validator;
     }
 
     @LoggedUserAccess
@@ -51,6 +54,8 @@ public class QueryController {
     @Post("/queries")
     public void save(Query query) {
         queryValidator.validate(query);
+        validator.onErrorRedirectTo(QueryController.class).queryForm();
+        
         query.setAuthor(userSession.getUser());
         queryDao.save(query);
         taskDao.saveTaskToExecuteQuery(query);
