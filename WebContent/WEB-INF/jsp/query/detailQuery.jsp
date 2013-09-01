@@ -51,7 +51,9 @@
 					
 					<h2>${query.name}</h2>
 					
-					<div id="sql-query"><span id="placeholder">Loading query...</span></div>
+					<div id="sql-query">
+						<textarea name="query.sqlQuery" id="sqlQuery">${query.sqlQuery }</textarea>
+					</div>
 					
 					<c:if test="${scheduledToRun eq false}">
 					
@@ -136,14 +138,10 @@
 	<script src="<c:url value='/js/codemirror/lib/codemirror.js' />"></script>
 	<script src="<c:url value='/js/codemirror/mode/sql/sql.js' />"></script>
 	<script>
-	$(function() {
-	  $("#placeholder").html("");
-	});
-	  var editor = CodeMirror(document.getElementById("sql-query"), {
+	  var editor = CodeMirror.fromTextArea(document.getElementById("sqlQuery"), {
 	    mode: "text/x-mariadb",
 	    lineNumbers: true,
-	    readOnly: true,
-	    value: "${query.sqlQuery}"
+	    readOnly: true
 	  });
 	</script>
 </body>

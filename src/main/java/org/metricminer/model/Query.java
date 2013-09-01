@@ -50,6 +50,10 @@ public class Query implements Comparable<Query> {
     public String getSqlQuery() {
         return sqlQuery;
     }
+    
+    public String getJsonSqlQuery() {
+    	return sqlQuery.replaceAll("\n", "\\n");
+    }
 
     public void setSqlQuery(String sql) {
         this.sqlQuery = sql;

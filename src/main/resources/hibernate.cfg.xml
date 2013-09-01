@@ -46,6 +46,7 @@
         <mapping class="org.metricminer.model.CommitMessage"/>  
         <mapping class="org.metricminer.model.StatisticalTest"/>  
         <mapping class="org.metricminer.model.StatisticalTestResult"/>  
+        <mapping class="org.metricminer.model.QueryExample" />
         
         <mapping class="org.metricminer.tasks.metric.lcom.LComResult" />
         <mapping class="org.metricminer.tasks.metric.cc.CCResult" />
@@ -59,6 +60,7 @@
         <mapping class="org.metricminer.tasks.metric.staticcounter.StaticCounterResult" />
         
         <mapping class="org.metricminer.tasks.projectmetric.truckfactor.TruckFactorResult" />
+        
 
     </session-factory>
 </hibernate-configuration>

@@ -5,12 +5,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.metricminer.infra.dao.QueryDao;
+import org.metricminer.infra.dao.QueryExampleDao;
 import org.metricminer.infra.dao.QueryResultDAO;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.infra.interceptor.LoggedUserAccess;
 import org.metricminer.infra.session.UserSession;
 import org.metricminer.infra.validator.QueryValidator;
 import org.metricminer.model.Query;
+import org.metricminer.model.QueryExample;
 import org.metricminer.model.QueryResult;
 import org.metricminer.model.Task;
 
@@ -32,10 +34,12 @@ public class QueryController {
     private final QueryValidator queryValidator;
     private final UserSession userSession;
 	private Validator validator;
+	private QueryExampleDao queryExampleDao;
 
     public QueryController(TaskDao taskDao, QueryDao queryDao,
             QueryResultDAO queryResultDAO, Result result,
-            QueryValidator queryValidator, UserSession userSession, Validator validator) {
+            QueryValidator queryValidator, UserSession userSession, 
+            Validator validator, QueryExampleDao queryExampleDao) {
         this.taskDao = taskDao;
         this.queryDao = queryDao;
         this.queryResultDAO = queryResultDAO;
@@ -43,11 +47,14 @@ public class QueryController {
         this.queryValidator = queryValidator;
         this.userSession = userSession;
 		this.validator = validator;
+		this.queryExampleDao = queryExampleDao;
     }
 
     @LoggedUserAccess
     @Get("/queries/new")
     public void queryForm() {
+    	List<QueryExample> examples = queryExampleDao.list();
+    	result.include("examples", examples);
     }
 
     @LoggedUserAccess

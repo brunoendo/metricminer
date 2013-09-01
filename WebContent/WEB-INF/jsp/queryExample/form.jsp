@@ -25,37 +25,24 @@
 						</p>
 					</div>
 				</c:if>
-				<form method="post" action="${linkTo[QueryController].save}">
+				<form method="post" action="${linkTo[QueryExampleController].save}">
 					<p>
-						<label for="query-name">Try one of our examples: </label> <br />
-						<select id="query-examples">
-							<c:forEach var="example" items="${examples}">
-								<option value="${example.query}">
-									${example.name}
-								</option>
-							</c:forEach>
-						</select>
+						<label for="query.name">Example name: </label> <br />
+						<input type="text" class="text small" name="example.name" />
 					</p>
 					<p>
-						<label for="query-name">Query name: </label> <br />
-						<input id="query-name" type="text" value="${query.name}" class="text small" name="query.name" />
+						<label for="query-name">Description: </label> <br />
+						<textarea id="query-name" class="text small" name="example.description"></textarea>
 					</p>
 					<p>
 						<label for="sqlQuery">SQL Query: </label> <br />
 						<div id="sql-query">
 							<span id="placeholder">loading editor...</span>
-							<textarea name="query.sqlQuery" id="sqlQuery"></textarea>
+							<textarea name="example.query" id="sqlQuery"></textarea>
 						</div>
 					</p>
-					<p class="note">
-						You can see the database schema <a target="_blank" href="<c:url value='/images/erd.png' />">here</a>.
-					</p>
-					<p class="note">
-						Please, do not get the source code. We are trying to convince industry to put 
-						their projects here. So, never try to get their code. Be honest!
-					</p>
 					<p>
-						<input type="submit" class="submit long" value="Save and execute" />
+						<input type="submit" class="submit long" value="Save" />
 					</p>
 				</form>
 			</metricminer:box>
@@ -66,19 +53,13 @@
 	<script src="<c:url value='/js/codemirror/lib/codemirror.js' />"></script>
 	<script src="<c:url value='/js/codemirror/mode/sql/sql.js' />"></script>
 	<script>
-	var editor = CodeMirror.fromTextArea(document.getElementById("sqlQuery"), {
-		mode: "text/x-mariadb",
-		lineNumbers: true
-	});
 	$(function() {
-		$("#placeholder").html("");
-		$("#query-examples").change(function() {
-			var selected = $("#query-examples option:selected");
-			var name = selected.text().trim();
-			$("#query-name").val(name);
-			editor.setValue(selected.val());
-		});
+	  $("#placeholder").html("");
 	});
+	  var editor = CodeMirror.fromTextArea(document.getElementById("sqlQuery"), {
+	    mode: "text/x-mariadb",
+	    lineNumbers: true,
+	  });
 	</script>
 </body>
 </html>
