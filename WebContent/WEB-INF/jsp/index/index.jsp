@@ -23,9 +23,25 @@
 		<div class="wrapper">
 			<!-- wrapper begins -->
 			<c:import url="../import/header.jsp" />
+			
+			<metricminer:box title="What is MetricMiner?">
+			<p>
+				MetricMiner is a tool that aims to support researchers when mining software
+				repository data. As a researcher, MetricMiner enables you to create code metrics,
+				execute them in many software repositories, extract data, and even run statistical
+				tests. Currently, MetricMiner contains all Apache software projects, plus many
+				popular code metrics.
+			</p>
+			<p> 
+				MetricMiner is a free open source tool. You can read more about it thoughout the
+				web application. If you want to contribute, please read the <i>How it Works</i>
+				page.
+			</p>
+			</metricminer:box>
+			
 			<metricminer:box extraClasses="small left" title="Projects">
 				<div class="projects-summary">
-					<table>
+					<table class="mm-table">
 						<tr>
 							<th>Total projects</th> 
 							<td>${totalProjects}</td>
@@ -44,20 +60,22 @@
 						</tr>
 					</table>
 					<h2>Last projects added</h2>
-					<table>
+					<table class="mm-table">
 						<tr>
 							<th>Name</th>
+							<th># of commits</th>
 						</tr>
 						<c:forEach items="${newProjects}" var="project">
 							<tr>
 								<td><a href="<c:url value="/project/${project.id}"/>">${project.name}</a></td>
+								<td>${project.totalCommits}</td>
 							</tr>
 						</c:forEach>
 					</table>
 				</div>
 			</metricminer:box>
 			
-			<metricminer:box extraClasses="small right" title="Charts">
+			<metricminer:box extraClasses="small right" title="Statistics">
 				<div id="top-committers" style="width: 550px; height: 400px;">loading chart...</div>
 			</metricminer:box>
 			
