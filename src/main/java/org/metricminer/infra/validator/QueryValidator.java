@@ -1,6 +1,5 @@
 package org.metricminer.infra.validator;
 
-import org.metricminer.controller.QueryController;
 import org.metricminer.model.Author;
 import org.metricminer.model.Query;
 

@@ -27,7 +27,7 @@
 				</c:if>
 				<form method="post" action="${linkTo[QueryController].save}">
 					<p>
-						<label for="query-name">Try one of our examples: </label> <br />
+						<label for="query-name">Start with one of our examples: </label> <br />
 						<select id="query-examples">
 							<option>Select a example</option>
 							<c:forEach var="example" items="${examples}">
