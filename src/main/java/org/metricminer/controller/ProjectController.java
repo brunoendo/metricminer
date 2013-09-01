@@ -90,13 +90,6 @@ public class ProjectController {
     }
 
     @LoggedUserAccess
-    @Get("/project/{projectId}/delete")
-    public void deleteProject(Long projectId) {
-        dao.delete(projectId);
-        result.redirectTo(ProjectController.class).list(1);
-    }
-
-    @LoggedUserAccess
     @Post("/projects/{projectId}/tags/remove")
     public void removeTag(Long projectId, String tagName) {
         Project project = dao.findProjectBy(projectId);
