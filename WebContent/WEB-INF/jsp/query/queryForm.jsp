@@ -9,16 +9,6 @@
 	<link rel="stylesheet" href="<c:url value='/js/codemirror/lib/codemirror.css' />" />
 	<c:import url="../import/head.jsp" />
 	<title>Metric Miner</title>
-	<style>
-	.block textarea.blank {
-		border: 0px;
-	}
-	#sql-query {
-		height: 300px;
-		border: 1px solid #CCC;
-		width: 700px;
-	}
-	</style>
 </head>
 
 <body>
@@ -37,12 +27,12 @@
 				</c:if>
 				<form method="post" action="${linkTo[QueryController].save}">
 					<p>
-						<label for="query.name">Query name: </label> <br />
-						<input type="text" value="${query.name}" class="text small" name="query.name" />
+						<label for="query-name">Query name: </label> <br />
+						<input id="query-name" type="text" value="${query.name}" class="text small" name="query.name" />
 					</p>
 					<p>
-						<label for="query.sqlQuery">SQL Query: </label> <br />
-						<div id="sql-query"><span id="placeholder">Loading editor...</span></div>
+						<label for="sqlQuery">SQL Query: </label> <br />
+						<div id="sql-query"><textarea name="query.sqlQuery" id="sqlQuery"></textarea></div>
 					</p>
 					<p class="note">
 						You can see the database schema <a target="_blank" href="<c:url value='/images/erd.png' />">here</a>.
@@ -66,8 +56,9 @@
 	$(function() {
 	  $("#placeholder").html("");
 	});
-	  var editor = CodeMirror(document.getElementById("sql-query"), {
+	  var editor = CodeMirror.fromTextArea(document.getElementById("sqlQuery"), {
 	    mode: "text/x-mariadb",
+	    value: "blablabla",
 	    lineNumbers: true,
 	  });
 	</script>

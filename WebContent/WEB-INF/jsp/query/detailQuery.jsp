@@ -25,13 +25,6 @@
 		.stacktrace {
 			display: none;
 		}
-		.CodeMirror, #sql-query {
-			height: 200px;
-			width: 700px;
-		}
-		#sql-query {
-			border: 1px solid #CCC;
-		}
 	</style>
 </head>
 
