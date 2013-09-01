@@ -66,10 +66,6 @@ public class QueryValidator {
             validator.add(new ValidationMessage(WILDCARD_MESSAGE,
                     "InvalidQuery"));
         }
-        if (containsAuthorName(query)) {
-            validator.add(new ValidationMessage(SECRETNAME_MESSAGE,
-                    "InvalidQuery"));
-        }
         if (containsAuthorEmail(query)) {
             validator.add(new ValidationMessage(SECRETEMAIL_MESSAGE,
                     "InvalidQuery"));
