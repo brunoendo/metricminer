@@ -29,6 +29,7 @@
 					<p>
 						<label for="query-name">Try one of our examples: </label> <br />
 						<select id="query-examples">
+							<option>Select a example</option>
 							<c:forEach var="example" items="${examples}">
 								<option value="${example.query}">
 									${example.name}
