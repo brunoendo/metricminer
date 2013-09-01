@@ -75,7 +75,7 @@ public class GitDiffParser {
 	}
 
 	private String extractFileNameIn(String line) {
-		return line.substring(2, line.indexOf(" "));
+		return line.substring(2, line.indexOf(" b/"));
 	}
 
 	private String transformInStringTheList(List<String> list) {

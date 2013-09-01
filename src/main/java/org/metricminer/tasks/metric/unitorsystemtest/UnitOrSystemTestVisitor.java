@@ -2,6 +2,9 @@ package org.metricminer.tasks.metric.unitorsystemtest;
 
 import static org.metricminer.tasks.metric.common.ClassAssumptions.isATest;
 import japa.parser.ast.ImportDeclaration;
+import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.ConstructorDeclaration;
+import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.body.VariableDeclaratorId;
@@ -10,6 +13,7 @@ import japa.parser.ast.expr.MethodCallExpr;
 import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.expr.ObjectCreationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
+import japa.parser.ast.type.Type;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.HashMap;
@@ -25,12 +29,14 @@ public class UnitOrSystemTestVisitor extends VoidVisitorAdapter<Object> {
 	private Map<String, TestInfo> tests = new HashMap<String, TestInfo>();
 	private String productionClass;
 	private Stack<String> currentMethod;
-	private Map<String, Boolean> objectAndPackage;
+	private Map<String, Boolean> variableAndPackage;
+	private Map<String, Boolean> fieldAndPackage;
 	private boolean checkTypes;
 	private boolean isUnitTest;
 	private Map<String, String> importList;
 	private VariableDeclaratorId lastDeclaredVariable;
 	private Set<String> productionClassTypeVariables;
+	private Set<String> productionClassTypeAttributes;
 	
 	
 	public UnitOrSystemTestVisitor(String testClass) {
@@ -43,9 +49,37 @@ public class UnitOrSystemTestVisitor extends VoidVisitorAdapter<Object> {
 		importList.put(getClassInImport(n.toString()), n.toString());
 	}
 	
+	public void visit(FieldDeclaration n, Object arg) {
+		
+		if(isProductionClass(n.getType())) {
+			for(VariableDeclarator v : n.getVariables()) {
+				productionClassTypeAttributes.add(v.getId().toString());
+			}
+		}
+		else {
+			for(VariableDeclarator v : n.getVariables()) {
+				putAttributeInTheList(v.getId().getName(), n.getType().toString());
+			}			
+		}
+		
+	}
+	
+	public void visit(ConstructorDeclaration n, Object arg) {
+	}
+	
+	public void visit(ClassOrInterfaceDeclaration expr, Object arg) {
+		productionClassTypeAttributes = new HashSet<String>();
+		fieldAndPackage = new HashMap<String, Boolean>();
+		super.visit(expr, arg);
+	}
+	
 	public void visit(ObjectCreationExpr expr, Object arg) {
 		
-		if(isProductionClass(expr.getType())) {
+		if(lastDeclaredVariable == null) {
+			super.visit(expr, arg);
+		}
+		
+		else if(isProductionClass(expr.getType())) {
 			
 			productionClassTypeVariables.add(lastDeclaredVariable.toString());
 			checkTypes = true;
@@ -55,37 +89,60 @@ public class UnitOrSystemTestVisitor extends VoidVisitorAdapter<Object> {
 			saveTest(!isUnitTest);
 			checkTypes = false;
 		} else {
-			putObjectInTheList(expr);
+			putInstanceInTheList(lastDeclaredVariable.toString(), expr.getType().toString());
+			lastDeclaredVariable = null;
 			super.visit(expr, arg);
 		}
 	}
 
-	public void visit(MethodCallExpr expr, Object arg) {
+	public void visit(MethodCallExpr method, Object arg) {
 
-		if(expr.getScope()!=null) {
-			String var = expr.getScope().toString();
-			if(!productionClassTypeVariables.contains(var)) {
-				if(instanceIsNotFromTheSamePackage(var)) {
-					saveTest(INTEGRATION);
-				}
-				
+		if(method.getScope()!=null && method.getScope().toString().startsWith("new ")) {
+			String type = extractClassNameFromScope(method);
+			if(importList.containsKey(type)) {
+				saveTest(INTEGRATION);
+			}
+		}
+		
+		else if(method.getScope()!=null) {
+			String var = method.getScope().toString();
+			if(!instanceOfProductionClass(var) && 
+					!instanceIsFromTheSamePackage(var)) {
+				saveTest(INTEGRATION);
 			}
 		}
 
-		if(expr.getArgs()!=null) {
-			for(Expression e : expr.getArgs()) {
+		if(containsParameters(method)) {
+			for(Expression e : method.getArgs()) {
 				if(e instanceof NameExpr) {
 					String var = e.toString();
 					
-					if(!productionClassTypeVariables.contains(var) && 
-							instanceIsNotFromTheSamePackage(var)) {
+					if(!instanceOfProductionClass(var) && 
+							!instanceIsFromTheSamePackage(var)) {
 						saveTest(INTEGRATION);
 					}
 				}
 			}
 		}
 		
-		super.visit(expr, arg);
+		super.visit(method, arg);
+	}
+
+	private boolean containsParameters(MethodCallExpr method) {
+		return method.getArgs()!=null;
+	}
+
+	private boolean instanceOfProductionClass(String var) {
+		return (productionClassTypeVariables!=null && productionClassTypeVariables.contains(var)) 
+				|| (productionClassTypeAttributes!=null && productionClassTypeAttributes.contains(var)) ;
+	}
+
+	private String extractClassNameFromScope(MethodCallExpr expr) {
+		String clazz = expr.getScope().toString();
+		String type = clazz.replace("new ", "");
+		type = type.substring(0, type.indexOf("("));
+		
+		return type;
 	}
 
 	public void visit(VariableDeclarator expr, Object arg) {
@@ -98,25 +155,27 @@ public class UnitOrSystemTestVisitor extends VoidVisitorAdapter<Object> {
 		
 		if(checkTypes) {
 			String var = name.toString();
-			isUnitTest = objectAndPackage.get(var);
+			isUnitTest = instanceIsFromTheSamePackage(var);
 		}
 		
 		super.visit(name, arg);
 	}
-	
 
 	public void visit(MethodDeclaration expr, Object arg) {
+		
+		variableAndPackage = new HashMap<String, Boolean>();
+		productionClassTypeVariables = new HashSet<String>();
+
 		if(isATest(expr)) {
 			currentMethod.push(expr.getName());
-			objectAndPackage = new HashMap<String, Boolean>();
-			productionClassTypeVariables = new HashSet<String>();
 			
 			tests.put(expr.getName(), new TestInfo(expr.getName()));
+
+			super.visit(expr, arg);
+			
+			currentMethod.pop();
 		}
 		
-		super.visit(expr, arg);
-		
-		if(isATest(expr)) currentMethod.pop();
 	}
 	
 	public Map<String, TestInfo> getTests() {
@@ -132,21 +191,32 @@ public class UnitOrSystemTestVisitor extends VoidVisitorAdapter<Object> {
 		tests.get(currentMethod.peek()).setIntegration(integration);
 	}
 
-	private void putObjectInTheList(ObjectCreationExpr expr) {
-		Boolean value = objectAndPackage.get(lastDeclaredVariable.toString());
-		boolean isPackage = classBelongsToSamePackage(expr.getType().toString());
+	private void putInstanceInTheList(String name, String type) {
+		Boolean value = variableAndPackage.get(name);
+		boolean isPackage = classBelongsToSamePackage(type);
 		
 		if(value == null || value == true) {
-			objectAndPackage.put(lastDeclaredVariable.toString(), isPackage);
+			variableAndPackage.put(name, isPackage);
 		}
+	}
+	private void putAttributeInTheList(String name, String type) {
+		Boolean value = fieldAndPackage.get(name);
+		boolean isPackage = classBelongsToSamePackage(type);
 		
+		if(value == null || value == true) {
+			fieldAndPackage.put(name, isPackage);
+		}
 	}
 
-	private boolean instanceIsNotFromTheSamePackage(String scope) {
-		return !objectAndPackage.containsKey(scope) || !objectAndPackage.get(scope);
+	private boolean instanceIsFromTheSamePackage(String var) {
+		return (variableAndPackage!=null && variableAndPackage.containsKey(var) && variableAndPackage.get(var)) || 
+				(fieldAndPackage!=null && fieldAndPackage.containsKey(var) && fieldAndPackage.get(var));
 	}
 
 	private boolean isProductionClass(ClassOrInterfaceType type) {
+		return type.toString().equals(productionClass);
+	}
+	private boolean isProductionClass(Type type) {
 		return type.toString().equals(productionClass);
 	}
 	

@@ -14,7 +14,7 @@ import org.metricminer.scm.git.GitDiffParser;
 
 public class GitDiffParserTests {
 
-	@Test
+	@Test 
 	public void shouldParseASimpleDiff() {
 		String log = "diff --git a/FJ-ON-28/todo.txt b/FJ-ON-28/todo.txt\r\n"
 				+ "index 6288664..007a49e 100644\r\n"
@@ -55,6 +55,32 @@ public class GitDiffParserTests {
 						+ " 6. slide de 10 secs explicando sessionscoped (2 a 3 slides)\r\n"
 						+ "+   gui: feito (session-scoped)\r\n", diffs.get(0)
 						.getDiff());
+	}
+	@Test 
+	public void shouldParseANameWithSpaces() {
+		String log = "diff --git a/FJ-ON-28/meu arquivo com espacos.txt b/FJ-ON-28/meu arquivo com espacos.txt\r\n"
+				+ "index 6288664..007a49e 100644\r\n"
+				+ "--- a/FJ-ON-28/meu arquivo com espacos.txt\r\n"
+				+ "+++ b/FJ-ON-28/meu arquivo com espacos.txt\r\n"
+				+ "@@ -1,11 +1,16 @@\r\n"
+				+ " CAPITULO DI\r\n"
+				+ " \r\n"
+				+ " 1. usar algo ao inves de return String\r\n"
+				+ "+   gui: vc edita? coloquei 2 videos lá, um colocando o Result e outro da correc\r\n"
+				+ " 2. slide de 5 secs para mostrar dando new ProdutoDAO para receber ProdutoDAO (3\r\n"
+				+ "+   gui: feito (injecao-dependencia.key)\r\n"
+				+ " 3. slide de 5 secs de dependencia para interface ao inves de classe (3 trans, 1\r\n"
+				+ "+   gui: feito (dao-interface)\r\n"
+				+ " 4. slide de 5 secs que o VRaptor usa a anotacao @Component para conectar a inte\r\n"
+				+ " 5. slidede 20 secs falando de requestscoped e produtodao a cada requisicao (2 a\r\n"
+				+ "+   gui: feito (request-scoped)\r\n"
+				+ " 6. slide de 10 secs explicando sessionscoped (2 a 3 slides)\r\n"
+				+ "+   gui: feito (session-scoped)\r\n";
+		
+		List<DiffData> diffs = new GitDiffParser().parse(log);
+		
+		assertEquals(1, diffs.size());
+		assertEquals("FJ-ON-28/meu arquivo com espacos.txt", diffs.get(0).getName());
 	}
 
 	@Test

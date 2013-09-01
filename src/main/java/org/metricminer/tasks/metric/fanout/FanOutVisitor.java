@@ -67,7 +67,7 @@ public class FanOutVisitor extends VoidVisitorAdapter<Object> {
 	}
 
 	private boolean isStaticImport(ImportDeclaration n) {
-		return n.toString().contains("import static");
+		return n.isStatic();
 	}
 
 	public void visit(ClassOrInterfaceType n, Object arg) {
