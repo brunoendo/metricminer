@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
@@ -41,6 +42,8 @@ public class User implements Serializable {
 	
 	@Transient
 	private static final long serialVersionUID = 1L;
+	
+	@NotEmpty(message="Password confirmation should not be empty")
 	@Transient
 	private String passwordConfirmation;
 

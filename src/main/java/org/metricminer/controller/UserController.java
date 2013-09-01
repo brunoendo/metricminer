@@ -67,11 +67,12 @@ public class UserController {
 	@Post("/signup")
 	public void registerUser(final User user) {
 		validator.validate(user);
+		result.include("user", user);
+		validator.onErrorRedirectTo(UserController.class).userForm();
 		if (!user.isValid()) {
 			validator.add(new ValidationMessage(
 					"Password confirmation don't match.", "error"));
 		}
-		result.include("user", user);
 		validator.onErrorRedirectTo(UserController.class).userForm();
 
 		user.encryptPassword(encryptor);
