@@ -21,6 +21,14 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+				
+					<p>
+						Remember that MetricMiner should be able to clone the project. It means that
+						the project should be public and should not require any authentication. After that,
+						MetricMiner will take a few hours to fully process the project. You will receive an
+						e-mail as soon as everything is done.
+					</p>
+				
 						<c:forEach var="error" items="${errors}">
 							<div class="message errormsg"><p>${error.message}</p></div>
 						</c:forEach>
