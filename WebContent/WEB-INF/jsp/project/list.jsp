@@ -39,8 +39,8 @@
 					<table cellpadding="0" cellspacing="0" width="100%" class="tablesorter zebra">
 						<thead>
 							<tr>
-								<th>Name</th>
-								<th>Repo's URL</th>
+								<th width="40%">Name</th>
+								<th width="40%">Repo's URL</th>
 								<th>Tags</th>
 							</tr>
 						</thead>
