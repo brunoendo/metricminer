@@ -6,6 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
+	<link rel="stylesheet" href="<c:url value='/js/codemirror/lib/codemirror.css' />" />
 	<c:import url="../import/head.jsp" />
 	<title>Metric Miner</title>
 	<style type="text/css">
@@ -23,6 +24,13 @@
 		}
 		.stacktrace {
 			display: none;
+		}
+		.CodeMirror, #sql-query {
+			height: 200px;
+			width: 700px;
+		}
+		#sql-query {
+			border: 1px solid #CCC;
 		}
 	</style>
 </head>
@@ -50,7 +58,7 @@
 					
 					<h2>${query.name}</h2>
 					
-					<pre>${query.sqlQuery}</pre>
+					<div id="sql-query"><span id="placeholder">Loading query...</span></div>
 					
 					<c:if test="${scheduledToRun eq false}">
 					
@@ -131,6 +139,19 @@
 				return false;
 			});
 		});
+	</script>
+	<script src="<c:url value='/js/codemirror/lib/codemirror.js' />"></script>
+	<script src="<c:url value='/js/codemirror/mode/sql/sql.js' />"></script>
+	<script>
+	$(function() {
+	  $("#placeholder").html("");
+	});
+	  var editor = CodeMirror(document.getElementById("sql-query"), {
+	    mode: "text/x-mariadb",
+	    lineNumbers: true,
+	    readOnly: true,
+	    value: "${query.sqlQuery}"
+	  });
 	</script>
 </body>
 </html>
