@@ -18,6 +18,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.Validator;
 import br.com.caelum.vraptor.validator.ValidationMessage;
+import br.com.caelum.vraptor.view.Results;
 
 @Resource
 public class ProjectController {
@@ -48,9 +49,23 @@ public class ProjectController {
 
     @Get("/projects/{page}")
     public void list(int page) {
-        result.include("projects", dao.listPage(page));
+        result.include("projects", dao.findAll(page));
         result.include("totalPages", dao.totalPages());
         result.include("currentPage", page);
+    }
+
+    @Get("/projects/search")
+    public void search(String criteria) {
+    	if(criteria == null || criteria.isEmpty()) {
+    		result.redirectTo(this).list(1);
+    		return;
+    	}
+    	
+    	result.include("projects", dao.search(criteria));
+    	result.include("totalPages", 1);
+    	result.include("currentPage", 1);
+    	
+    	result.use(Results.page()).of(ProjectController.class).list(1);
     }
 
     @Get("/project/{id}")

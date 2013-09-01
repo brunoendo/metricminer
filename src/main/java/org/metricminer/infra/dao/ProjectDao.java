@@ -19,7 +19,7 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class ProjectDao {
-	static final int PAGE_SIZE = 500;
+	static final int PAGE_SIZE = 50;
     private final Session session;
 
 	public ProjectDao(Session session) {
@@ -42,7 +42,7 @@ public class ProjectDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-    public List<Project> listPage(int page) {
+    public List<Project> findAll(int page) {
 	    page--;
 	    return (List<Project>) session.createCriteria(Project.class)
 	        .setMaxResults(PAGE_SIZE)
@@ -220,6 +220,13 @@ public class ProjectDao {
 	public Long totalProjects() {
 		Query query = session.createQuery("select count(id) from Project");
 		return (Long) query.uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Project> search(String criteria) {
+		return session.createQuery("select p from Project p where p.name like :criteria")
+				.setParameter("criteria", "%" + criteria + "%")
+				.list();
 	}
 
 }

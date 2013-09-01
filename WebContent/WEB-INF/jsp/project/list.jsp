@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="metricminer" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -13,16 +14,21 @@
 	<div id="hld">
 		<div class="wrapper">		<!-- wrapper begins -->
 			<c:import url="../import/header.jsp" />
+			
+			<metricminer:box title="Search a project">
+			<form action="<c:url value="/projects/search" />" method="get" class="project-search">
+				<input type="search" name="criteria" id="criteria" value="${param.criteria}" />
+				<input type="submit" value="Search" id="search" />
+			</form>
+			
+			</metricminer:box>
+			
 			<div class="block">
 				<div class="block_head">
 					<div class="bheadl"></div>
 					<div class="bheadr"></div>
 					<h2>Projects</h2>
-					
-					<ul>
-						<li><a href="<c:url value="/projects/new" />">New project</a></li>
-					</ul>
-				</div>		<!-- .block_head ends -->
+				</div>
 				
 				<div class="block_content">
 				

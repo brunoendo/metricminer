@@ -6,3 +6,20 @@
 	width: 100%;
 	
 }
+
+.project-search {
+	text-align: center;
+	width: 100%;
+}
+
+.project-search #criteria {
+	width: 75%;
+	font-size: 1em;
+	height: 20px;
+}
+
+.project-search #search {
+	border: 1px solid #efefef;
+	padding: 5px;
+	font-size: 1em;
+}

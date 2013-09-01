@@ -10,14 +10,14 @@
 	<ul id="nav">
 		<li><a href="<c:url value="/projects/1"/>">Projects</a>
 			<ul>
-				<li><a href="<c:url value="/projects/new" />">Add a new one</a></li>
 				<li><a href="<c:url value="/projects/1"/>">List all</a></li>
+				<li><a href="<c:url value="/projects/new" />">Add a new one</a></li>
 			</ul>
 		</li>
 		<li><a href="${linkTo[QueryController].listQueries}">Queries</a>
 			<ul>
-				<li><a href="${linkTo[QueryController].queryForm}">Add a new one</a></li>
 				<li><a href="${linkTo[QueryController].listQueries}">List all</a></li>
+				<li><a href="${linkTo[QueryController].queryForm}">Add a new one</a></li>
 			</ul>
 		</li>
 		<li><a href="${linkTo[StatisticalTestController].listStats}">Statistical Test</a>
