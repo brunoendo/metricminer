@@ -41,6 +41,7 @@
 						<p>
 							<label for="project.scmUrl">Git url: </label><br />
 							<input type="text" class="text small" name="scmUrl" value="${scmUrl}" />
+							(e.g. <i>git@github.com:metricminer-msr/metricminer.git</i>. Do not use the Github's HTTP URL)
 						</p>
 						
 						<p>
