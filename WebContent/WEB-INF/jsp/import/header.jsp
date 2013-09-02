@@ -20,7 +20,7 @@
 				<li><a href="<c:url value="/projects/new" />">Add a new one</a></li>
 			</ul>
 		</li>
-		<li><a href="${linkTo[QueryController].listQueries}">Data Extraction</a>
+		<li><a href="${linkTo[QueryController].listQueries[1]}">Data Extraction</a>
 			<ul>
 				<li><a href="${linkTo[QueryController].listQueries[1]}">List all</a></li>
 				<li><a href="${linkTo[QueryController].queryForm}">Add a new one</a></li>

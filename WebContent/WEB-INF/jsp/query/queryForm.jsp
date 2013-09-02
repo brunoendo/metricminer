@@ -77,8 +77,10 @@
 		$("#query-examples").change(function() {
 			var selected = $("#query-examples option:selected");
 			var name = selected.text().trim();
-			$("#query-name").val(name);
-			editor.setValue(selected.val());
+			if (name != "Select a example") {
+				$("#query-name").val(name);
+				editor.setValue(selected.val());
+			}
 		});
 	});
 	</script>
