@@ -22,6 +22,19 @@
 				
 				
 				<div class="block_content">
+				
+					<p>
+					MetricMiner enables you to execute statistical tests and compare two different
+					groups. In order to do it, you need to choose two datasets that have been already
+					created and executed. These datasets should only contain a single column.
+					</p>
+					
+					<p>
+						If you have a doubt chosing a statistical test, 
+						<a target="_blank" href="http://www.graphpad.com/support/faqid/1790/">this page</a> can help.
+					
+					</p>
+				
 					<form method="post" action="${linkTo[StatisticalTestController].addStatisticalTestExecution}">
 					
 						<p>

@@ -18,7 +18,7 @@
 				<div class="block_head">
 					<div class="bheadl"></div>
 					<div class="bheadr"></div>
-					<h2>Statistical Test</h2>
+					<h2>My Statistical Tests</h2>
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
@@ -30,7 +30,6 @@
 					<table class="results">
 						<tr>
 							<th>Name</th>
-							<th>Author</th>
 							<th>1st set</th>
 							<th>2nd set</th>
 							<th>Statistical test</th>
@@ -40,7 +39,6 @@
 						<c:forEach items="${results}" var="result">
 							<tr>
 								<td>${result.name}</td>
-								<td>${result.author.name}</td>
 								<td>${result.q1.query.name}</td>
 								<td>${result.q2.query.name}</td>
 								<td>${result.test.name}</td>

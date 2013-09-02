@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.metricminer.model.StatisticalTest;
 import org.metricminer.model.StatisticalTestResult;
+import org.metricminer.model.User;
 
 import br.com.caelum.vraptor.ioc.Component;
 
@@ -37,6 +38,13 @@ public class StatisticalTestDao {
 
 	public StatisticalTestResult findResult(Long resultId) {
 		return (StatisticalTestResult) session.load(StatisticalTestResult.class, resultId);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<StatisticalTestResult> belongsTo(User user) {
+		return session.createQuery("select t from StatisticalTestResult t where author = :user")
+				.setParameter("user", user)
+				.list();
 	}
     
     

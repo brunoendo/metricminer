@@ -71,7 +71,7 @@ public class StatisticalTestController {
     
     @Get("/stats")
     public void listStats() {
-    	result.include("results", statisticalTestDao.results());
+    	result.include("results", statisticalTestDao.belongsTo(userSession.getUser()));
     }
     
     @Get("/stats/results/{resultId}")
