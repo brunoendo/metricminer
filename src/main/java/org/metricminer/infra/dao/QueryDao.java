@@ -36,14 +36,17 @@ public class QueryDao {
     	return session.createQuery("select q from Query q where q.author != :myself order by submitDate desc")
     	.setParameter("myself", user)
 	    .setMaxResults(PAGE_SIZE)
-	    .setFirstResult(page * PAGE_SIZE)
+	    .setFirstResult((page-1) * PAGE_SIZE)
     	.list();
     }
 
-    public long countDoesntBelongTo(User user) {
-    	return (Long)session.createQuery("select count(q) from Query q where q.author != :myself")
+    public long pagesForDoesntBelongTo(User user) {
+    	Long total = (Long)session.createQuery("select count(q) from Query q where q.author != :myself")
     			.setParameter("myself", user)
     			.uniqueResult();
+    	
+	    double pages = (double) total/(double)  PAGE_SIZE;
+        return (long) Math.ceil(pages);
     }
 
 	public void save(QueryResult result) {

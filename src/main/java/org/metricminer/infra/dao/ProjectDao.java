@@ -46,7 +46,7 @@ public class ProjectDao {
 	    page--;
 	    return (List<Project>) session.createCriteria(Project.class)
 	        .setMaxResults(PAGE_SIZE)
-	        .setFirstResult(page * PAGE_SIZE)
+	        .setFirstResult((page-1) * PAGE_SIZE)
 	        .list();
     }
 	

@@ -78,7 +78,7 @@ public class QueryController {
         result.include("others", otherQueries);
         result.include("mine", myQueries);
         
-        result.include("totalPages", queryDao.countDoesntBelongTo(userSession.getUser()));
+        result.include("totalPages", queryDao.pagesForDoesntBelongTo(userSession.getUser()));
         result.include("currentPage", page);
     }
 
