@@ -43,7 +43,7 @@
 						</p>
 						<p>
 							<label for="firstQueryResultId">First dataset</label> <br />
-							<select name="firstQueryResultId">
+							<select name="firstQueryResultId" class="stat-dataset-select">
 								<c:forEach var="result" items="${results}">
 									<option value=${result.id}>${result.query.name} (${result.id})</option>
 								</c:forEach>
@@ -52,7 +52,7 @@
 						</p>
 						<p>
 							<label for="secondQueryResultId">Second dataset</label> <br />
-							<select name="secondQueryResultId">
+							<select name="secondQueryResultId" class="stat-dataset-select">
 								<c:forEach var="result" items="${results}">
 									<option value=${result.id}>${result.query.name} (${result.id})</option>
 								</c:forEach>
