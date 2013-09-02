@@ -90,4 +90,19 @@ public class MethodsInvocationMetricTests {
 	
 		assertEquals(3, metric.getMethods().get("method/0").size());
 	}
+	
+	@Test
+	public void shouldIgnoreMethodInvokedOutsideOfAMethod() {
+		metric.calculate(source,
+				toInputStream(
+						classDeclaration(
+								"private int x = someMethod();"+
+								"public void method() {"+
+								"x++;"+
+								"a();"+
+								"}"
+								)));
+		
+		assertEquals(1, metric.getMethods().get("method/0").size());
+	}
 }

@@ -35,6 +35,7 @@ public class MethodsInvocationVisitor extends VoidVisitorAdapter<Object> {
 	}
 	
 	private void invoked(String name) {
+		if(currentMethods.isEmpty()) return;
 		if(!methods.containsKey(currentMethods.peek())) {
 			methods.put(currentMethods.peek(), new HashSet<String>());
 		}
