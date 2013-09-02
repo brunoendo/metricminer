@@ -45,7 +45,7 @@
 							<label for="firstQueryResultId">First dataset</label> <br />
 							<select name="firstQueryResultId" class="stat-dataset-select">
 								<c:forEach var="result" items="${results}">
-									<option value=${result.id}>${result.query.name} (${result.id})</option>
+									<option value=${result.id}>${result.query.name} (version ${result.id})</option>
 								</c:forEach>
 							</select>
 							<span class="note">*This should be a single column dataset</span>
@@ -54,7 +54,7 @@
 							<label for="secondQueryResultId">Second dataset</label> <br />
 							<select name="secondQueryResultId" class="stat-dataset-select">
 								<c:forEach var="result" items="${results}">
-									<option value=${result.id}>${result.query.name} (${result.id})</option>
+									<option value=${result.id}>${result.query.name} (version ${result.id})</option>
 								</c:forEach>
 							</select>
 							<span class="note">*This should to be a single column dataset</span>
