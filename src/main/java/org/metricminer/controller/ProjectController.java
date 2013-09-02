@@ -140,7 +140,6 @@ public class ProjectController {
     }
 
 	private void saveProject(Project project) {
-		//Project completeProject = new Project(project, configs);
 	    Project completeProject = new ProjectBuilder()
 	        .withBaseProject(project)
 	        .withInitialTasks()

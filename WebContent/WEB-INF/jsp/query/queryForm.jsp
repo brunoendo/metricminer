@@ -25,6 +25,7 @@
 						</p>
 					</div>
 				</c:if>
+				
 				<form method="post" action="${linkTo[QueryController].save}">
 					<p>
 						<label for="query-name">Start with one of our examples: </label> <br />

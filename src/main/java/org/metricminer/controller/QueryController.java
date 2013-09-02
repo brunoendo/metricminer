@@ -1,7 +1,6 @@
 package org.metricminer.controller;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 import org.metricminer.infra.dao.QueryDao;
@@ -71,11 +70,16 @@ public class QueryController {
     }
 
 
-    @Get("/queries")
-    public void listQueries() {
-        List<Query> queries = queryDao.list();
-        Collections.sort(queries);
-        result.include("queries", queries);
+    @Get("/queries/{page}")
+    @LoggedUserAccess
+    public void listQueries(int page) {
+        List<Query> otherQueries = queryDao.doesntBelongTo(userSession.getUser(), 1);
+        List<Query> myQueries = queryDao.belongsTo(userSession.getUser());
+        result.include("others", otherQueries);
+        result.include("mine", myQueries);
+        
+        result.include("totalPages", queryDao.countDoesntBelongTo(userSession.getUser()));
+        result.include("currentPage", page);
     }
 
 
@@ -107,7 +111,7 @@ public class QueryController {
     public void runQuery(Long queryId) {
         Query query = queryDao.findBy(queryId);
         taskDao.saveTaskToExecuteQuery(query);
-        result.include("toRun", true);
+        result.include("scheduledToRun", true);
         result.redirectTo(this).detailQuery(queryId);
     }
 }

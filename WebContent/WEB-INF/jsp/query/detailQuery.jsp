@@ -41,14 +41,14 @@
 				
 				<div class="block_content">
 				
-					<c:if test="${toRun}">
-					<div class="message success"><p>Your query will be executed as soon as possible!</p></div>
-					</c:if>
-
 					<c:if test="${included}">
 					<div class="message success"><p>Your query was added and will be executed as soon as possible!</p></div>
 					</c:if>
-					
+
+					<c:if test="${scheduledToRun}">
+						<div class="message success"><p>Query scheduled to run, you will receive a email when the results are ready.</p></div>
+					</c:if>
+
 					<h2>${query.name}</h2>
 					
 					<div id="sql-query">
@@ -63,9 +63,7 @@
 						</form>
 						
 					</c:if>
-					<c:if test="${scheduledToRun}">
-						<div class="message success"><p>Query scheduled to run, you will receive a email when the results are ready.</p></div>
-					</c:if>
+
 					
 					
 					<h3 class="clear">Results:</h3>

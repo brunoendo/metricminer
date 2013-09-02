@@ -8,6 +8,12 @@
 	
 	<h1><a href="${linkTo[IndexController].index}">MetricMiner</a></h1>
 	<ul id="nav">
+	
+		<li>
+			<a href="<c:url value="/info/how-it-works"/>">How It Works</a>
+		</li>
+	
+	
 		<li><a href="<c:url value="/projects/1"/>">Projects</a>
 			<ul>
 				<li><a href="<c:url value="/projects/1"/>">List all</a></li>
@@ -16,7 +22,7 @@
 		</li>
 		<li><a href="${linkTo[QueryController].listQueries}">Queries</a>
 			<ul>
-				<li><a href="${linkTo[QueryController].listQueries}">List all</a></li>
+				<li><a href="${linkTo[QueryController].listQueries[1]}">List all</a></li>
 				<li><a href="${linkTo[QueryController].queryForm}">Add a new one</a></li>
 			</ul>
 		</li>
@@ -26,6 +32,11 @@
 				<li><a href="${linkTo[StatisticalTestController].listStats}">List all</a></li>
 			</ul>
 		</li>
+		
+		<li>
+			<a href="<c:url value="/info/how-it-works"/>">Publications</a>
+		</li>
+		
 		<li><a href="${linkTo[StatusController].showStatus}">Status</a></li>
 	</ul>
 	<c:if test="${not empty userSession.user}">

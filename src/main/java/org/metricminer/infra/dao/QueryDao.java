@@ -3,15 +3,16 @@ package org.metricminer.infra.dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
 import org.metricminer.model.Query;
 import org.metricminer.model.QueryResult;
+import org.metricminer.model.User;
 
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class QueryDao {
-    private Session session;
+    private static final int PAGE_SIZE = 20;
+	private Session session;
 
     public QueryDao(Session session) {
         this.session = session;
@@ -31,11 +32,29 @@ public class QueryDao {
     }
     
     @SuppressWarnings("unchecked")
-    public List<Query> list() {
-        return session.createCriteria(Query.class).addOrder(Order.desc("submitDate")).list();
+    public List<Query> doesntBelongTo(User user, int page) {
+    	return session.createQuery("select q from Query q where q.author != :myself order by submitDate desc")
+    	.setParameter("myself", user)
+	    .setMaxResults(PAGE_SIZE)
+	    .setFirstResult(page * PAGE_SIZE)
+    	.list();
+    }
+
+    public long countDoesntBelongTo(User user) {
+    	return (Long)session.createQuery("select count(q) from Query q where q.author != :myself")
+    			.setParameter("myself", user)
+    			.uniqueResult();
     }
 
 	public void save(QueryResult result) {
 		session.save(result);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<Query> belongsTo(User user) {
+    	return session.createQuery("select q from Query q where q.author = :myself order by submitDate desc")
+    	.setParameter("myself", user)
+    	.list();
+	}
+
 }

@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class Query implements Comparable<Query> {
+public class Query {
     @Type(type = "text")
     private String sqlQuery;
     private String name;
@@ -77,11 +77,6 @@ public class Query implements Comparable<Query> {
 
     public User getAuthor() {
         return author;
-    }
-
-    @Override
-    public int compareTo(Query otherQuery) {
-        return -submitDate.compareTo(otherQuery.submitDate);
     }
 
     public void addResult(QueryResult result) {
