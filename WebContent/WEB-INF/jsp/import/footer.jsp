@@ -14,6 +14,13 @@
 	</div>
 	
 	<div class="footer-info">
+		<p class="center">This app is part of CCSL,<br/>center of competence in open source software.</p>
+		<p class="center">
+				<img src="<c:url value='/images/ccsl.jpg' />" width=120px" />
+		</p>
+	</div>
+
+	<div class="footer-info">
 		<p class="center">This app is proudly hosted by Locaweb.<br/>Visit our sponsor website.</p>
 		<p class="center">
 			<a href="http://www.locaweb.com.br/produtos/cloud-server.html">

@@ -25,6 +25,11 @@
 }
 
 .footer-info {
-float: left;
-width: 50%;
+	float: left;
+	width: 30%;
+}
+
+.publication-authors {
+	font-weight: bold;
+	font-style: italic;
 }

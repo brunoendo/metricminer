@@ -34,7 +34,11 @@
 		</li>
 		
 		<li>
-			<a href="<c:url value="/info/how-it-works"/>">Publications</a>
+			<a href="<c:url value="/info/publications"/>">Publications</a>
+		</li>
+
+		<li>
+			<a href="<c:url value="/info/authors"/>">Authors</a>
 		</li>
 		
 		<li><a href="${linkTo[StatusController].showStatus}">Status</a></li>
