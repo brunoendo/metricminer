@@ -3,6 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="metricminer" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -53,15 +54,11 @@
 		<div class="wrapper">
 			<!-- wrapper begins -->
 			<c:import url="../import/header.jsp" />
-			<div class="block">
-				<div class="block_head">
-					<div class="bheadl"></div>
-					<div class="bheadr"></div>
-					<h2>${project.name}</h2>
-				</div>
-				<!-- .block_head ends -->
-
-				<div class="block_content" id="project-content">
+			<metricminer:box title="${project.name}">
+				<c:if test="${empty project.totalCommits }">
+					<h2>We have not finished processing this project yet!</h2>
+				</c:if>
+				<c:if test="${! empty project.totalCommits}">
 					<div id="details">
 						<div class="detail-box">
 							<table>
@@ -117,15 +114,12 @@
 							</table>
 						</div>
 					</div>
-					
 					<div id="charts">
 					    <div id="commit_chart" class="googlechart"></div>
 					    <div id="fileCount_chart" class="googlechart"></div>
 				    </div>
-				</div>
-				<div class="bendl"></div>
-				<div class="bendr"></div>
-			</div>
+			    </c:if>
+			</metricminer:box>
 
 			<div class="block">
 				<div class="block_head">

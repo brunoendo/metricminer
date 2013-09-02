@@ -1,5 +1,6 @@
 <%@ attribute name="title" type="java.lang.String" %>
 <%@ attribute name="extraClasses" type="java.lang.String" %>
+<%@ attribute name="contentId" type="java.lang.String" %>
 
 <div class="block ${extraClasses}">
 	<div class="block_head">
@@ -9,7 +10,7 @@
 	</div>
 	<!-- .block_head ends -->
 
-	<div class="block_content">
+	<div class="block_content" id="${contentId}">
 		<jsp:doBody />
 	</div>
 	<div class="bendl"></div>
