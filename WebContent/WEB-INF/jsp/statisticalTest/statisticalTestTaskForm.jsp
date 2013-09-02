@@ -61,7 +61,7 @@
 						</p>
 						<p>
 							<label for="statisticalTestId">Statistical test</label> <br />
-							<select name="statisticalTestId">
+							<select name="statisticalTestId" class="stat-dataset-select">
 								<c:forEach var="test" items="${tests}">
 									<option value=${test.id}>${test.name}</option>
 								</c:forEach>
