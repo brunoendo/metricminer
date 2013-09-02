@@ -78,6 +78,30 @@
 			
 			</metricminer:box>
 			
+			<metricminer:box title="How should I use it?">
+				<p>
+					The first step is to create a query that extracts some information about projects
+					that are already inside MetricMiner. To do that, go to <i>Data Extraction</i> menu,
+					and create a query. There you can find a few examples or even the database diagram
+					that explains our tables. After that, you can download the query in CSV format, and
+					analyse it.
+				</p>
+				
+				<p>
+					You can also use MetricMiner to execute an statistical test. All you have to do
+					is to go to <i>Statistical Test</i> menu, choose two datasets and the test. Then,
+					MetricMiner will call R tool and save the results for you.
+				</p>
+				
+				<p>
+					If you need a specific project, you may add it using the <i>Projects</i> menu. There,
+					all you have to do is to point a git address. You can also create a new code metric. To do
+					that, you need to fork our project in Github and write the drivers for your metric. 
+					The process is well-explained in this page. You also can always get in touch with us.
+				</p>
+			
+			</metricminer:box>
+			
 			<metricminer:box title="How to Contribute">
 				<p>
 					MetricMiner is open source and freely available on Github. The repository
