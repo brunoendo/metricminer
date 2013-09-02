@@ -61,7 +61,7 @@
 				<c:if test="${! empty project.totalCommits}">
 					<div id="details">
 						<div class="detail-box">
-							<table>
+							<table class="mm-table">
 								<tr>
 									<th>Name</th>
 									<td>${project.name} <input type="hidden" name="id"
@@ -103,7 +103,7 @@
 						</div>
 						<div class="detail-box">
 							<h2>Top committers</h2>
-							<table>
+							<table class="mm-table">
 								<c:forEach items="${commiters}" var="a" varStatus="status">
 									<tr>
 										<td>#${status.index+1}</td>
