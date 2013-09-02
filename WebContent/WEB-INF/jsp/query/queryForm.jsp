@@ -9,6 +9,17 @@
 	<link rel="stylesheet" href="<c:url value='/js/codemirror/lib/codemirror.css' />" />
 	<c:import url="../import/head.jsp" />
 	<title>Metric Miner</title>
+	<style>
+	#example-editor {
+		height: 300px;
+		border: 1px solid #CCC;
+		border-radius: 0;
+		width: 800px;
+	}
+	.example-details {
+		margin-top: 15px;
+	}
+	</style>
 </head>
 
 <body>
@@ -28,7 +39,7 @@
 				
 				<form method="post" action="${linkTo[QueryController].save}">
 					<p>
-						<label for="query-name">Start with one of our examples: </label> <br />
+						<label for="query-name">You can start with one of our <a href="#examples">examples</a>: </label> <br />
 						<select id="query-examples">
 							<option>Select a example</option>
 							<c:forEach var="example" items="${examples}">
@@ -61,6 +72,21 @@
 					</p>
 				</form>
 			</metricminer:box>
+			<metricminer:box title="Examples" boxId="examples">
+				<c:set var="firstExample" value="${examples.get(0)}" />
+				<select id="query-examples-details">
+					<c:forEach var="example" items="${examples}">
+						<option data-query="${example.query}" data-description="${example.description}">
+							${example.name}
+						</option>
+					</c:forEach>
+				</select>
+				<div class="example-details">
+					<h2>${firstExample.name}</h2>
+					<p class="description">${firstExample.description}</p>
+					<textarea id="example-editor">${firstExample.query}</textarea>
+				</div>
+			</metricminer:box>
 		</div>						<!-- wrapper ends -->
 	</div>		<!-- #hld ends -->
 	<c:import url="../import/footer.jsp" />
@@ -69,6 +95,10 @@
 	<script src="<c:url value='/js/codemirror/mode/sql/sql.js' />"></script>
 	<script>
 	var editor = CodeMirror.fromTextArea(document.getElementById("sqlQuery"), {
+		mode: "text/x-mariadb",
+		lineNumbers: true
+	});
+	var exampleEditor = CodeMirror.fromTextArea(document.getElementById("example-editor"), {
 		mode: "text/x-mariadb",
 		lineNumbers: true
 	});
@@ -81,6 +111,15 @@
 				$("#query-name").val(name);
 				editor.setValue(selected.val());
 			}
+		});
+		$("#query-examples-details").change(function() {
+			var selected = $("#query-examples-details option:selected");
+			var name = selected.text().trim();
+			var query = selected.data("query");
+			var description = selected.data("description");
+			$(".example-details h2").text(name);
+			$(".example-details .description").text(description);
+			exampleEditor.setValue(query);
 		});
 	});
 	</script>

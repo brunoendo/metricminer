@@ -1049,10 +1049,10 @@ select {
 .CodeMirror {
 	font-size: 15px;
 	width: 800px;
+	border: 1px solid #CCC;
 }
 #sql-query {
 	height: 300px;
-	border: 1px solid #CCC;
 	border-radius: 0;
 	width: 800px;
 }

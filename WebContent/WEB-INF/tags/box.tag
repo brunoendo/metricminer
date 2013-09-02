@@ -1,8 +1,9 @@
 <%@ attribute name="title" type="java.lang.String" %>
 <%@ attribute name="extraClasses" type="java.lang.String" %>
 <%@ attribute name="contentId" type="java.lang.String" %>
+<%@ attribute name="boxId" type="java.lang.String" %>
 
-<div class="block ${extraClasses}">
+<div id="${boxId}" class="block ${extraClasses}">
 	<div class="block_head">
 		<div class="bheadl"></div>
 		<div class="bheadr"></div>
