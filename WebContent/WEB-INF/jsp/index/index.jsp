@@ -33,7 +33,7 @@
 				popular code metrics.
 			</p>
 			<p> 
-				MetricMiner is a free open source tool. You can read more about it thoughout the
+				MetricMiner is a free open source tool. You can read more about it throughout the
 				web application. If you want to contribute, please read the <i>How it Works</i>
 				page.
 			</p>
