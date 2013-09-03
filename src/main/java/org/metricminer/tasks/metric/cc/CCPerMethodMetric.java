@@ -1,23 +1,19 @@
 package org.metricminer.tasks.metric.cc;
 
-import japa.parser.JavaParser;
-import japa.parser.ast.CompilationUnit;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map.Entry;
 
+import org.metricminer.antlr4.java.AntLRVisitor;
 import org.metricminer.model.SourceCode;
-import org.metricminer.tasks.metric.common.ClassInfoVisitor;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricResult;
 
 
 public class CCPerMethodMetric implements Metric {
 
-    private CCVisitor visitor;
-    private ClassInfoVisitor classInfo;
+    private CCListener visitor;
 	private SourceCode sourceCode;
 
     public String header() {
@@ -28,13 +24,8 @@ public class CCPerMethodMetric implements Metric {
         this.sourceCode = sourceCode;
         
 		try {
-            CompilationUnit cunit = JavaParser.parse(is);
-
-            classInfo = new ClassInfoVisitor();
-            classInfo.visit(cunit, null);
-
-            visitor = new CCVisitor();
-            visitor.visit(cunit, null);
+			visitor = new CCListener();
+	        new AntLRVisitor().visit(visitor, is);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
