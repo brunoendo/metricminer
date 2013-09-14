@@ -47,6 +47,7 @@
 								<input type="submit" class="submit" value="Login" />
 								<a href="<c:url value='/signup' />">Create an account</a> 
 							</p>
+							<input type="hidden" name="redirectUrl" value="${redirectUrl}" />
 						</form>
 					</div>		<!-- .block_content ends -->
 					<div class="bendl"></div>

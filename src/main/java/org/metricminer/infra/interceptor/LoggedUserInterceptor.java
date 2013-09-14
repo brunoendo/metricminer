@@ -1,6 +1,9 @@
 package org.metricminer.infra.interceptor;
 
+import java.net.HttpRetryException;
 import java.util.Arrays;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.metricminer.controller.UserController;
 import org.metricminer.infra.session.UserSession;
@@ -21,12 +24,12 @@ public class LoggedUserInterceptor implements Interceptor {
 	
 	private final UserSession session;
 	private final Result result;
-	private final Validator validator;
+	private HttpServletRequest request;
 
-	public LoggedUserInterceptor(UserSession session, Validator validator, Result result) {
+	public LoggedUserInterceptor(UserSession session, Result result, HttpServletRequest request) {
 		this.session = session;
-		this.validator = validator;
 		this.result = result;
+		this.request = request;
 	}
 
 	@Override
@@ -40,7 +43,9 @@ public class LoggedUserInterceptor implements Interceptor {
 		if (session.isLoggedIn()) {
 			ValidationMessage message = new ValidationMessage("You must login",
                     "loggedUser");
+			String path = request.getRequestURI().substring(request.getContextPath().length());
 			result.include("errors", Arrays.asList(message));
+			result.include("redirectUrl", path);
 			result.redirectTo(UserController.class).loginForm();
 		} else {
 			stack.next(method, resource);
