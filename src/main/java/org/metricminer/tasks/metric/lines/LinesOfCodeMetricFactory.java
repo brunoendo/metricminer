@@ -4,7 +4,7 @@ import org.metricminer.tasks.MetricComponent;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricFactory;
 
-@MetricComponent(name="Lines of Code")
+@MetricComponent(name="Lines of Code", result=LinesOfCodeResult.class)
 public class LinesOfCodeMetricFactory implements MetricFactory {
 
     @Override

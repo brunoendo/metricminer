@@ -4,7 +4,7 @@ import org.metricminer.tasks.MetricComponent;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricFactory;
 
-@MetricComponent(name="Cyclomatic Complexity per method")
+@MetricComponent(name="Cyclomatic Complexity per method", result=CCPerMethodResult.class)
 public class CCPerMethodMetricFactory implements MetricFactory {
 
     @Override
