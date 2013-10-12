@@ -33,24 +33,6 @@ public class QueryValidator {
         return invalid;
     }
 
-    public boolean containsAuthorName(Query query) {
-        boolean invalid = false;
-        String sql = query.getSqlQuery();
-        if (sql.contains("Author") && sql.contains(Author.NAME_COLUMN)) {
-            invalid = true;
-        }
-        return invalid;
-    }
-
-    public boolean containsAuthorEmail(Query query) {
-        boolean invalid = false;
-        String sql = query.getSqlQuery();
-        if (sql.contains("Author") && sql.contains(Author.EMAIL_COLUMN)) {
-            invalid = true;
-        }
-        return invalid;
-    }
-
     public void validate(Query query) {
     	if (query.getName() == null || query.getName().isEmpty()) {
     		validator.add(new ValidationMessage("The name of the query cannot be empty",
@@ -63,10 +45,6 @@ public class QueryValidator {
     	}
         if (containsWildCard(query)) {
             validator.add(new ValidationMessage(WILDCARD_MESSAGE,
-                    "InvalidQuery"));
-        }
-        if (containsAuthorEmail(query)) {
-            validator.add(new ValidationMessage(SECRETEMAIL_MESSAGE,
                     "InvalidQuery"));
         }
         if (containsDiff(query)) {
