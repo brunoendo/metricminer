@@ -16,10 +16,12 @@ import br.com.caelum.vraptor.ioc.Component;
 public class QueryExecutor {
     private StatelessSession session;
 	private final CSVWriter writer;
+	private QueryProcessor processor;
     
-    public QueryExecutor(StatelessSession session, CSVWriter writer) {
+    public QueryExecutor(StatelessSession session, CSVWriter writer, QueryProcessor processor) {
         this.session = session;
 		this.writer = writer;
+		this.processor = processor;
     }
     
     @SuppressWarnings("unchecked")
@@ -27,7 +29,8 @@ public class QueryExecutor {
 
     	int currentPage = 1;
     	do {
-			SQLQuery sqlQuery = session.createSQLQuery(query.getSqlQuery());
+    		Query paginatedQuery = processor.paginate(query, currentPage);
+			SQLQuery sqlQuery = session.createSQLQuery(paginatedQuery.getSqlQuery());
 	        sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
 	        List<Map<String, Object>> results = sqlQuery.list();
 	

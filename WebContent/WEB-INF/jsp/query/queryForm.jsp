@@ -72,21 +72,23 @@
 					</p>
 				</form>
 			</metricminer:box>
-			<metricminer:box title="Examples" boxId="examples">
-				<c:set var="firstExample" value="${examples.get(0)}" />
-				<select id="query-examples-details">
-					<c:forEach var="example" items="${examples}">
-						<option data-query="${example.query}" data-description="${example.description}">
-							${example.name}
-						</option>
-					</c:forEach>
-				</select>
-				<div class="example-details">
-					<h2>${firstExample.name}</h2>
-					<p class="description">${firstExample.description}</p>
-					<textarea id="example-editor">${firstExample.query}</textarea>
-				</div>
-			</metricminer:box>
+			<c:if test="${not empty examples}">
+				<metricminer:box title="Examples" boxId="examples">
+					<c:set var="firstExample" value="${examples.get(0)}" />
+					<select id="query-examples-details">
+						<c:forEach var="example" items="${examples}">
+							<option data-query="${example.query}" data-description="${example.description}">
+								${example.name}
+							</option>
+						</c:forEach>
+					</select>
+					<div class="example-details">
+						<h2>${firstExample.name}</h2>
+						<p class="description">${firstExample.description}</p>
+						<textarea id="example-editor">${firstExample.query}</textarea>
+					</div>
+				</metricminer:box>
+			</c:if>
 		</div>						<!-- wrapper ends -->
 	</div>		<!-- #hld ends -->
 	<c:import url="../import/footer.jsp" />

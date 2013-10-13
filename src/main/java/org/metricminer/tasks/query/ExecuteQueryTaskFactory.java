@@ -26,7 +26,7 @@ public class ExecuteQueryTaskFactory implements RunnableTaskFactory {
 	public RunnableTask build(Task task, Session session, StatelessSession statelessSession,
 			MetricMinerConfigs config) {
         return new ExecuteQueryTask(task, 
-        		new QueryExecutor(statelessSession, new SimpleCSVWriter()), 
+        		new QueryExecutor(statelessSession, new SimpleCSVWriter(), new QueryProcessor()), 
         		new QueryDao(session), config, mailer);
     }
 
