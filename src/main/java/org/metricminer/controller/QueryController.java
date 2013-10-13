@@ -114,4 +114,11 @@ public class QueryController {
         result.include("scheduledToRun", true);
         result.redirectTo(this).detailQuery(queryId);
     }
+    
+    @LoggedUserAccess
+    @Get("/query/wizard")
+    public void wizard() {
+    }
+    
+    
 }
