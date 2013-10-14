@@ -24,6 +24,7 @@
 			<ul>
 				<li><a href="${linkTo[QueryController].listQueries[1]}">List all</a></li>
 				<li><a href="${linkTo[QueryController].queryForm}">Add a new one</a></li>
+				<li><a href="${linkTo[QueryController].wizard}">Query wizard (beta)</a></li>
 			</ul>
 		</li>
 		<li><a href="${linkTo[StatisticalTestController].listStats}">Statistical Test</a>
