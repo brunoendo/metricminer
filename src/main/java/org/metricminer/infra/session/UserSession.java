@@ -21,7 +21,6 @@ public class UserSession implements Serializable {
 
 	public UserSession(Result result, HttpSession session) {
 		this.session = session;
-		result.include("userSession", this);
 	}
 
 	public void login(User user) {
