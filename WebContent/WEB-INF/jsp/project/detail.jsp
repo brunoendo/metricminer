@@ -107,8 +107,8 @@
 								<c:forEach items="${commiters}" var="a" varStatus="status">
 									<tr>
 										<td>#${status.index+1}</td>
-										<td>${a.name}</td>
-										<td>${a.email}</td>
+										<td>${a.author.name} (${a.commits})</td>
+										<td>${a.author.email}</td>
 									</tr>
 								</c:forEach>
 							</table>

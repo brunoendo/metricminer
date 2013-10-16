@@ -11,6 +11,7 @@ import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.metricminer.config.MetricMinerConfigs;
+import org.metricminer.infra.dao.dto.AuthorAndCommitCount;
 import org.metricminer.model.Author;
 import org.metricminer.model.Commit;
 import org.metricminer.model.Project;
@@ -73,11 +74,15 @@ public class ProjectDao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Author> commitersFor(Project project, int maxResults){
-		Query query = session.createQuery("select author From Commit as commit"
-						+ " join commit.author as author where commit.project.id = :id group by author order by count(commit) desc");
+	public List<AuthorAndCommitCount> commitersFor(Project project, int maxResults){
+		Query query = session.createQuery("select author, count(commit) from Commit as commit"
+						+ " join commit.author as author"
+						+ " where commit.project.id = :id "
+						+ "group by author order by count(commit) desc");
+		
 		query.setParameter("id", project.getId()).setMaxResults(maxResults);
-		return (List<Author>) query.list();
+		List<Object[]> results = query.list();
+		return AuthorAndCommitCount.build(results);
 		
 	}
 	public Commit firstCommitFor(Project project) {

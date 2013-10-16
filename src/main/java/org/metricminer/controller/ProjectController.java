@@ -6,6 +6,7 @@ import org.metricminer.builder.ProjectBuilder;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.ProjectDao;
 import org.metricminer.infra.dao.TagDao;
+import org.metricminer.infra.dao.dto.AuthorAndCommitCount;
 import org.metricminer.infra.interceptor.LoggedUserAccess;
 import org.metricminer.model.Author;
 import org.metricminer.model.Project;
@@ -71,7 +72,7 @@ public class ProjectController {
     @Get("/project/{id}")
     public void detail(Long id) {
         Project project = dao.findProjectBy(id);
-        List<Author> commiters = dao.commitersFor(project, 9);
+        List<AuthorAndCommitCount> commiters = dao.commitersFor(project, 10);
         result.include("tags", tokenize.tags(project.getTags()));
         result.include("commiters", commiters);
         result.include("project", project);	
