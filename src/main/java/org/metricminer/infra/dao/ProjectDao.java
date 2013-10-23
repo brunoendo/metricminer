@@ -1,10 +1,13 @@
 package org.metricminer.infra.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.hibernate.Query;
@@ -229,9 +232,18 @@ public class ProjectDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Project> search(String criteria) {
-		return session.createQuery("select p from Project p where p.name like :criteria")
-				.setParameter("criteria", "%" + criteria + "%")
-				.list();
+		String[] world = criteria.split(" +");
+		List<Project> searchTemp;
+		Set<Project> searchResult = new HashSet<Project>();
+		for(int i = 0; i < world.length; i++){
+			searchTemp = session.createQuery("select p from Project p where p.name like :criteria")
+					.setParameter("criteria", "%"+world[i]+"%")
+					.list();
+			searchResult.addAll(searchTemp);
+		}
+		List<Project> result = new ArrayList<Project>();
+		result.addAll(searchResult);
+		return result;
 	}
 
 }
