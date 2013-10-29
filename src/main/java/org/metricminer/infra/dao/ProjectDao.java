@@ -232,12 +232,11 @@ public class ProjectDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Project> search(String criteria) {
-		String[] world = criteria.split(" +");
-		List<Project> searchTemp;
+		String[] words = criteria.split(" +");
 		Set<Project> searchResult = new HashSet<Project>();
-		for(int i = 0; i < world.length; i++){
-			searchTemp = session.createQuery("select p from Project p where p.name like :criteria")
-					.setParameter("criteria", "%"+world[i]+"%")
+		for(String word : words){
+			List<Project> searchTemp = session.createQuery("select p from Project p where p.name like :criteria")
+					.setParameter("criteria", "%"+word+"%")
 					.list();
 			searchResult.addAll(searchTemp);
 		}

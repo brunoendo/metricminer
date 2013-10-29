@@ -289,9 +289,6 @@ public class Project {
         return "Project [id=" + id + ", name=" + name + "]";
     }
     
-    public boolean equals(Project p) {
-    	return this.id == p.getId();
-    }
 
     public boolean willCalculateAllMetrics() {
         for (Task task : tasks) {
